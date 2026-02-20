@@ -4,6 +4,8 @@ import { AppContent } from "@/components/app-content"
 import { AppShell } from "@/components/app-shell"
 import { AppSidebar } from "@/components/app-sidebar"
 import { AppSidebarHeader } from "@/components/app-sidebar-header"
+import { Toaster } from "@/components/ui/sonner"
+import { useFlash } from "@/hooks/use-flash"
 import type { BreadcrumbItem } from "@/types"
 
 export default function AppSidebarLayout({
@@ -12,6 +14,8 @@ export default function AppSidebarLayout({
 }: PropsWithChildren<{
   breadcrumbs?: BreadcrumbItem[]
 }>) {
+  useFlash()
+
   return (
     <AppShell variant="sidebar">
       <AppSidebar />
@@ -19,6 +23,7 @@ export default function AppSidebarLayout({
         <AppSidebarHeader breadcrumbs={breadcrumbs} />
         {children}
       </AppContent>
+      <Toaster richColors />
     </AppShell>
   )
 }
