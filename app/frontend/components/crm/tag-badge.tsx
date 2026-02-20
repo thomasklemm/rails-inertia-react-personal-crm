@@ -16,6 +16,10 @@ export const TAG_LABELS: Partial<Record<Tag, string>> = {
   vip: "VIP",
 }
 
+export const COMPANY_TAG_LABELS: Partial<Record<CompanyTag, string>> = {
+  saas: "SaaS",
+}
+
 export const COMPANY_TAG_STYLES: Record<CompanyTag, string> = {
   saas: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300",
   fintech: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300",
@@ -55,7 +59,7 @@ export function CompanyTagBadge({ tag }: CompanyTagBadgeProps) {
       variant="outline"
       className={`border-0 px-2 py-0.5 text-xs font-medium capitalize ${COMPANY_TAG_STYLES[tag]}`}
     >
-      {tag}
+      {COMPANY_TAG_LABELS[tag] ?? tag}
     </Badge>
   )
 }

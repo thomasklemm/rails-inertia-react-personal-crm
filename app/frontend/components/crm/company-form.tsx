@@ -1,6 +1,6 @@
 import type { InertiaFormProps } from "@inertiajs/react"
 
-import { COMPANY_TAG_STYLES } from "@/components/crm/tag-badge"
+import { COMPANY_TAG_LABELS, COMPANY_TAG_STYLES } from "@/components/crm/tag-badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -133,7 +133,7 @@ export function CompanyForm({ form, cancelHref, submitLabel }: CompanyFormProps)
                     : "border-border text-muted-foreground hover:border-foreground/40 hover:text-foreground",
                 )}
               >
-                {tag}
+                {COMPANY_TAG_LABELS[tag] ?? tag}
               </button>
             )
           })}
