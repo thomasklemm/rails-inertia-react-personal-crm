@@ -5,18 +5,26 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import AppLayout from "@/layouts/app-layout"
+import { CompaniesLayout } from "@/layouts/companies-layout"
 import { companiesPath, companyPath } from "@/routes"
 import type { BreadcrumbItem, Company } from "@/types"
 
 interface Props {
   company: Company
+  q?: string
+  sort?: string
+  sort_dir?: string
   [key: string]: unknown
 }
 
 export default function CompaniesEdit() {
-  const { company } = usePage<Props>().props
+  const { company, q, sort, sort_dir } = usePage<Props>().props
   const form = useForm({ name: company.name, website: company.website ?? "" })
   const { data, setData, patch, processing, errors } = form
+
+  const listParams = Object.fromEntries(
+    Object.entries({ q, sort, sort_dir }).filter(([, v]) => v !== undefined),
+  )
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -59,7 +67,7 @@ export default function CompaniesEdit() {
               Save changes
             </Button>
             <Button variant="outline" asChild>
-              <a href={companyPath(company.id)}>Cancel</a>
+              <a href={companyPath(company.id, listParams)}>Cancel</a>
             </Button>
           </div>
         </form>
@@ -75,5 +83,9 @@ CompaniesEdit.layout = (page: ReactNode) => {
     { title: company?.name ?? "", href: company ? companyPath(company.id) : "#" },
     { title: "Edit", href: "#" },
   ]
-  return <AppLayout breadcrumbs={breadcrumbs}>{page}</AppLayout>
+  return (
+    <AppLayout breadcrumbs={breadcrumbs}>
+      <CompaniesLayout>{page}</CompaniesLayout>
+    </AppLayout>
+  )
 }

@@ -3,6 +3,8 @@ class Company < ApplicationRecord
 
   validates :name, presence: true
 
+  scope :search, ->(q) { where("name LIKE ?", "%#{q}%") }
+
   def to_s
     name
   end

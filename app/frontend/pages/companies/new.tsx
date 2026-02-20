@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import AppLayout from "@/layouts/app-layout"
+import { CompaniesLayout } from "@/layouts/companies-layout"
 import { companiesPath } from "@/routes"
 import type { BreadcrumbItem } from "@/types"
 
@@ -68,5 +69,7 @@ export default function CompaniesNew() {
 }
 
 CompaniesNew.layout = (page: ReactNode) => (
-  <AppLayout breadcrumbs={breadcrumbs}>{page}</AppLayout>
+  <AppLayout breadcrumbs={breadcrumbs}>
+    <CompaniesLayout>{page}</CompaniesLayout>
+  </AppLayout>
 )

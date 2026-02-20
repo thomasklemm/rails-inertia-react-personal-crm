@@ -1,5 +1,5 @@
 import { Head } from "@inertiajs/react"
-import { UserPlus } from "lucide-react"
+import { User } from "lucide-react"
 import type { ReactNode } from "react"
 
 import { Button } from "@/components/ui/button"
@@ -18,10 +18,10 @@ export default function ContactsIndex() {
       <Head title="Contacts" />
       <div className="flex h-full flex-col items-center justify-center gap-4 text-center">
         <div className="flex size-16 items-center justify-center rounded-full bg-muted">
-          <UserPlus className="size-8 text-muted-foreground" />
+          <User className="size-8 text-muted-foreground" />
         </div>
         <div>
-          <h3 className="text-lg font-semibold">Select a contact</h3>
+          <h3 className="text-lg font-semibold">Contacts</h3>
           <p className="mt-1 text-sm text-muted-foreground">
             Choose a contact from the list, or add a new one.
           </p>

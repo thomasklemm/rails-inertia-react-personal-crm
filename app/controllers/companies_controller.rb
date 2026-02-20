@@ -5,21 +5,31 @@ class CompaniesController < InertiaController
 
   def index
     render inertia: "companies/index", props: {
-      companies: Company.order(:name).map { |c|
-        c.as_json.merge(contacts_count: c.contacts.count)
-      }
+      companies: filtered_companies.as_json,
+      q: params[:q],
+      sort: params[:sort],
+      sort_dir: params[:sort_dir]
     }
   end
 
   def show
     render inertia: "companies/show", props: {
+      companies: filtered_companies.as_json,
       company: @company.as_json,
-      contacts: @company.contacts.includes(:company).order(:last_name, :first_name).as_json(include: :company)
+      contacts: @company.contacts.includes(:company).order(:last_name, :first_name).as_json(include: :company),
+      q: params[:q],
+      sort: params[:sort],
+      sort_dir: params[:sort_dir]
     }
   end
 
   def new
-    render inertia: "companies/new", props: {}
+    render inertia: "companies/new", props: {
+      companies: filtered_companies.as_json,
+      q: params[:q],
+      sort: params[:sort],
+      sort_dir: params[:sort_dir]
+    }
   end
 
   def create
@@ -33,7 +43,11 @@ class CompaniesController < InertiaController
 
   def edit
     render inertia: "companies/edit", props: {
-      company: @company.as_json
+      companies: filtered_companies.as_json,
+      company: @company.as_json,
+      q: params[:q],
+      sort: params[:sort],
+      sort_dir: params[:sort_dir]
     }
   end
 
@@ -58,5 +72,27 @@ class CompaniesController < InertiaController
 
   def company_params
     params.permit(:name, :website)
+  end
+
+  def filtered_companies
+    scope = Company.left_joins(:contacts)
+                   .group(:id)
+                   .select("companies.*, COUNT(contacts.id) AS contacts_count")
+                   .order(:name)
+
+    scope = scope.search(params[:q]) if params[:q].present?
+
+    dir = params[:sort_dir] == "desc" ? :desc : :asc
+
+    scope = case params[:sort]
+            when "added"
+              scope.reorder(created_at: dir)
+            when "contacts"
+              scope.reorder(Arel.sql("contacts_count #{dir == :desc ? 'DESC' : 'ASC'}, companies.name"))
+            else
+              dir == :desc ? scope.reorder(name: :desc) : scope
+            end
+
+    scope
   end
 end

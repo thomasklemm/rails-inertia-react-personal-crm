@@ -1,5 +1,6 @@
 import { Link } from "@inertiajs/react"
 import { Archive, Star } from "lucide-react"
+import { useEffect, useRef } from "react"
 
 import { contactPath } from "@/routes"
 import type { Contact } from "@/types"
@@ -17,14 +18,20 @@ interface ContactRowProps {
 }
 
 export function ContactRow({ contact, isActive, q, filter, sort, sort_dir }: ContactRowProps) {
+  const ref = useRef<HTMLAnchorElement>(null)
   const params: Record<string, string> = {}
   if (q) params.q = q
   if (filter) params.filter = filter
   if (sort) params.sort = sort
   if (sort_dir) params.sort_dir = sort_dir
 
+  useEffect(() => {
+    if (isActive) ref.current?.scrollIntoView({ block: "nearest" })
+  }, [isActive])
+
   return (
     <Link
+      ref={ref}
       href={contactPath(contact.id, params)}
       className={`flex items-center gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground ${
         isActive ? "bg-sidebar-accent text-sidebar-accent-foreground" : ""
