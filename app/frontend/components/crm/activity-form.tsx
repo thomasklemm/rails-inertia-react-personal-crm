@@ -69,7 +69,7 @@ export function ActivityForm({ contactId, companyId }: ActivityFormProps) {
                 ? "What was discussed?"
                 : "Email summary…"
           }
-          rows={3}
+          rows={2}
           className="resize-none text-sm"
         />
         {errors.body && <p className="mt-1 text-xs text-destructive">{errors.body}</p>}

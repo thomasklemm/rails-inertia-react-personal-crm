@@ -51,17 +51,17 @@ export function ActivityItem({ activity, showContact = false, isLast = true }: A
 
   return (
     <>
-      <div className="group relative flex gap-4">
+      <div className="group relative flex gap-3">
         {/* Icon + vertical connector line */}
         <div className="flex flex-col items-center">
-          <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">
-            <Icon className="size-3.5" />
+          <div className="flex size-6 shrink-0 items-center justify-center rounded-full bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">
+            <Icon className="size-3" />
           </div>
           {!isLast && <div className="mt-1 w-px flex-1 bg-border" />}
         </div>
 
         {/* Content */}
-        <div className={`min-w-0 flex-1 ${isLast ? "pb-0" : "pb-5"}`}>
+        <div className={`min-w-0 flex-1 ${isLast ? "pb-0" : "pb-3"}`}>
           <div className="flex items-start justify-between gap-2">
             <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
               <span className="text-sm font-medium capitalize">{activity.kind}</span>

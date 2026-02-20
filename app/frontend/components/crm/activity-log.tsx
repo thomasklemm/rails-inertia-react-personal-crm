@@ -62,7 +62,7 @@ export function ActivityLog({ activities, title = "Activity Log", showContact = 
 
   return (
     <div>
-      <div className="mb-4 flex items-center justify-between">
+      <div className="mb-3 flex items-center justify-between">
         <h3 className="text-sm font-semibold">{title}</h3>
         <div className="inline-flex rounded-lg border bg-muted p-0.5">
           {FILTERS.map((f) => (
@@ -85,10 +85,10 @@ export function ActivityLog({ activities, title = "Activity Log", showContact = 
       {groups.length === 0 ? (
         <p className="py-8 text-center text-sm text-muted-foreground">No activities yet.</p>
       ) : (
-        <div className="space-y-6">
+        <div className="space-y-4">
           {groups.map((group) => (
             <div key={group.key}>
-              <div className="mb-3 flex items-baseline justify-between">
+              <div className="mb-2 flex items-baseline justify-between">
                 <span className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                   {group.label}
                 </span>
