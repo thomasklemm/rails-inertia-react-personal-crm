@@ -13,7 +13,7 @@ npm run lint                     # ESLint
 npm run lint:fix                 # ESLint with auto-fix
 npm run format                   # Prettier check
 npm run format:fix               # Prettier auto-format
-rails js_routes:generate         # Regenerate js-routes after changing routes.rb
+bin/rails js:routes:typescript   # Regenerate js-routes after changing routes.rb
 ```
 
 ## Architecture
@@ -47,7 +47,7 @@ app/frontend/
 
 ### Routing
 
-Use `js-routes` helpers from `@/routes` (e.g., `signInPath()`, `dashboardPath()`) — never hardcode URL strings. After changing `routes.rb`, run `rails js_routes:generate`.
+Use `js-routes` helpers from `@/routes` (e.g., `signInPath()`, `dashboardPath()`) — never hardcode URL strings. After changing `routes.rb`, run `bin/rails js:routes:typescript`.
 
 ## Inertia Rails Stack
 

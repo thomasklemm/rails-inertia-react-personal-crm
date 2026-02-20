@@ -43,3 +43,51 @@ export interface Session {
   ip_address: string
   created_at: string
 }
+
+// ── CRM types ────────────────────────────────────────────────────────────────
+
+export type Tag =
+  | "customer"
+  | "friend"
+  | "investor"
+  | "lead"
+  | "partner"
+  | "prospect"
+  | "vip"
+  | "vendor"
+
+export type ActivityKind = "note" | "call" | "email"
+
+export interface Company {
+  id: number
+  name: string
+  website: string | null
+  contacts_count?: number
+  created_at: string
+  updated_at: string
+}
+
+export interface Contact {
+  id: number
+  first_name: string
+  last_name: string
+  email: string | null
+  phone: string | null
+  notes: string | null
+  starred: boolean
+  archived: boolean
+  tags: Tag[]
+  company: Company | null
+  company_id: number | null
+  created_at: string
+  updated_at: string
+}
+
+export interface Activity {
+  id: number
+  kind: ActivityKind
+  body: string
+  contact: Pick<Contact, "id" | "first_name" | "last_name">
+  created_at: string
+  updated_at: string
+}

@@ -1,5 +1,5 @@
 import { Link } from "@inertiajs/react"
-import { BookOpen, Folder, LayoutGrid } from "lucide-react"
+import { ActivitySquare, BookOpen, Building2, Folder, LayoutGrid, Users } from "lucide-react"
 
 import { NavFooter } from "@/components/nav-footer"
 import { NavMain } from "@/components/nav-main"
@@ -13,7 +13,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { dashboardPath } from "@/routes"
+import { activitiesPath, companiesPath, contactsPath, dashboardPath } from "@/routes"
 import type { NavItem } from "@/types"
 
 import AppLogo from "./app-logo"
@@ -23,6 +23,21 @@ const mainNavItems: NavItem[] = [
     title: "Dashboard",
     href: dashboardPath(),
     icon: LayoutGrid,
+  },
+  {
+    title: "Contacts",
+    href: contactsPath(),
+    icon: Users,
+  },
+  {
+    title: "Companies",
+    href: companiesPath(),
+    icon: Building2,
+  },
+  {
+    title: "Activity Log",
+    href: activitiesPath(),
+    icon: ActivitySquare,
   },
 ]
 

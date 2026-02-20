@@ -16,4 +16,13 @@ module AuthenticationHelpers
     cookies = request.cookie_jar
     cookies.delete(:session_token)
   end
+
+  # For system tests — signs in through the browser UI
+  def sign_in_via_browser(user, password: "Secret1*3*5*")
+    visit sign_in_path
+    fill_in "Email address", with: user.email
+    fill_in "Password", with: password
+    click_button "Log in"
+    expect(page).to have_current_path(dashboard_path)
+  end
 end

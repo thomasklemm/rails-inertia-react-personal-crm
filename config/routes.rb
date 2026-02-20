@@ -16,6 +16,17 @@ Rails.application.routes.draw do
 
   get :dashboard, to: "dashboard#index"
 
+  resources :contacts do
+    member do
+      patch :star
+      patch :archive
+    end
+  end
+
+  resources :companies
+
+  resources :activities
+
   namespace :settings do
     resource :profile, only: [:show, :update]
     resource :password, only: [:show, :update]
