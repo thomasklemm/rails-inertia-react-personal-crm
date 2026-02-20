@@ -29,7 +29,7 @@ export default function CompaniesEdit({ company }: Props) {
     <Modal>
       <Head title={`Edit ${company.name}`} />
       <div className="p-6">
-        <div className="mb-6">
+        <div className="mb-4">
           <h2 className="text-xl font-semibold">Edit Company</h2>
           <p className="mt-0.5 text-sm text-muted-foreground">{company.name}</p>
         </div>

@@ -30,7 +30,7 @@ export default function ContactsEdit({ contact, companies }: Props) {
     <Modal>
       <Head title={`Edit ${contact.first_name} ${contact.last_name}`} />
       <div className="p-6">
-        <div className="mb-6">
+        <div className="mb-4">
           <h2 className="text-xl font-semibold">Edit Contact</h2>
           <p className="mt-0.5 text-sm text-muted-foreground">
             {contact.first_name} {contact.last_name}

@@ -77,30 +77,30 @@ export function CompanyForm({ form, cancelHref, submitLabel }: CompanyFormProps)
         {errors.website && <p className="text-xs text-destructive">{errors.website}</p>}
       </div>
 
-      {/* Phone */}
-      <div className="space-y-1.5">
-        <Label htmlFor="phone">Phone</Label>
-        <Input
-          id="phone"
-          name="phone"
-          type="tel"
-          value={data.phone}
-          onChange={(e) => setData("phone", e.target.value)}
-        />
-        {errors.phone && <p className="text-xs text-destructive">{errors.phone}</p>}
-      </div>
-
-      {/* Email */}
-      <div className="space-y-1.5">
-        <Label htmlFor="email">Email</Label>
-        <Input
-          id="email"
-          name="email"
-          type="email"
-          value={data.email}
-          onChange={(e) => setData("email", e.target.value)}
-        />
-        {errors.email && <p className="text-xs text-destructive">{errors.email}</p>}
+      {/* Phone + Email */}
+      <div className="grid grid-cols-2 gap-3">
+        <div className="space-y-1.5">
+          <Label htmlFor="phone">Phone</Label>
+          <Input
+            id="phone"
+            name="phone"
+            type="tel"
+            value={data.phone}
+            onChange={(e) => setData("phone", e.target.value)}
+          />
+          {errors.phone && <p className="text-xs text-destructive">{errors.phone}</p>}
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="email">Email</Label>
+          <Input
+            id="email"
+            name="email"
+            type="email"
+            value={data.email}
+            onChange={(e) => setData("email", e.target.value)}
+          />
+          {errors.email && <p className="text-xs text-destructive">{errors.email}</p>}
+        </div>
       </div>
 
       {/* Address */}

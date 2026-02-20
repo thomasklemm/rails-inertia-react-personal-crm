@@ -1,10 +1,18 @@
 import type { ResolvedComponent } from "@inertiajs/react"
 import { createInertiaApp } from "@inertiajs/react"
-import { renderApp } from "@inertiaui/modal-react"
+import { putConfig, renderApp } from "@inertiaui/modal-react"
 import { StrictMode } from "react"
 import { createRoot } from "react-dom/client"
 
 import { initializeTheme } from "@/hooks/use-appearance"
+
+putConfig({
+  modal: {
+    paddingClasses: "p-0",
+    panelClasses:
+      "bg-white dark:bg-card text-foreground rounded-lg shadow-xl dark:border dark:border-border",
+  },
+})
 import PersistentLayout from "@/layouts/persistent-layout"
 
 const appName = import.meta.env.VITE_APP_NAME ?? "React Starter Kit"

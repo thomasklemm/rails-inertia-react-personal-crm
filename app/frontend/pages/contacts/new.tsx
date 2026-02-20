@@ -29,7 +29,7 @@ export default function ContactsNew({ companies }: Props) {
     <Modal>
       <Head title="New Contact" />
       <div className="p-6">
-        <h2 className="mb-6 text-xl font-semibold">New Contact</h2>
+        <h2 className="mb-4 text-xl font-semibold">New Contact</h2>
         <form onSubmit={handleSubmit}>
           <ContactForm
             form={form}
