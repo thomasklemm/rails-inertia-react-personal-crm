@@ -16,13 +16,17 @@ interface TagBadgeProps {
   tag: Tag
 }
 
+const TAG_LABELS: Partial<Record<Tag, string>> = {
+  vip: "VIP",
+}
+
 export function TagBadge({ tag }: TagBadgeProps) {
   return (
     <Badge
       variant="outline"
       className={`border-0 px-2 py-0.5 text-xs font-medium capitalize ${TAG_STYLES[tag]}`}
     >
-      {tag}
+      {TAG_LABELS[tag] ?? tag}
     </Badge>
   )
 }
