@@ -117,33 +117,36 @@ export function ContactList({ contacts, q, filter, sort, sort_dir, activeContact
       </div>
 
       {/* Sort row */}
-      <div className="flex items-center gap-0.5 px-3 pb-2">
-        {SORTS.map((s) => {
-          const isActive = (sort ?? undefined) === s.value
-          const effectiveDir = isActive ? (sort_dir ?? s.defaultDir) : s.defaultDir
-          const Icon = effectiveDir === "asc" ? s.iconAsc : s.iconDesc
+      <div className="border-t border-b px-3 pb-2 pt-2">
+        <div className="flex items-center gap-0.5">
+          <span className="mr-1 text-[10px] font-medium uppercase tracking-wider text-muted-foreground/50">Sort</span>
+          {SORTS.map((s) => {
+            const isActive = (sort ?? undefined) === s.value
+            const effectiveDir = isActive ? (sort_dir ?? s.defaultDir) : s.defaultDir
+            const Icon = effectiveDir === "asc" ? s.iconAsc : s.iconDesc
 
-          return (
-            <button
-              key={s.label}
-              onClick={() => {
-                if (isActive) {
-                  navigate({ sort: s.value, sort_dir: sort_dir === "asc" ? "desc" : "asc" })
-                } else {
-                  navigate({ sort: s.value, sort_dir: s.defaultDir })
-                }
-              }}
-              className={`flex cursor-pointer items-center gap-1 rounded-md px-2 py-0.5 text-xs transition-colors ${
-                isActive
-                  ? "font-semibold text-foreground"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              <Icon className="size-3" />
-              {s.label}
-            </button>
-          )
-        })}
+            return (
+              <button
+                key={s.label}
+                onClick={() => {
+                  if (isActive) {
+                    navigate({ sort: s.value, sort_dir: sort_dir === "asc" ? "desc" : "asc" })
+                  } else {
+                    navigate({ sort: s.value, sort_dir: s.defaultDir })
+                  }
+                }}
+                className={`flex cursor-pointer items-center gap-1 rounded-md px-2 py-0.5 text-xs transition-colors ${
+                  isActive
+                    ? "font-semibold text-foreground"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <Icon className="size-3" />
+                {s.label}
+              </button>
+            )
+          })}
+        </div>
       </div>
 
       {/* Contact list */}

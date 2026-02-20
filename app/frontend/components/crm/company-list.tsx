@@ -114,7 +114,9 @@ export function CompanyList({ companies, q, filter, sort, sort_dir, activeCompan
       </div>
 
       {/* Sort row */}
-      <div className="flex items-center gap-0.5 px-3 pb-2">
+      <div className="border-t border-b px-3 pb-2 pt-2">
+        <div className="flex items-center gap-0.5">
+        <span className="mr-1 text-[10px] font-medium uppercase tracking-wider text-muted-foreground/50">Sort</span>
         {SORTS.map((s) => {
           const isActive = (sort ?? undefined) === s.value
           const effectiveDir = isActive ? (sort_dir ?? s.defaultDir) : s.defaultDir
@@ -141,6 +143,7 @@ export function CompanyList({ companies, q, filter, sort, sort_dir, activeCompan
             </button>
           )
         })}
+        </div>
       </div>
 
       {/* Company list */}
