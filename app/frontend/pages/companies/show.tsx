@@ -5,24 +5,37 @@ import { CompanyDetail } from "@/components/crm/company-detail"
 import AppLayout from "@/layouts/app-layout"
 import { CompaniesLayout } from "@/layouts/companies-layout"
 import { companiesPath } from "@/routes"
-import type { BreadcrumbItem, Company, Contact } from "@/types"
+import type { Activity, BreadcrumbItem, Company, Contact } from "@/types"
 
 interface Props {
   company: Company
   contacts: Contact[]
+  activities: Activity[]
+  contact_activities: Activity[]
   q?: string
+  filter?: string
   sort?: string
   sort_dir?: string
   [key: string]: unknown
 }
 
 export default function CompaniesShow() {
-  const { company, contacts, q, sort, sort_dir } = usePage<Props>().props
+  const { company, contacts, activities, contact_activities, q, filter, sort, sort_dir } =
+    usePage<Props>().props
 
   return (
     <>
       <Head title={company.name} />
-      <CompanyDetail company={company} contacts={contacts} q={q} sort={sort} sort_dir={sort_dir} />
+      <CompanyDetail
+        company={company}
+        contacts={contacts}
+        activities={activities}
+        contactActivities={contact_activities}
+        q={q}
+        filter={filter}
+        sort={sort}
+        sort_dir={sort_dir}
+      />
     </>
   )
 }

@@ -7,6 +7,7 @@ import type { Company } from "@/types"
 interface CompaniesPageProps {
   companies: Company[]
   q?: string
+  filter?: string
   sort?: string
   sort_dir?: string
   company?: { id: number }
@@ -14,7 +15,7 @@ interface CompaniesPageProps {
 }
 
 export function CompaniesLayout({ children }: { children: ReactNode }) {
-  const { companies, q, sort, sort_dir, company } = usePage<CompaniesPageProps>().props
+  const { companies, q, filter, sort, sort_dir, company } = usePage<CompaniesPageProps>().props
 
   return (
     <div className="flex flex-1 overflow-hidden">
@@ -23,6 +24,7 @@ export function CompaniesLayout({ children }: { children: ReactNode }) {
         <CompanyList
           companies={companies ?? []}
           q={q}
+          filter={filter}
           sort={sort}
           sort_dir={sort_dir}
           activeCompanyId={company?.id}

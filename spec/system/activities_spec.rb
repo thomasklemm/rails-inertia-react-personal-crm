@@ -30,7 +30,7 @@ RSpec.describe "Activities", type: :system do
     it "logs a note from the contact detail page" do
       visit contact_path(contact)
       fill_in "Add a note…", with: "Met at conference."
-      click_button "Log note"
+      click_button "Log Note"
       expect(page).to have_current_path(contact_path(contact))
       expect(page).to have_text("Met at conference.")
     end
@@ -39,7 +39,7 @@ RSpec.describe "Activities", type: :system do
       visit contact_path(contact)
       click_button "Call"
       fill_in "What was discussed?", with: "Negotiated contract terms."
-      click_button "Log call"
+      click_button "Log Call"
       expect(page).to have_text("Negotiated contract terms.")
     end
   end
@@ -48,7 +48,7 @@ RSpec.describe "Activities", type: :system do
     it "updates the activity body" do
       visit edit_activity_path(activity)
       fill_in "Details", with: "Updated: signed the contract."
-      click_button "Save changes"
+      click_button "Save Changes"
       expect(page).to have_text("Updated: signed the contract.")
     end
   end

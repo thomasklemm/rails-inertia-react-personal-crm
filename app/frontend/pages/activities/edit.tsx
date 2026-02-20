@@ -12,23 +12,36 @@ import {
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import AppLayout from "@/layouts/app-layout"
-import { activitiesPath, activityPath, contactPath } from "@/routes"
+import { activitiesPath, activityPath, companyPath, contactPath } from "@/routes"
 import type { Activity, ActivityKind, BreadcrumbItem } from "@/types"
 
 interface Props {
   activity: Activity
+  return_to?: string
   [key: string]: unknown
 }
 
 export default function ActivitiesEdit() {
-  const { activity } = usePage<Props>().props
+  const { activity, return_to } = usePage<Props>().props
 
   const form = useForm({
     kind: activity.kind,
     body: activity.body,
-    contact_id: String(activity.contact.id),
+    contact_id: activity.contact ? String(activity.contact.id) : "",
+    company_id: activity.company ? String(activity.company.id) : "",
+    return_to: return_to ?? "",
   })
   const { data, setData, patch, processing, errors } = form
+
+  const subjectName = activity.contact
+    ? `${activity.contact.first_name} ${activity.contact.last_name}`
+    : (activity.company?.name ?? "")
+
+  const cancelHref =
+    return_to ??
+    (activity.contact
+      ? contactPath(activity.contact.id)
+      : companyPath(activity.company!.id))
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -37,11 +50,12 @@ export default function ActivitiesEdit() {
 
   return (
     <>
-      <Head title="Edit Activity" />
+      <Head title={`Edit Activity${subjectName ? ` for ${subjectName}` : ""}`} />
       <div className="p-6">
-        <h2 className="mb-6 text-lg font-semibold">
-          Edit activity for {activity.contact.first_name} {activity.contact.last_name}
-        </h2>
+        <div className="mb-6">
+          <h2 className="text-xl font-semibold">Edit Activity</h2>
+          {subjectName && <p className="mt-0.5 text-sm text-muted-foreground">{subjectName}</p>}
+        </div>
 
         <form onSubmit={handleSubmit} className="max-w-lg space-y-5">
           <div className="space-y-1.5">
@@ -76,10 +90,10 @@ export default function ActivitiesEdit() {
 
           <div className="flex gap-3">
             <Button type="submit" disabled={processing}>
-              Save changes
+              Save Changes
             </Button>
             <Button variant="outline" asChild>
-              <a href={contactPath(activity.contact.id)}>Cancel</a>
+              <a href={cancelHref}>Cancel</a>
             </Button>
           </div>
         </form>

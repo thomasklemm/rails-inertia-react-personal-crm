@@ -1,5 +1,5 @@
 import { router } from "@inertiajs/react"
-import { Edit, ExternalLink, Trash2 } from "lucide-react"
+import { Edit, ExternalLink, Mail, MapPin, Phone, Star, Trash2 } from "lucide-react"
 import { useState } from "react"
 
 import {
@@ -14,25 +14,45 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
-import { companiesPath, companyPath, editCompanyPath } from "@/routes"
-import type { Company, Contact } from "@/types"
+import { companiesPath, companyPath, editCompanyPath, starCompanyPath } from "@/routes"
+import type { Activity, Company, Contact } from "@/types"
 
+import { ActivityForm } from "./activity-form"
+import { ActivityLog } from "./activity-log"
+import { CompanyAvatar } from "./company-avatar"
+import { CompanyTagBadge } from "./tag-badge"
 import { ContactRow } from "./contact-row"
 
 interface CompanyDetailProps {
   company: Company
   contacts: Contact[]
+  activities: Activity[]
+  contactActivities: Activity[]
   q?: string
+  filter?: string
   sort?: string
   sort_dir?: string
 }
 
-export function CompanyDetail({ company, contacts, q, sort, sort_dir }: CompanyDetailProps) {
+export function CompanyDetail({
+  company,
+  contacts,
+  activities,
+  contactActivities,
+  q,
+  filter,
+  sort,
+  sort_dir,
+}: CompanyDetailProps) {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
 
   const listParams = Object.fromEntries(
-    Object.entries({ q, sort, sort_dir }).filter(([, v]) => v !== undefined && v !== ""),
+    Object.entries({ q, filter, sort, sort_dir }).filter(([, v]) => v !== undefined && v !== ""),
   )
+
+  function handleStar() {
+    router.patch(starCompanyPath(company.id), {}, { preserveScroll: true })
+  }
 
   function confirmDelete() {
     router.delete(companyPath(company.id), {
@@ -44,27 +64,34 @@ export function CompanyDetail({ company, contacts, q, sort, sort_dir }: CompanyD
     <div className="flex flex-col gap-6 p-6">
       {/* Header */}
       <div className="flex items-start gap-4">
-        <div className="flex size-14 shrink-0 items-center justify-center rounded-xl bg-muted text-xl font-semibold text-muted-foreground">
-          {company.name[0].toUpperCase()}
-        </div>
+        <CompanyAvatar company={company} size="lg" />
 
         <div className="min-w-0 flex-1">
-          <h1 className="truncate text-xl font-semibold">{company.name}</h1>
-          {company.website && (
-            <a
-              href={company.website}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1 text-sm text-muted-foreground hover:underline"
-            >
-              <ExternalLink className="size-3.5" />
-              {company.website.replace(/^https?:\/\//, "")}
-            </a>
+          <div className="flex items-center gap-2">
+            <h1 className="truncate text-xl font-semibold">{company.name}</h1>
+            {company.starred && <Star className="size-4 shrink-0 fill-amber-400 text-amber-400" />}
+          </div>
+          {company.tags.length > 0 && (
+            <div className="mt-2 flex flex-wrap gap-1.5">
+              {company.tags.map((tag) => (
+                <CompanyTagBadge key={tag} tag={tag} />
+              ))}
+            </div>
           )}
         </div>
 
         {/* Actions */}
         <div className="flex shrink-0 gap-1.5">
+          <Button
+            size="icon-sm"
+            variant="outline"
+            onClick={handleStar}
+            title={company.starred ? "Unstar" : "Star"}
+          >
+            <Star
+              className={`size-4 ${company.starred ? "fill-amber-400 text-amber-400" : ""}`}
+            />
+          </Button>
           <Button size="icon-sm" variant="outline" asChild>
             <a href={editCompanyPath(company.id, listParams)} title="Edit">
               <Edit className="size-4" />
@@ -81,6 +108,80 @@ export function CompanyDetail({ company, contacts, q, sort, sort_dir }: CompanyD
           </Button>
         </div>
       </div>
+
+      <Separator />
+
+      {/* Info grid */}
+      <dl className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        {company.website && (
+          <div>
+            <dt className="text-xs font-medium text-muted-foreground">Website</dt>
+            <dd className="mt-0.5 flex items-center gap-1.5 text-sm">
+              <ExternalLink className="size-3.5 text-muted-foreground" />
+              <a
+                href={company.website}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:underline"
+              >
+                {company.website.replace(/^https?:\/\//, "")}
+              </a>
+            </dd>
+          </div>
+        )}
+        {company.phone && (
+          <div>
+            <dt className="text-xs font-medium text-muted-foreground">Phone</dt>
+            <dd className="mt-0.5 flex items-center gap-1.5 text-sm">
+              <Phone className="size-3.5 text-muted-foreground" />
+              <a href={`tel:${company.phone}`} className="hover:underline">
+                {company.phone}
+              </a>
+            </dd>
+          </div>
+        )}
+        {company.email && (
+          <div>
+            <dt className="text-xs font-medium text-muted-foreground">Email</dt>
+            <dd className="mt-0.5 flex items-center gap-1.5 text-sm">
+              <Mail className="size-3.5 text-muted-foreground" />
+              <a href={`mailto:${company.email}`} className="hover:underline">
+                {company.email}
+              </a>
+            </dd>
+          </div>
+        )}
+        {company.address && (
+          <div>
+            <dt className="text-xs font-medium text-muted-foreground">Address</dt>
+            <dd className="mt-0.5 flex items-center gap-1.5 text-sm">
+              <MapPin className="size-3.5 text-muted-foreground" />
+              {company.address}
+            </dd>
+          </div>
+        )}
+        <div>
+          <dt className="text-xs font-medium text-muted-foreground">Added</dt>
+          <dd className="mt-0.5 text-sm">
+            {new Date(company.created_at).toLocaleDateString(undefined, {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            })}
+          </dd>
+        </div>
+      </dl>
+
+      {/* Notes */}
+      {company.notes && (
+        <>
+          <Separator />
+          <div>
+            <h3 className="mb-1.5 text-xs font-medium text-muted-foreground">Notes</h3>
+            <p className="whitespace-pre-wrap text-sm">{company.notes}</p>
+          </div>
+        </>
+      )}
 
       <Separator />
 
@@ -101,6 +202,26 @@ export function CompanyDetail({ company, contacts, q, sort, sort_dir }: CompanyD
           </div>
         )}
       </div>
+
+      <Separator />
+
+      {/* Company activity */}
+      <div className="space-y-4">
+        <ActivityForm companyId={company.id} />
+        <ActivityLog activities={activities} />
+      </div>
+
+      {/* Contact activity aggregated */}
+      {contactActivities.length > 0 && (
+        <>
+          <Separator />
+          <ActivityLog
+            activities={contactActivities}
+            title="Activity from contacts"
+            showContact={true}
+          />
+        </>
+      )}
 
       {/* Delete confirmation */}
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>

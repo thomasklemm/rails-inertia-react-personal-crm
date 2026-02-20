@@ -43,15 +43,18 @@ export default function ContactsEdit() {
     <>
       <Head title={`Edit ${contact.first_name} ${contact.last_name}`} />
       <div className="p-6">
-        <h2 className="mb-6 text-lg font-semibold">
-          Edit {contact.first_name} {contact.last_name}
-        </h2>
+        <div className="mb-6">
+          <h2 className="text-xl font-semibold">Edit Contact</h2>
+          <p className="mt-0.5 text-sm text-muted-foreground">
+            {contact.first_name} {contact.last_name}
+          </p>
+        </div>
         <form onSubmit={handleSubmit}>
           <ContactForm
             form={form}
             companies={companies}
             cancelHref={contactPath(contact.id, listParams)}
-            submitLabel="Save changes"
+            submitLabel="Save Changes"
           />
         </form>
       </div>

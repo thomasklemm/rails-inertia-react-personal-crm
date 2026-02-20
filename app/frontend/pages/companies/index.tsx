@@ -29,7 +29,7 @@ export default function CompaniesIndex() {
         <Button asChild>
           <a href={newCompanyPath()}>
             <Plus className="size-4" />
-            Add company
+            Add Company
           </a>
         </Button>
       </div>

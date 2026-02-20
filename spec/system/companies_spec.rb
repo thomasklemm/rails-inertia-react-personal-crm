@@ -37,14 +37,14 @@ RSpec.describe "Companies", type: :system do
       visit new_company_path
       fill_in "Company name", with: "NewCo"
       fill_in "Website", with: "https://newco.example.com"
-      click_button "Create company"
+      click_button "Create Company"
       expect(page).to have_current_path(/companies\/\d+/)
       expect(page).to have_text("NewCo")
     end
 
     it "shows validation errors for missing name" do
       visit new_company_path
-      click_button "Create company"
+      click_button "Create Company"
       expect(page).to have_text("can't be blank")
     end
   end
@@ -53,7 +53,7 @@ RSpec.describe "Companies", type: :system do
     it "updates the company and redirects to its page" do
       visit edit_company_path(company)
       fill_in "Company name", with: "Acme Corp Updated"
-      click_button "Save changes"
+      click_button "Save Changes"
       expect(page).to have_current_path(company_path(company))
       expect(page).to have_text("Acme Corp Updated")
     end

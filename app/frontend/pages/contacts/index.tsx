@@ -27,7 +27,7 @@ export default function ContactsIndex() {
           </p>
         </div>
         <Button asChild>
-          <a href={newContactPath()}>Add contact</a>
+          <a href={newContactPath()}>Add Contact</a>
         </Button>
       </div>
     </>

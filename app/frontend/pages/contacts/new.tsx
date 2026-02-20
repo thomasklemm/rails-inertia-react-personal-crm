@@ -18,7 +18,7 @@ interface Props {
 
 const breadcrumbs: BreadcrumbItem[] = [
   { title: "Contacts", href: contactsPath() },
-  { title: "New contact", href: "#" },
+  { title: "New Contact", href: "#" },
 ]
 
 export default function ContactsNew() {
@@ -47,13 +47,13 @@ export default function ContactsNew() {
     <>
       <Head title="New Contact" />
       <div className="p-6">
-        <h2 className="mb-6 text-lg font-semibold">New contact</h2>
+        <h2 className="mb-6 text-xl font-semibold">New Contact</h2>
         <form onSubmit={handleSubmit}>
           <ContactForm
             form={form}
             companies={companies}
             cancelHref={contactsPath(cancelParams)}
-            submitLabel="Create contact"
+            submitLabel="Create Contact"
           />
         </form>
       </div>

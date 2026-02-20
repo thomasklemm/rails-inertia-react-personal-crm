@@ -31,7 +31,11 @@ class ActivitiesController < InertiaController
   def create
     @activity = Activity.new(activity_params)
     if @activity.save
-      redirect_to contact_path(@activity.contact), notice: "Activity logged."
+      if @activity.company_id?
+        redirect_to company_path(@activity.company), notice: "Activity logged."
+      else
+        redirect_to contact_path(@activity.contact), notice: "Activity logged."
+      end
     else
       redirect_back_or_to contacts_path, inertia: { errors: @activity.errors.as_json }
     end
@@ -39,22 +43,35 @@ class ActivitiesController < InertiaController
 
   def edit
     render inertia: "activities/edit", props: {
-      activity: @activity.as_json(include: { contact: { only: [:id, :first_name, :last_name] } })
+      activity: @activity.as_json(include: {
+        contact: { only: [:id, :first_name, :last_name] },
+        company: { only: [:id, :name] }
+      }),
+      return_to: params[:return_to]
     }
   end
 
   def update
     if @activity.update(activity_params)
-      redirect_back_or_to contact_path(@activity.contact), notice: "Activity updated."
+      redirect_path = if @activity.company_id?
+                        company_path(@activity.company)
+                      else
+                        contact_path(@activity.contact)
+                      end
+      redirect_to safe_return_path(params[:return_to], redirect_path), notice: "Activity updated."
     else
-      redirect_to edit_activity_path(@activity), inertia: { errors: @activity.errors.as_json }
+      redirect_to edit_activity_path(@activity, return_to: params[:return_to]), inertia: { errors: @activity.errors.as_json }
     end
   end
 
   def destroy
-    contact = @activity.contact
+    redirect_path = if @activity.company_id?
+                      company_path(@activity.company)
+                    else
+                      contact_path(@activity.contact)
+                    end
     @activity.destroy
-    redirect_back_or_to contact_path(contact), notice: "Activity deleted."
+    redirect_back_or_to redirect_path, notice: "Activity deleted."
   end
 
   private
@@ -64,6 +81,6 @@ class ActivitiesController < InertiaController
   end
 
   def activity_params
-    params.permit(:kind, :body, :contact_id)
+    params.permit(:kind, :body, :contact_id, :company_id)
   end
 end

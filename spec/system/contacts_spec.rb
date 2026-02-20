@@ -44,7 +44,7 @@ RSpec.describe "Contacts", type: :system do
 
     it "shows the activity log form" do
       visit contact_path(contact)
-      expect(page).to have_text("Log activity")
+      expect(page).to have_text("Log Activity")
       expect(page).to have_button("Note")
       expect(page).to have_button("Call")
       expect(page).to have_button("Email")
@@ -57,14 +57,14 @@ RSpec.describe "Contacts", type: :system do
       fill_in "First name", with: "Alice"
       fill_in "Last name", with: "Wonderland"
       fill_in "Email", with: "alice@example.com"
-      click_button "Create contact"
+      click_button "Create Contact"
       expect(page).to have_current_path(/contacts\/\d+/)
       expect(page).to have_text("Alice Wonderland")
     end
 
     it "shows validation errors for missing required fields" do
       visit new_contact_path
-      click_button "Create contact"
+      click_button "Create Contact"
       expect(page).to have_text("can't be blank")
     end
   end
@@ -73,7 +73,7 @@ RSpec.describe "Contacts", type: :system do
     it "updates the contact and redirects to their page" do
       visit edit_contact_path(contact)
       fill_in "First name", with: "Zara Updated"
-      click_button "Save changes"
+      click_button "Save Changes"
       expect(page).to have_current_path(contact_path(contact))
       expect(page).to have_text("Zara Updated")
     end

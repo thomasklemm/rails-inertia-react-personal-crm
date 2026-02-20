@@ -13,12 +13,14 @@ const KINDS: { value: ActivityKind; label: string; icon: React.ElementType }[] =
 ]
 
 interface ActivityFormProps {
-  contactId: number
+  contactId?: number
+  companyId?: number
 }
 
-export function ActivityForm({ contactId }: ActivityFormProps) {
+export function ActivityForm({ contactId, companyId }: ActivityFormProps) {
   const { data, setData, post, processing, reset, errors } = useForm({
-    contact_id: contactId,
+    ...(contactId ? { contact_id: contactId } : {}),
+    ...(companyId ? { company_id: companyId } : {}),
     kind: "note" as ActivityKind,
     body: "",
   })
@@ -33,7 +35,7 @@ export function ActivityForm({ contactId }: ActivityFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-3">
-      <h3 className="text-sm font-semibold">Log activity</h3>
+      <h3 className="text-sm font-semibold">Log Activity</h3>
 
       {/* Kind selector */}
       <div className="flex gap-1">
@@ -73,10 +75,11 @@ export function ActivityForm({ contactId }: ActivityFormProps) {
         {errors.body && <p className="mt-1 text-xs text-destructive">{errors.body}</p>}
       </div>
 
-      <input type="hidden" name="contact_id" value={contactId} />
+      {contactId && <input type="hidden" name="contact_id" value={contactId} />}
+      {companyId && <input type="hidden" name="company_id" value={companyId} />}
 
       <Button type="submit" size="sm" disabled={processing || !data.body.trim()}>
-        Log {data.kind}
+        Log {KINDS.find((k) => k.value === data.kind)?.label ?? data.kind}
       </Button>
     </form>
   )

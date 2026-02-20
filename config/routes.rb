@@ -23,7 +23,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :companies
+  resources :companies do
+    member do
+      patch :star
+    end
+  end
 
   resources :activities
 

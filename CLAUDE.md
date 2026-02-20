@@ -57,3 +57,10 @@ Use `js-routes` helpers from `@/routes` (e.g., `signInPath()`, `dashboardPath()`
 - **Testing**: RSpec with inertia_rails/rspec matchers. Use `render_component`, `have_props`, `have_flash` — NOT direct property access.
 - **Routing**: js-routes for typed path helpers. Run `rails js_routes:generate` after changing routes.rb.
 - **Architecture**: Server owns routing, data, and auth. React renders only. See `inertia-rails-architecture` for the decision matrix.
+
+## UI Text Conventions
+
+- **Title Case everywhere**: All button labels, form headings, page titles, and breadcrumbs use Title Case.
+  - Submit buttons: "Create Contact", "Create Company", "Save Changes", "Log Note", "Log Call", "Log Email"
+  - Page headings: "New Contact", "Edit Contact", "New Company", "Edit Company", "Log Activity"
+  - Specs must match the exact Title Case text rendered in the UI.

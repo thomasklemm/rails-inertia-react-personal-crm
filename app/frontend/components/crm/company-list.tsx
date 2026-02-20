@@ -12,10 +12,16 @@ import { CompanyRow } from "./company-row"
 interface CompanyListProps {
   companies: Company[]
   q?: string
+  filter?: string
   sort?: string
   sort_dir?: string
   activeCompanyId?: number
 }
+
+const FILTERS = [
+  { label: "All", value: undefined },
+  { label: "Starred", value: "starred" },
+]
 
 const SORTS = [
   { label: "Name", value: undefined, defaultDir: "asc", iconAsc: ArrowUpAZ, iconDesc: ArrowDownAZ },
@@ -23,13 +29,14 @@ const SORTS = [
   { label: "Contacts", value: "contacts", defaultDir: "desc", iconAsc: ArrowUp, iconDesc: ArrowDown },
 ] as const
 
-export function CompanyList({ companies, q, sort, sort_dir, activeCompanyId }: CompanyListProps) {
+export function CompanyList({ companies, q, filter, sort, sort_dir, activeCompanyId }: CompanyListProps) {
   const searchRef = useRef<HTMLInputElement>(null)
 
   const navigate = useCallback(
-    (params: { q?: string; sort?: string; sort_dir?: string }) => {
+    (params: { q?: string; filter?: string; sort?: string; sort_dir?: string }) => {
       const merged = {
         q: q ?? "",
+        filter: filter ?? "",
         sort: sort ?? "",
         sort_dir: sort_dir ?? "",
         ...params,
@@ -39,7 +46,7 @@ export function CompanyList({ companies, q, sort, sort_dir, activeCompanyId }: C
       )
       router.get(companiesPath(clean), {}, { preserveState: true, replace: true })
     },
-    [q, sort, sort_dir],
+    [q, filter, sort, sort_dir],
   )
 
   const handleSearch = useCallback(
@@ -55,7 +62,7 @@ export function CompanyList({ companies, q, sort, sort_dir, activeCompanyId }: C
       <div className="flex items-center justify-between px-3 py-3">
         <h2 className="text-sm font-semibold">Companies</h2>
         <Button size="sm" variant="outline" title="New company" asChild>
-          <a href={newCompanyPath({ q, sort, sort_dir })}>
+          <a href={newCompanyPath({ q, filter, sort, sort_dir })}>
             <Building2 className="size-4" />
             Add
           </a>
@@ -74,6 +81,26 @@ export function CompanyList({ companies, q, sort, sort_dir, activeCompanyId }: C
             onChange={(e) => handleSearch(e.target.value)}
           />
         </div>
+      </div>
+
+      {/* Filter tabs */}
+      <div className="flex gap-1 px-3 pb-2">
+        {FILTERS.map((f) => {
+          const isActive = (filter ?? undefined) === f.value
+          return (
+            <button
+              key={f.label}
+              onClick={() => navigate({ filter: f.value })}
+              className={`rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${
+                isActive
+                  ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                  : "text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground"
+              }`}
+            >
+              {f.label}
+            </button>
+          )
+        })}
       </div>
 
       {/* Sort row */}
@@ -118,6 +145,7 @@ export function CompanyList({ companies, q, sort, sort_dir, activeCompanyId }: C
               company={company}
               isActive={company.id === activeCompanyId}
               q={q}
+              filter={filter}
               sort={sort}
               sort_dir={sort_dir}
             />

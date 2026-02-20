@@ -28,4 +28,9 @@ class ApplicationController < ActionController::Base
     Current.user_agent = request.user_agent
     Current.ip_address = request.ip
   end
+
+  # Redirect to `path` only if it's a safe internal relative path, otherwise fall back.
+  def safe_return_path(path, fallback)
+    path.present? && path.start_with?("/") && !path.start_with?("//") ? path : fallback
+  end
 end

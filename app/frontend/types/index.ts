@@ -56,12 +56,31 @@ export type Tag =
   | "vip"
   | "vendor"
 
+export type CompanyTag =
+  | "saas"
+  | "fintech"
+  | "healthcare"
+  | "agency"
+  | "consulting"
+  | "ecommerce"
+  | "media"
+  | "manufacturing"
+  | "logistics"
+  | "education"
+  | "nonprofit"
+
 export type ActivityKind = "note" | "call" | "email"
 
 export interface Company {
   id: number
   name: string
   website: string | null
+  phone: string | null
+  email: string | null
+  address: string | null
+  notes: string | null
+  starred: boolean
+  tags: CompanyTag[]
   contacts_count?: number
   created_at: string
   updated_at: string
@@ -87,7 +106,8 @@ export interface Activity {
   id: number
   kind: ActivityKind
   body: string
-  contact: Pick<Contact, "id" | "first_name" | "last_name">
+  contact: Pick<Contact, "id" | "first_name" | "last_name"> | null
+  company: Pick<Company, "id" | "name"> | null
   created_at: string
   updated_at: string
 }

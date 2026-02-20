@@ -1,14 +1,15 @@
 # frozen_string_literal: true
 
 class CompaniesController < InertiaController
-  before_action :set_company, only: [:show, :edit, :update, :destroy]
+  before_action :set_company, only: [:show, :edit, :update, :destroy, :star]
 
   def index
     render inertia: "companies/index", props: {
       companies: filtered_companies.as_json,
       q: params[:q],
       sort: params[:sort],
-      sort_dir: params[:sort_dir]
+      sort_dir: params[:sort_dir],
+      filter: params[:filter]
     }
   end
 
@@ -19,7 +20,12 @@ class CompaniesController < InertiaController
       contacts: @company.contacts.includes(:company).order(:last_name, :first_name).as_json(include: :company),
       q: params[:q],
       sort: params[:sort],
-      sort_dir: params[:sort_dir]
+      sort_dir: params[:sort_dir],
+      filter: params[:filter],
+      activities: @company.activities.as_json(include: { contact: { only: [:id, :first_name, :last_name] } }),
+      contact_activities: Activity.where(contact_id: @company.contacts.pluck(:id))
+                                  .order(created_at: :desc)
+                                  .as_json(include: { contact: { only: [:id, :first_name, :last_name] } })
     }
   end
 
@@ -28,7 +34,8 @@ class CompaniesController < InertiaController
       companies: filtered_companies.as_json,
       q: params[:q],
       sort: params[:sort],
-      sort_dir: params[:sort_dir]
+      sort_dir: params[:sort_dir],
+      filter: params[:filter]
     }
   end
 
@@ -47,7 +54,8 @@ class CompaniesController < InertiaController
       company: @company.as_json,
       q: params[:q],
       sort: params[:sort],
-      sort_dir: params[:sort_dir]
+      sort_dir: params[:sort_dir],
+      filter: params[:filter]
     }
   end
 
@@ -64,6 +72,11 @@ class CompaniesController < InertiaController
     redirect_to companies_path, notice: "Company deleted."
   end
 
+  def star
+    @company.update!(starred: !@company.starred)
+    redirect_back_or_to company_path(@company), notice: @company.starred? ? "Starred." : "Unstarred."
+  end
+
   private
 
   def set_company
@@ -71,7 +84,7 @@ class CompaniesController < InertiaController
   end
 
   def company_params
-    params.permit(:name, :website)
+    params.permit(:name, :website, :phone, :email, :address, :notes, tags: [])
   end
 
   def filtered_companies
@@ -80,6 +93,7 @@ class CompaniesController < InertiaController
                    .select("companies.*, COUNT(contacts.id) AS contacts_count")
                    .order(:name)
 
+    scope = scope.where(starred: true) if params[:filter] == "starred"
     scope = scope.search(params[:q]) if params[:q].present?
 
     dir = params[:sort_dir] == "desc" ? :desc : :asc
