@@ -150,7 +150,7 @@ export function ContactList({ contacts, q, filter, sort, sort_dir, activeContact
       </div>
 
       {/* Contact list */}
-      <div className="flex-1 overflow-y-auto px-2">
+      <div className="flex flex-1 flex-col gap-0.5 overflow-y-auto px-2 pt-2">
         {contacts.length === 0 ? (
           <p className="px-3 py-6 text-center text-sm text-muted-foreground">No contacts found.</p>
         ) : (

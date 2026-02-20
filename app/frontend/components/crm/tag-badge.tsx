@@ -46,7 +46,7 @@ export function TagBadge({ tag }: TagBadgeProps) {
   return (
     <Badge
       variant="outline"
-      className={`border-0 px-2 py-0.5 text-xs font-medium capitalize ${TAG_STYLES[tag]}`}
+      className={`border-0 px-1.5 py-0 text-[10px] font-medium capitalize leading-5 ${TAG_STYLES[tag]}`}
     >
       {TAG_LABELS[tag] ?? tag}
     </Badge>
@@ -57,7 +57,7 @@ export function CompanyTagBadge({ tag }: CompanyTagBadgeProps) {
   return (
     <Badge
       variant="outline"
-      className={`border-0 px-2 py-0.5 text-xs font-medium capitalize ${COMPANY_TAG_STYLES[tag]}`}
+      className={`border-0 px-1.5 py-0 text-[10px] font-medium capitalize leading-5 ${COMPANY_TAG_STYLES[tag]}`}
     >
       {COMPANY_TAG_LABELS[tag] ?? tag}
     </Badge>

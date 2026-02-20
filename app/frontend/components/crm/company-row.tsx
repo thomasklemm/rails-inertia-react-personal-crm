@@ -33,7 +33,7 @@ export function CompanyRow({ company, isActive, q, filter, sort, sort_dir }: Com
     <Link
       ref={ref}
       href={companyPath(company.id, params)}
-      className={`flex items-center gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground ${
+      className={`flex items-center gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground ${
         isActive ? "bg-sidebar-accent text-sidebar-accent-foreground" : ""
       }`}
       prefetch
@@ -48,10 +48,12 @@ export function CompanyRow({ company, isActive, q, filter, sort, sort_dir }: Com
           )}
         </div>
         {company.tags.length > 0 && (
-          <div className="mt-0.5 flex flex-wrap gap-1">
+          <div className="mt-0.5 flex items-center gap-1.5 overflow-hidden">
             <CompanyTagBadge tag={company.tags[0]} />
             {company.tags.length > 1 && (
-              <span className="text-xs text-muted-foreground">+{company.tags.length - 1}</span>
+              <span className="rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
+                +{company.tags.length - 1}
+              </span>
             )}
           </div>
         )}

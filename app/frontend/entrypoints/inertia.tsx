@@ -10,7 +10,7 @@ putConfig({
   modal: {
     paddingClasses: "p-0",
     panelClasses:
-      "bg-white dark:bg-card text-foreground rounded-lg shadow-xl dark:border dark:border-border",
+      "bg-card dark:bg-card text-foreground rounded-lg shadow-xl border border-border/60 dark:border dark:border-border",
   },
 })
 import PersistentLayout from "@/layouts/persistent-layout"

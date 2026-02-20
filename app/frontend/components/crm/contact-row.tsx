@@ -33,7 +33,7 @@ export function ContactRow({ contact, isActive, q, filter, sort, sort_dir }: Con
     <Link
       ref={ref}
       href={contactPath(contact.id, params)}
-      className={`flex items-center gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground ${
+      className={`flex items-center gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground ${
         isActive ? "bg-sidebar-accent text-sidebar-accent-foreground" : ""
       }`}
       prefetch
@@ -52,16 +52,23 @@ export function ContactRow({ contact, isActive, q, filter, sort, sort_dir }: Con
             <Archive className="size-3 shrink-0 text-muted-foreground" />
           )}
         </div>
-        {contact.company && (
-          <p className="truncate text-xs text-muted-foreground">{contact.company.name}</p>
-        )}
-        {contact.tags.length > 0 && (
-          <div className="mt-0.5 flex flex-wrap gap-1">
-            {contact.tags.slice(0, 2).map((tag) => (
-              <TagBadge key={tag} tag={tag} />
-            ))}
-            {contact.tags.length > 2 && (
-              <span className="text-xs text-muted-foreground">+{contact.tags.length - 2}</span>
+        {(contact.company || contact.tags.length > 0) && (
+          <div className="mt-0.5 flex items-center gap-2 overflow-hidden">
+            {contact.company && (
+              <p className="shrink-0 truncate text-xs text-muted-foreground">{contact.company.name}</p>
+            )}
+            {contact.company && contact.tags.length > 0 && (
+              <span className="text-xs text-muted-foreground/50">·</span>
+            )}
+            {contact.tags.length > 0 && (
+              <>
+                <TagBadge tag={contact.tags[0]} />
+                {contact.tags.length > 1 && (
+                  <span className="rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
+                    +{contact.tags.length - 1}
+                  </span>
+                )}
+              </>
             )}
           </div>
         )}

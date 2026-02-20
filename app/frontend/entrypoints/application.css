@@ -13,24 +13,24 @@
 :root {
   /* ── Aureate · Light Mode ─────────────────────────────────────────────── */
   /* Warm parchment backgrounds, deep sepia text, rich amber accents        */
-  --background: oklch(0.99 0.006 82);
+  --background: oklch(0.955 0.010 82);
   --foreground: oklch(0.15 0.02 52);
-  --card: oklch(1 0 0);
+  --card: oklch(0.972 0.008 82);
   --card-foreground: oklch(0.15 0.02 52);
-  --popover: oklch(1 0 0);
+  --popover: oklch(0.972 0.008 82);
   --popover-foreground: oklch(0.15 0.02 52);
   --primary: oklch(0.52 0.155 58);
   --primary-foreground: oklch(0.99 0.004 85);
-  --secondary: oklch(0.94 0.016 78);
+  --secondary: oklch(0.915 0.016 78);
   --secondary-foreground: oklch(0.22 0.018 55);
-  --muted: oklch(0.94 0.012 78);
+  --muted: oklch(0.915 0.012 78);
   --muted-foreground: oklch(0.5 0.03 68);
-  --accent: oklch(0.94 0.016 78);
+  --accent: oklch(0.915 0.016 78);
   --accent-foreground: oklch(0.22 0.018 55);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(0.88 0.014 78);
-  --input: oklch(0.80 0.018 78);
+  --border: oklch(0.865 0.014 78);
+  --input: oklch(0.845 0.016 78);
   --ring: oklch(0.52 0.155 58);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
@@ -38,13 +38,13 @@
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
   --radius: 0.5rem;
-  --sidebar: oklch(0.97 0.01 80);
+  --sidebar: oklch(0.938 0.012 80);
   --sidebar-foreground: oklch(0.15 0.02 52);
   --sidebar-primary: oklch(0.52 0.155 58);
   --sidebar-primary-foreground: oklch(0.99 0.004 85);
-  --sidebar-accent: oklch(0.93 0.015 78);
+  --sidebar-accent: oklch(0.905 0.015 78);
   --sidebar-accent-foreground: oklch(0.22 0.018 55);
-  --sidebar-border: oklch(0.88 0.014 78);
+  --sidebar-border: oklch(0.865 0.014 78);
   --sidebar-ring: oklch(0.52 0.155 58);
 }
 
