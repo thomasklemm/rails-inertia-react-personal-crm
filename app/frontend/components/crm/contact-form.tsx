@@ -143,7 +143,7 @@ export function ContactForm({ form, companies, cancelHref, submitLabel }: Contac
                 type="button"
                 onClick={() => toggleTag(tag)}
                 className={cn(
-                  "rounded-full border px-2.5 py-0.5 text-xs font-medium capitalize transition-colors",
+                  "cursor-pointer rounded-full border px-2.5 py-0.5 text-xs font-medium capitalize transition-colors",
                   isSelected
                     ? TAG_STYLES[tag]
                     : "border-border text-muted-foreground hover:border-foreground/40 hover:text-foreground",

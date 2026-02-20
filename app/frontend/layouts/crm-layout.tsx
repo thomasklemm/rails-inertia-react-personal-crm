@@ -9,12 +9,13 @@ interface CrmPageProps {
   q?: string
   filter?: string
   sort?: string
+  sort_dir?: string
   contact?: { id: number }
   [key: string]: unknown
 }
 
 export function CrmLayout({ children }: { children: ReactNode }) {
-  const { contacts, q, filter, sort, contact } = usePage<CrmPageProps>().props
+  const { contacts, q, filter, sort, sort_dir, contact } = usePage<CrmPageProps>().props
 
   return (
     <div className="flex flex-1 overflow-hidden">
@@ -25,6 +26,7 @@ export function CrmLayout({ children }: { children: ReactNode }) {
           q={q}
           filter={filter}
           sort={sort}
+          sort_dir={sort_dir}
           activeContactId={contact?.id}
         />
       </div>

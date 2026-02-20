@@ -1,5 +1,5 @@
 import { router } from "@inertiajs/react"
-import { Archive, Building2, Edit, Mail, Phone, Star, Trash2 } from "lucide-react"
+import { Archive, ArchiveRestore, Building2, Edit, Mail, Phone, Star, Trash2 } from "lucide-react"
 import { useState } from "react"
 
 import {
@@ -32,14 +32,15 @@ interface ContactDetailProps {
   q?: string
   filter?: string
   sort?: string
+  sort_dir?: string
 }
 
-export function ContactDetail({ contact, q, filter, sort }: ContactDetailProps) {
+export function ContactDetail({ contact, q, filter, sort, sort_dir }: ContactDetailProps) {
   const [archiveDialogOpen, setArchiveDialogOpen] = useState(false)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
 
   const listParams = Object.fromEntries(
-    Object.entries({ q, filter, sort }).filter(([, v]) => v !== undefined && v !== ""),
+    Object.entries({ q, filter, sort, sort_dir }).filter(([, v]) => v !== undefined && v !== ""),
   )
 
   function handleStar() {
@@ -110,7 +111,7 @@ export function ContactDetail({ contact, q, filter, sort }: ContactDetailProps) 
             onClick={() => setArchiveDialogOpen(true)}
             title={contact.archived ? "Restore" : "Archive"}
           >
-            <Archive className="size-4" />
+            {contact.archived ? <ArchiveRestore className="size-4" /> : <Archive className="size-4" />}
           </Button>
           <Button size="icon-sm" variant="outline" asChild>
             <a href={editContactPath(contact.id, listParams)} title="Edit">

@@ -1,5 +1,5 @@
 import { router } from "@inertiajs/react"
-import { Search, UserPlus } from "lucide-react"
+import { ArrowDown, ArrowDownAZ, ArrowUp, ArrowUpAZ, Search, UserPlus } from "lucide-react"
 import { useCallback, useRef } from "react"
 
 import { Button } from "@/components/ui/button"
@@ -14,6 +14,7 @@ interface ContactListProps {
   q?: string
   filter?: string
   sort?: string
+  sort_dir?: string
   activeContactId?: number
 }
 
@@ -24,20 +25,21 @@ const FILTERS = [
 ]
 
 const SORTS = [
-  { label: "Name", value: undefined },
-  { label: "Newest", value: "added" },
-  { label: "Company", value: "company" },
-]
+  { label: "Name", value: undefined, defaultDir: "asc", iconAsc: ArrowUpAZ, iconDesc: ArrowDownAZ },
+  { label: "Newest", value: "added", defaultDir: "desc", iconAsc: ArrowUp, iconDesc: ArrowDown },
+  { label: "Company", value: "company", defaultDir: "asc", iconAsc: ArrowUpAZ, iconDesc: ArrowDownAZ },
+] as const
 
-export function ContactList({ contacts, q, filter, sort, activeContactId }: ContactListProps) {
+export function ContactList({ contacts, q, filter, sort, sort_dir, activeContactId }: ContactListProps) {
   const searchRef = useRef<HTMLInputElement>(null)
 
   const navigate = useCallback(
-    (params: { q?: string; filter?: string; sort?: string }) => {
+    (params: { q?: string; filter?: string; sort?: string; sort_dir?: string }) => {
       const merged = {
         q: q ?? "",
         filter: filter ?? "",
         sort: sort ?? "",
+        sort_dir: sort_dir ?? "",
         ...params,
       }
       // Remove empty params
@@ -46,7 +48,7 @@ export function ContactList({ contacts, q, filter, sort, activeContactId }: Cont
       )
       router.get(contactsPath(clean), {}, { preserveState: true, replace: true })
     },
-    [q, filter, sort],
+    [q, filter, sort, sort_dir],
   )
 
   const handleSearch = useCallback(
@@ -62,7 +64,7 @@ export function ContactList({ contacts, q, filter, sort, activeContactId }: Cont
       <div className="flex items-center justify-between px-3 py-3">
         <h2 className="text-sm font-semibold">Contacts</h2>
         <Button size="sm" variant="outline" title="New contact" asChild>
-          <a href={newContactPath({ q, filter, sort })}>
+          <a href={newContactPath({ q, filter, sort, sort_dir })}>
             <UserPlus className="size-4" />
             Add
           </a>
@@ -108,17 +110,27 @@ export function ContactList({ contacts, q, filter, sort, activeContactId }: Cont
         <span className="text-xs text-muted-foreground">Sort:</span>
         {SORTS.map((s) => {
           const isActive = (sort ?? undefined) === s.value
+          const effectiveDir = isActive ? (sort_dir ?? s.defaultDir) : s.defaultDir
+          const Icon = effectiveDir === "asc" ? s.iconAsc : s.iconDesc
+
           return (
             <button
               key={s.label}
-              onClick={() => navigate({ sort: s.value })}
-              className={`rounded-md px-2 py-0.5 text-xs transition-colors ${
+              onClick={() => {
+                if (isActive) {
+                  navigate({ sort: s.value, sort_dir: sort_dir === "asc" ? "desc" : "asc" })
+                } else {
+                  navigate({ sort: s.value, sort_dir: s.defaultDir })
+                }
+              }}
+              className={`flex cursor-pointer items-center gap-0.5 rounded-md px-2 py-0.5 text-xs transition-colors ${
                 isActive
                   ? "font-semibold text-foreground"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
               {s.label}
+              {isActive && <Icon className="size-3" />}
             </button>
           )
         })}
@@ -137,6 +149,7 @@ export function ContactList({ contacts, q, filter, sort, activeContactId }: Cont
               q={q}
               filter={filter}
               sort={sort}
+              sort_dir={sort_dir}
             />
           ))
         )}

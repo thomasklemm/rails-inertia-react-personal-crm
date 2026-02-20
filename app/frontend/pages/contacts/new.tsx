@@ -12,6 +12,7 @@ interface Props {
   q?: string
   filter?: string
   sort?: string
+  sort_dir?: string
   [key: string]: unknown
 }
 
@@ -21,10 +22,10 @@ const breadcrumbs: BreadcrumbItem[] = [
 ]
 
 export default function ContactsNew() {
-  const { companies, q, filter, sort } = usePage<Props>().props
+  const { companies, q, filter, sort, sort_dir } = usePage<Props>().props
 
   const cancelParams = Object.fromEntries(
-    Object.entries({ q, filter, sort }).filter(([, v]) => v !== undefined),
+    Object.entries({ q, filter, sort, sort_dir }).filter(([, v]) => v !== undefined),
   )
 
   const form = useForm<ContactFormData>({

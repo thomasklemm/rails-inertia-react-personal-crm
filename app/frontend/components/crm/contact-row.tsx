@@ -1,5 +1,5 @@
 import { Link } from "@inertiajs/react"
-import { Star } from "lucide-react"
+import { Archive, Star } from "lucide-react"
 
 import { contactPath } from "@/routes"
 import type { Contact } from "@/types"
@@ -13,13 +13,15 @@ interface ContactRowProps {
   q?: string
   filter?: string
   sort?: string
+  sort_dir?: string
 }
 
-export function ContactRow({ contact, isActive, q, filter, sort }: ContactRowProps) {
+export function ContactRow({ contact, isActive, q, filter, sort, sort_dir }: ContactRowProps) {
   const params: Record<string, string> = {}
   if (q) params.q = q
   if (filter) params.filter = filter
   if (sort) params.sort = sort
+  if (sort_dir) params.sort_dir = sort_dir
 
   return (
     <Link
@@ -38,6 +40,9 @@ export function ContactRow({ contact, isActive, q, filter, sort }: ContactRowPro
           </span>
           {contact.starred && (
             <Star className="size-3 shrink-0 fill-amber-400 text-amber-400" />
+          )}
+          {contact.archived && (
+            <Archive className="size-3 shrink-0 text-muted-foreground" />
           )}
         </div>
         {contact.company && (

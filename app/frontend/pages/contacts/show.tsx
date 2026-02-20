@@ -17,16 +17,17 @@ interface Props {
   q?: string
   filter?: string
   sort?: string
+  sort_dir?: string
   [key: string]: unknown
 }
 
 export default function ContactsShow() {
-  const { contact, activities, q, filter, sort } = usePage<Props>().props
+  const { contact, activities, q, filter, sort, sort_dir } = usePage<Props>().props
 
   return (
     <>
       <Head title={`${contact.first_name} ${contact.last_name}`} />
-      <ContactDetail contact={contact} q={q} filter={filter} sort={sort} />
+      <ContactDetail contact={contact} q={q} filter={filter} sort={sort} sort_dir={sort_dir} />
       <Separator />
       <div className="p-6 space-y-6">
         <ActivityForm contactId={contact.id} />

@@ -13,11 +13,12 @@ interface Props {
   q?: string
   filter?: string
   sort?: string
+  sort_dir?: string
   [key: string]: unknown
 }
 
 export default function ContactsEdit() {
-  const { contact, companies, q, filter, sort } = usePage<Props>().props
+  const { contact, companies, q, filter, sort, sort_dir } = usePage<Props>().props
 
   const form = useForm<ContactFormData>({
     first_name: contact.first_name,
@@ -30,7 +31,7 @@ export default function ContactsEdit() {
   })
 
   const listParams = Object.fromEntries(
-    Object.entries({ q, filter, sort }).filter(([, v]) => v !== undefined),
+    Object.entries({ q, filter, sort, sort_dir }).filter(([, v]) => v !== undefined),
   )
 
   function handleSubmit(e: React.FormEvent) {

@@ -8,7 +8,8 @@ class ContactsController < InertiaController
       contacts: filtered_contacts.as_json(include: :company),
       q: params[:q],
       filter: params[:filter],
-      sort: params[:sort]
+      sort: params[:sort],
+      sort_dir: params[:sort_dir]
     }
   end
 
@@ -20,7 +21,8 @@ class ContactsController < InertiaController
       companies: Company.order(:name).as_json,
       q: params[:q],
       filter: params[:filter],
-      sort: params[:sort]
+      sort: params[:sort],
+      sort_dir: params[:sort_dir]
     }
   end
 
@@ -30,7 +32,8 @@ class ContactsController < InertiaController
       companies: Company.order(:name).as_json,
       q: params[:q],
       filter: params[:filter],
-      sort: params[:sort]
+      sort: params[:sort],
+      sort_dir: params[:sort_dir]
     }
   end
 
@@ -50,7 +53,8 @@ class ContactsController < InertiaController
       companies: Company.order(:name).as_json,
       q: params[:q],
       filter: params[:filter],
-      sort: params[:sort]
+      sort: params[:sort],
+      sort_dir: params[:sort_dir]
     }
   end
 
@@ -100,12 +104,17 @@ class ContactsController < InertiaController
       scope = scope.search(params[:q])
     end
 
+    dir = params[:sort_dir] == "desc" ? :desc : :asc
+
     scope = case params[:sort]
-            when "first"   then scope.reorder(:first_name, :last_name)
-            when "added"   then scope.reorder(created_at: :desc)
-            when "company" then scope.joins("LEFT JOIN companies ON companies.id = contacts.company_id")
-                                     .reorder(Arel.sql("companies.name NULLS LAST, contacts.last_name"))
-            else scope
+            when "added"
+              scope.reorder(created_at: dir)
+            when "company"
+              dir_sql = dir == :desc ? "DESC" : "ASC"
+              scope.joins("LEFT JOIN companies ON companies.id = contacts.company_id")
+                   .reorder(Arel.sql("companies.name #{dir_sql} NULLS LAST, contacts.last_name #{dir_sql}"))
+            else
+              dir == :desc ? scope.reorder(last_name: :desc, first_name: :desc) : scope
             end
 
     scope
