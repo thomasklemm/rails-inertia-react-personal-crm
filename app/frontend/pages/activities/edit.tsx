@@ -39,7 +39,7 @@ export default function ActivitiesEdit({ activity }: Props) {
   return (
     <Modal>
       <Head title={`Edit Activity${subjectName ? ` for ${subjectName}` : ""}`} />
-      <div className="p-6">
+      <div className="p-8">
         <div className="mb-4">
           <h2 className="text-xl font-semibold">Edit Activity</h2>
           {subjectName && <p className="mt-0.5 text-sm text-muted-foreground">{subjectName}</p>}

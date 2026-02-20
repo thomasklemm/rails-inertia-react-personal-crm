@@ -23,7 +23,7 @@ export default function CompaniesNew() {
   return (
     <Modal>
       <Head title="New Company" />
-      <div className="p-6">
+      <div className="p-8">
         <h2 className="mb-4 text-xl font-semibold">New Company</h2>
         <form onSubmit={handleSubmit}>
           <CompanyForm form={form} cancelHref={companiesPath()} submitLabel="Create Company" />
