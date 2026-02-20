@@ -57,6 +57,7 @@ Use `js-routes` helpers from `@/routes` (e.g., `signInPath()`, `dashboardPath()`
 - **Testing**: RSpec with inertia_rails/rspec matchers. Use `render_component`, `have_props`, `have_flash` — NOT direct property access.
 - **Routing**: js-routes for typed path helpers. Run `rails js_routes:generate` after changing routes.rb.
 - **Architecture**: Server owns routing, data, and auth. React renders only. See `inertia-rails-architecture` for the decision matrix.
+- **Modals**: `@inertiaui/modal-react` — use the `inertia-modal` skill when opening any route in a modal or slideover, replacing `<Link>` with `<ModalLink>`, wrapping page content in `<Modal>`, or building inline local modals.
 
 ## UI Text Conventions
 

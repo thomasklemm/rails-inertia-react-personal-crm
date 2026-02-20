@@ -36,9 +36,10 @@ interface CompanyFormProps {
   form: InertiaFormProps<CompanyFormData>
   cancelHref: string
   submitLabel: string
+  autoFocus?: boolean
 }
 
-export function CompanyForm({ form, cancelHref, submitLabel }: CompanyFormProps) {
+export function CompanyForm({ form, cancelHref, submitLabel, autoFocus = true }: CompanyFormProps) {
   const { data, setData, errors, processing } = form
 
   function toggleTag(tag: CompanyTag) {
@@ -58,7 +59,7 @@ export function CompanyForm({ form, cancelHref, submitLabel }: CompanyFormProps)
           name="name"
           value={data.name}
           onChange={(e) => setData("name", e.target.value)}
-          autoFocus
+          autoFocus={autoFocus}
         />
         {errors.name && <p className="text-xs text-destructive">{errors.name}</p>}
       </div>
@@ -148,7 +149,7 @@ export function CompanyForm({ form, cancelHref, submitLabel }: CompanyFormProps)
           name="notes"
           value={data.notes}
           onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setData("notes", e.target.value)}
-          rows={4}
+          rows={6}
           className="resize-none"
         />
       </div>

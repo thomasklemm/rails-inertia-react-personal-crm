@@ -1,13 +1,14 @@
 import { Head, usePage } from "@inertiajs/react"
+import { ModalLink } from "@inertiaui/modal-react"
 import type { ReactNode } from "react"
 
-import { ActivityForm } from "@/components/crm/activity-form"
 import { ActivityLog } from "@/components/crm/activity-log"
 import { CompanyDetail } from "@/components/crm/company-detail"
+import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import AppLayout from "@/layouts/app-layout"
 import { CompaniesLayout } from "@/layouts/companies-layout"
-import { companiesPath } from "@/routes"
+import { companiesPath, newActivityPath } from "@/routes"
 import type { Activity, BreadcrumbItem, Company, Contact } from "@/types"
 
 interface Props {
@@ -39,7 +40,9 @@ export default function CompaniesShow() {
           sort_dir={sort_dir}
         />
         <div className="space-y-5 border-t px-6 py-5">
-          <ActivityForm companyId={company.id} />
+          <ModalLink href={newActivityPath({ company_id: company.id })}>
+            <Button size="sm">Log Activity</Button>
+          </ModalLink>
           <ActivityLog activities={activities} />
           {contact_activities.length > 0 && (
             <>

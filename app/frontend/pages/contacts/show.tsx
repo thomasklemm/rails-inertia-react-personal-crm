@@ -1,12 +1,13 @@
 import { Head, usePage } from "@inertiajs/react"
+import { ModalLink } from "@inertiaui/modal-react"
 import type { ReactNode } from "react"
 
-import { ActivityForm } from "@/components/crm/activity-form"
 import { ActivityLog } from "@/components/crm/activity-log"
 import { ContactDetail } from "@/components/crm/contact-detail"
+import { Button } from "@/components/ui/button"
 import AppLayout from "@/layouts/app-layout"
 import { CrmLayout } from "@/layouts/crm-layout"
-import { contactsPath } from "@/routes"
+import { contactsPath, newActivityPath } from "@/routes"
 import type { Activity, BreadcrumbItem, Company, Contact } from "@/types"
 
 interface Props {
@@ -29,7 +30,9 @@ export default function ContactsShow() {
       <div className="scrollbar-subtle h-full overflow-y-auto">
         <ContactDetail contact={contact} q={q} filter={filter} sort={sort} sort_dir={sort_dir} />
         <div className="space-y-5 border-t px-6 py-5">
-          <ActivityForm contactId={contact.id} />
+          <ModalLink href={newActivityPath({ contact_id: contact.id })}>
+            <Button size="sm">Log Activity</Button>
+          </ModalLink>
           <ActivityLog activities={activities} />
         </div>
       </div>

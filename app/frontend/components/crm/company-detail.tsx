@@ -1,6 +1,6 @@
 import { router } from "@inertiajs/react"
 import { ModalLink } from "@inertiaui/modal-react"
-import { Edit, ExternalLink, Mail, MapPin, Phone, Plus, Star, Trash2 } from "lucide-react"
+import { Edit, ExternalLink, Mail, MapPin, Phone, Star, Trash2 } from "lucide-react"
 import { useState } from "react"
 
 import {
@@ -164,43 +164,47 @@ export function CompanyDetail({
         </div>
       </dl>
 
-      {/* Notes */}
-      {company.notes && (
-        <>
-          <Separator />
-          <div>
-            <h3 className="mb-1.5 text-xs font-medium text-muted-foreground">Notes</h3>
-            <p className="whitespace-pre-wrap text-sm">{company.notes}</p>
-          </div>
-        </>
-      )}
-
       <Separator />
 
-      {/* Contacts */}
-      <div>
-        <div className="mb-3 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <h2 className="text-sm font-semibold">Contacts</h2>
-            <span className="text-xs text-muted-foreground">
-              {contacts.length} {contacts.length === 1 ? "contact" : "contacts"}
-            </span>
+      {/* Contacts + Notes side by side */}
+      <div className="flex flex-col items-start gap-6 lg:flex-row lg:gap-0">
+        {/* Contacts */}
+        <div className="w-full lg:w-2/5 lg:pr-8">
+          <div className="mb-3 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <h2 className="text-sm font-semibold">Contacts</h2>
+              <span className="text-xs text-muted-foreground">
+                {contacts.length} {contacts.length === 1 ? "contact" : "contacts"}
+              </span>
+            </div>
+            <Button size="sm" variant="outline" asChild>
+              <ModalLink navigate href={newContactPath({ company_id: String(company.id) })}>
+                + Add Contact
+              </ModalLink>
+            </Button>
           </div>
-          <Button size="icon-sm" variant="outline" asChild title="New Contact">
-            <ModalLink navigate href={newContactPath({ company_id: String(company.id) })}>
-              <Plus className="size-4" />
-            </ModalLink>
-          </Button>
+          {contacts.length === 0 ? (
+            <p className="text-sm text-muted-foreground">No contacts at this company.</p>
+          ) : (
+            <div className="divide-y overflow-hidden rounded-lg border">
+              {contacts.map((contact) => (
+                <ContactRow key={contact.id} contact={contact} isActive={false} />
+              ))}
+            </div>
+          )}
         </div>
-        {contacts.length === 0 ? (
-          <p className="text-sm text-muted-foreground">No contacts at this company.</p>
-        ) : (
-          <div className="divide-y overflow-hidden rounded-lg border">
-            {contacts.map((contact) => (
-              <ContactRow key={contact.id} contact={contact} isActive={false} />
-            ))}
-          </div>
-        )}
+
+        <div className="hidden w-px self-stretch bg-border lg:block" />
+
+        {/* Notes */}
+        <div className="w-full lg:flex-1 lg:pl-8">
+          <h3 className="mb-1.5 text-xs font-medium text-muted-foreground">Notes</h3>
+          {company.notes ? (
+            <p className="whitespace-pre-wrap text-sm">{company.notes}</p>
+          ) : (
+            <p className="text-sm text-muted-foreground">No notes.</p>
+          )}
+        </div>
       </div>
 
       {/* Delete confirmation */}

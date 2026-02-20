@@ -42,6 +42,7 @@ export default function ContactsEdit({ contact, companies }: Props) {
             companies={companies}
             cancelHref={contactPath(contact.id)}
             submitLabel="Save Changes"
+            autoFocus={false}
           />
         </form>
       </div>

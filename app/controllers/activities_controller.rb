@@ -41,6 +41,13 @@ class ActivitiesController < InertiaController
     end
   end
 
+  def new
+    render inertia_modal: "activities/new", props: {
+      contact_id: params[:contact_id]&.to_i,
+      company_id: params[:company_id]&.to_i
+    }, base_url: activities_path
+  end
+
   def edit
     render inertia_modal: "activities/edit", props: {
       activity: @activity.as_json(include: {

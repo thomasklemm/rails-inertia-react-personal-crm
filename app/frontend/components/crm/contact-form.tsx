@@ -41,9 +41,10 @@ interface ContactFormProps {
   companies: Company[]
   cancelHref: string
   submitLabel: string
+  autoFocus?: boolean
 }
 
-export function ContactForm({ form, companies, cancelHref, submitLabel }: ContactFormProps) {
+export function ContactForm({ form, companies, cancelHref, submitLabel, autoFocus = true }: ContactFormProps) {
   const { data, setData, errors, processing } = form
 
   function toggleTag(tag: Tag) {
@@ -64,7 +65,7 @@ export function ContactForm({ form, companies, cancelHref, submitLabel }: Contac
             name="first_name"
             value={data.first_name}
             onChange={(e) => setData("first_name", e.target.value)}
-            autoFocus
+            autoFocus={autoFocus}
           />
           {errors.first_name && (
             <p className="text-xs text-destructive">{errors.first_name}</p>

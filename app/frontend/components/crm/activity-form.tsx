@@ -62,6 +62,7 @@ export function ActivityForm({ contactId, companyId }: ActivityFormProps) {
           name="body"
           value={data.body}
           onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setData("body", e.target.value)}
+          autoFocus
           placeholder={
             data.kind === "note"
               ? "Add a note…"

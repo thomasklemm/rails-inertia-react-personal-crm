@@ -8,7 +8,6 @@ import {
   Building2,
   Search,
   Star,
-  UserPlus,
   Users,
 } from "lucide-react"
 import { useCallback, useRef } from "react"
@@ -73,11 +72,8 @@ export function ContactList({ contacts, q, filter, sort, sort_dir, activeContact
       {/* Header */}
       <div className="flex items-center justify-between px-3 py-3">
         <h2 className="text-sm font-semibold">Contacts</h2>
-        <Button size="sm" variant="outline" title="New contact" asChild>
-          <a href={newContactPath({ q, filter, sort, sort_dir })}>
-            <UserPlus className="size-4" />
-            Add
-          </a>
+        <Button size="sm" variant="outline" asChild>
+          <a href={newContactPath({ q, filter, sort, sort_dir })}>+ Add Contact</a>
         </Button>
       </div>
 

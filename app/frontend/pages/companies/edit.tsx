@@ -38,6 +38,7 @@ export default function CompaniesEdit({ company }: Props) {
             form={form}
             cancelHref={companyPath(company.id)}
             submitLabel="Save Changes"
+            autoFocus={false}
           />
         </form>
       </div>
