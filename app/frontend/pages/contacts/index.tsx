@@ -28,7 +28,7 @@ export default function ContactsIndex() {
           </p>
         </div>
         <Button asChild>
-          <ModalLink navigate href={newContactPath()}>Add Contact</ModalLink>
+          <ModalLink navigate href={newContactPath()}>+ Add Contact</ModalLink>
         </Button>
       </div>
     </>
