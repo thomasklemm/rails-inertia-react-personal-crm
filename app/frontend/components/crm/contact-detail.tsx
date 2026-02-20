@@ -61,14 +61,14 @@ export function ContactDetail({ contact, q, filter, sort, sort_dir }: ContactDet
     <div className="flex flex-col gap-6 p-6">
       {/* Header */}
       <div className="flex items-start gap-3">
-        <ContactAvatar contact={contact} size="md" />
+        <ContactAvatar contact={contact} size="lg" />
 
         <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-1.5">
-            <h1 className="truncate text-base font-semibold leading-snug">
+          <div className="flex items-center gap-2">
+            <h1 className="truncate text-lg font-semibold leading-snug">
               {contact.first_name} {contact.last_name}
             </h1>
-            {contact.starred && <Star className="size-3.5 shrink-0 fill-amber-400 text-amber-400" />}
+            {contact.starred && <Star className="size-4 shrink-0 fill-amber-400 text-amber-400" />}
             {contact.archived && (
               <span className="shrink-0 rounded bg-muted px-1.5 py-0.5 text-xs text-muted-foreground">
                 Archived
@@ -84,49 +84,46 @@ export function ContactDetail({ contact, q, filter, sort, sort_dir }: ContactDet
               {contact.company.name}
             </a>
           )}
-
-          {/* Tags + Actions */}
-          <div className="mt-2 flex items-start justify-between gap-2">
-            <div className="flex flex-wrap gap-1">
-              {contact.tags.map((tag) => (
-                <TagBadge key={tag} tag={tag} />
-              ))}
-            </div>
-            <div className="flex shrink-0 gap-1">
-              <Button
-                size="icon-xs"
-                variant="outline"
-                onClick={handleStar}
-                title={contact.starred ? "Unstar" : "Star"}
-              >
-                <Star
-                  className={`size-3 ${contact.starred ? "fill-amber-400 text-amber-400" : ""}`}
-                />
-              </Button>
-              <Button
-                size="icon-xs"
-                variant="outline"
-                onClick={() => setArchiveDialogOpen(true)}
-                title={contact.archived ? "Restore" : "Archive"}
-              >
-                {contact.archived ? <ArchiveRestore className="size-3" /> : <Archive className="size-3" />}
-              </Button>
-              <Button size="icon-xs" variant="outline" asChild>
-                <a href={editContactPath(contact.id, listParams)} title="Edit">
-                  <Edit className="size-3" />
-                </a>
-              </Button>
-              <Button
-                size="icon-xs"
-                variant="ghost"
-                className="hover:bg-destructive/10 hover:text-destructive dark:hover:bg-destructive/20"
-                onClick={() => setDeleteDialogOpen(true)}
-                title="Delete"
-              >
-                <Trash2 className="size-3" />
-              </Button>
-            </div>
+          <div className="mt-2 flex flex-wrap gap-1">
+            {contact.tags.map((tag) => (
+              <TagBadge key={tag} tag={tag} />
+            ))}
           </div>
+        </div>
+
+        <div className="flex shrink-0 gap-1">
+          <Button
+            size="icon-sm"
+            variant="outline"
+            onClick={handleStar}
+            title={contact.starred ? "Unstar" : "Star"}
+          >
+            <Star
+              className={`size-4 ${contact.starred ? "fill-amber-400 text-amber-400" : ""}`}
+            />
+          </Button>
+          <Button
+            size="icon-sm"
+            variant="outline"
+            onClick={() => setArchiveDialogOpen(true)}
+            title={contact.archived ? "Restore" : "Archive"}
+          >
+            {contact.archived ? <ArchiveRestore className="size-4" /> : <Archive className="size-4" />}
+          </Button>
+          <Button size="icon-sm" variant="outline" asChild>
+            <a href={editContactPath(contact.id, listParams)} title="Edit">
+              <Edit className="size-4" />
+            </a>
+          </Button>
+          <Button
+            size="icon-sm"
+            variant="ghost"
+            className="hover:bg-destructive/10 hover:text-destructive dark:hover:bg-destructive/20"
+            onClick={() => setDeleteDialogOpen(true)}
+            title="Delete"
+          >
+            <Trash2 className="size-4" />
+          </Button>
         </div>
       </div>
 

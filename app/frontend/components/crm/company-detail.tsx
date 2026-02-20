@@ -58,48 +58,45 @@ export function CompanyDetail({
     <div className="flex flex-col gap-6 p-6">
       {/* Header */}
       <div className="flex items-start gap-3">
-        <CompanyAvatar company={company} size="md" />
+        <CompanyAvatar company={company} size="lg" />
 
         <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-1.5">
-            <h1 className="truncate text-base font-semibold leading-snug">{company.name}</h1>
-            {company.starred && <Star className="size-3.5 shrink-0 fill-amber-400 text-amber-400" />}
+          <div className="flex items-center gap-2">
+            <h1 className="truncate text-lg font-semibold leading-snug">{company.name}</h1>
+            {company.starred && <Star className="size-4 shrink-0 fill-amber-400 text-amber-400" />}
           </div>
+          <div className="mt-2 flex flex-wrap gap-1">
+            {company.tags.map((tag) => (
+              <CompanyTagBadge key={tag} tag={tag} />
+            ))}
+          </div>
+        </div>
 
-          {/* Tags + Actions */}
-          <div className="mt-2 flex items-start justify-between gap-2">
-            <div className="flex flex-wrap gap-1">
-              {company.tags.map((tag) => (
-                <CompanyTagBadge key={tag} tag={tag} />
-              ))}
-            </div>
-            <div className="flex shrink-0 gap-1">
-              <Button
-                size="icon-xs"
-                variant="outline"
-                onClick={handleStar}
-                title={company.starred ? "Unstar" : "Star"}
-              >
-                <Star
-                  className={`size-3 ${company.starred ? "fill-amber-400 text-amber-400" : ""}`}
-                />
-              </Button>
-              <Button size="icon-xs" variant="outline" asChild>
-                <a href={editCompanyPath(company.id, listParams)} title="Edit">
-                  <Edit className="size-3" />
-                </a>
-              </Button>
-              <Button
-                size="icon-xs"
-                variant="ghost"
-                className="hover:bg-destructive/10 hover:text-destructive dark:hover:bg-destructive/20"
-                onClick={() => setDeleteDialogOpen(true)}
-                title="Delete"
-              >
-                <Trash2 className="size-3" />
-              </Button>
-            </div>
-          </div>
+        <div className="flex shrink-0 gap-1">
+          <Button
+            size="icon-sm"
+            variant="outline"
+            onClick={handleStar}
+            title={company.starred ? "Unstar" : "Star"}
+          >
+            <Star
+              className={`size-4 ${company.starred ? "fill-amber-400 text-amber-400" : ""}`}
+            />
+          </Button>
+          <Button size="icon-sm" variant="outline" asChild>
+            <a href={editCompanyPath(company.id, listParams)} title="Edit">
+              <Edit className="size-4" />
+            </a>
+          </Button>
+          <Button
+            size="icon-sm"
+            variant="ghost"
+            className="hover:bg-destructive/10 hover:text-destructive dark:hover:bg-destructive/20"
+            onClick={() => setDeleteDialogOpen(true)}
+            title="Delete"
+          >
+            <Trash2 className="size-4" />
+          </Button>
         </div>
       </div>
 
@@ -181,17 +178,18 @@ export function CompanyDetail({
 
       {/* Contacts */}
       <div>
-        <h2 className="mb-3 text-xs font-medium text-muted-foreground">
-          {contacts.length} {contacts.length === 1 ? "contact" : "contacts"}
-        </h2>
+        <div className="mb-3 flex items-center gap-2">
+          <h2 className="text-sm font-semibold">Contacts</h2>
+          <span className="text-xs text-muted-foreground">
+            {contacts.length} {contacts.length === 1 ? "contact" : "contacts"}
+          </span>
+        </div>
         {contacts.length === 0 ? (
           <p className="text-sm text-muted-foreground">No contacts at this company.</p>
         ) : (
-          <div className="divide-y rounded-lg border">
+          <div className="divide-y overflow-hidden rounded-lg border">
             {contacts.map((contact) => (
-              <div key={contact.id} className="px-2">
-                <ContactRow contact={contact} isActive={false} />
-              </div>
+              <ContactRow key={contact.id} contact={contact} isActive={false} />
             ))}
           </div>
         )}
