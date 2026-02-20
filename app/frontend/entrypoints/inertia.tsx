@@ -62,7 +62,7 @@ void createInertiaApp({
   },
 
   progress: {
-    color: "#4B5563",
+    color: "#C17B00",
   },
 }).catch((error) => {
   // This ensures this entrypoint is only loaded on Inertia pages
