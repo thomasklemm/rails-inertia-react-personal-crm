@@ -1,6 +1,17 @@
 import { router } from "@inertiajs/react"
 import { Archive, Building2, Edit, Mail, Phone, Star, Trash2 } from "lucide-react"
+import { useState } from "react"
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import {
@@ -24,6 +35,9 @@ interface ContactDetailProps {
 }
 
 export function ContactDetail({ contact, q, filter, sort }: ContactDetailProps) {
+  const [archiveDialogOpen, setArchiveDialogOpen] = useState(false)
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+
   const listParams = Object.fromEntries(
     Object.entries({ q, filter, sort }).filter(([, v]) => v !== undefined && v !== ""),
   )
@@ -32,16 +46,14 @@ export function ContactDetail({ contact, q, filter, sort }: ContactDetailProps) 
     router.patch(starContactPath(contact.id), {}, { preserveScroll: true })
   }
 
-  function handleArchive() {
+  function confirmArchive() {
     router.patch(archiveContactPath(contact.id), {}, { preserveScroll: true })
   }
 
-  function handleDelete() {
-    if (confirm(`Delete ${contact.first_name} ${contact.last_name}? This cannot be undone.`)) {
-      router.delete(contactPath(contact.id), {
-        onSuccess: () => router.visit(contactsPath(listParams)),
-      })
-    }
+  function confirmDelete() {
+    router.delete(contactPath(contact.id), {
+      onSuccess: () => router.visit(contactsPath(listParams)),
+    })
   }
 
   return (
@@ -83,35 +95,33 @@ export function ContactDetail({ contact, q, filter, sort }: ContactDetailProps) 
         {/* Actions */}
         <div className="flex shrink-0 gap-1.5">
           <Button
-            size="icon"
+            size="icon-sm"
             variant="outline"
-            className="size-8"
             onClick={handleStar}
             title={contact.starred ? "Unstar" : "Star"}
           >
             <Star
-              className={`size-4 ${contact.starred ? "fill-amber-400 text-amber-400" : "text-muted-foreground"}`}
+              className={`size-4 ${contact.starred ? "fill-amber-400 text-amber-400" : ""}`}
             />
           </Button>
           <Button
-            size="icon"
+            size="icon-sm"
             variant="outline"
-            className="size-8"
-            onClick={handleArchive}
+            onClick={() => setArchiveDialogOpen(true)}
             title={contact.archived ? "Restore" : "Archive"}
           >
-            <Archive className="size-4 text-muted-foreground" />
+            <Archive className="size-4" />
           </Button>
-          <Button size="icon" variant="outline" className="size-8" asChild>
+          <Button size="icon-sm" variant="outline" asChild>
             <a href={editContactPath(contact.id, listParams)} title="Edit">
               <Edit className="size-4" />
             </a>
           </Button>
           <Button
-            size="icon"
-            variant="outline"
-            className="size-8 hover:border-destructive hover:text-destructive"
-            onClick={handleDelete}
+            size="icon-sm"
+            variant="ghost"
+            className="hover:bg-destructive/10 hover:text-destructive dark:hover:bg-destructive/20"
+            onClick={() => setDeleteDialogOpen(true)}
             title="Delete"
           >
             <Trash2 className="size-4" />
@@ -166,6 +176,49 @@ export function ContactDetail({ contact, q, filter, sort }: ContactDetailProps) 
           </div>
         </>
       )}
+
+      {/* Archive / Restore confirmation */}
+      <AlertDialog open={archiveDialogOpen} onOpenChange={setArchiveDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              {contact.archived ? "Restore" : "Archive"} {contact.first_name} {contact.last_name}?
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              {contact.archived
+                ? "This contact will be restored and visible in your contacts list."
+                : "This contact will be moved to your archive. You can restore them at any time."}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmArchive}>
+              {contact.archived ? "Restore" : "Archive"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Delete confirmation */}
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              Delete {contact.first_name} {contact.last_name}?
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. All activities and data for this contact will be
+              permanently deleted.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction variant="destructive" onClick={confirmDelete}>
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }
