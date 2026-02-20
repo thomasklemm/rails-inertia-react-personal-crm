@@ -1,33 +1,15 @@
-import { Head, useForm, usePage } from "@inertiajs/react"
-import type { ReactNode } from "react"
+import { Head, useForm } from "@inertiajs/react"
+import { Modal } from "@inertiaui/modal-react"
 
 import { ContactForm, type ContactFormData } from "@/components/crm/contact-form"
-import AppLayout from "@/layouts/app-layout"
-import { CrmLayout } from "@/layouts/crm-layout"
 import { contactsPath } from "@/routes"
-import type { BreadcrumbItem, Company } from "@/types"
+import type { Company } from "@/types"
 
 interface Props {
   companies: Company[]
-  q?: string
-  filter?: string
-  sort?: string
-  sort_dir?: string
-  [key: string]: unknown
 }
 
-const breadcrumbs: BreadcrumbItem[] = [
-  { title: "Contacts", href: contactsPath() },
-  { title: "New Contact", href: "#" },
-]
-
-export default function ContactsNew() {
-  const { companies, q, filter, sort, sort_dir } = usePage<Props>().props
-
-  const cancelParams = Object.fromEntries(
-    Object.entries({ q, filter, sort, sort_dir }).filter(([, v]) => v !== undefined),
-  )
-
+export default function ContactsNew({ companies }: Props) {
   const form = useForm<ContactFormData>({
     first_name: "",
     last_name: "",
@@ -44,25 +26,21 @@ export default function ContactsNew() {
   }
 
   return (
-    <>
+    <Modal>
       <Head title="New Contact" />
-      <div className="h-full overflow-y-auto p-6">
+      <div className="p-6">
         <h2 className="mb-6 text-xl font-semibold">New Contact</h2>
         <form onSubmit={handleSubmit}>
           <ContactForm
             form={form}
             companies={companies}
-            cancelHref={contactsPath(cancelParams)}
+            cancelHref={contactsPath()}
             submitLabel="Create Contact"
           />
         </form>
       </div>
-    </>
+    </Modal>
   )
 }
 
-ContactsNew.layout = (page: ReactNode) => (
-  <AppLayout breadcrumbs={breadcrumbs}>
-    <CrmLayout>{page}</CrmLayout>
-  </AppLayout>
-)
+ContactsNew.layout = (page: React.ReactNode) => <>{page}</>

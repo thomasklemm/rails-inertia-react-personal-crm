@@ -30,13 +30,7 @@ class CompaniesController < InertiaController
   end
 
   def new
-    render inertia: "companies/new", props: {
-      companies: filtered_companies.as_json,
-      q: params[:q],
-      sort: params[:sort],
-      sort_dir: params[:sort_dir],
-      filter: params[:filter]
-    }
+    render inertia_modal: "companies/new", props: {}, base_url: companies_path
   end
 
   def create
@@ -49,14 +43,9 @@ class CompaniesController < InertiaController
   end
 
   def edit
-    render inertia: "companies/edit", props: {
-      companies: filtered_companies.as_json,
-      company: @company.as_json,
-      q: params[:q],
-      sort: params[:sort],
-      sort_dir: params[:sort_dir],
-      filter: params[:filter]
-    }
+    render inertia_modal: "companies/edit", props: {
+      company: @company.as_json
+    }, base_url: company_path(@company)
   end
 
   def update

@@ -1,4 +1,5 @@
 import { router } from "@inertiajs/react"
+import { ModalLink } from "@inertiaui/modal-react"
 import { Archive, ArchiveRestore, Building2, Edit, Mail, Phone, Star, Trash2 } from "lucide-react"
 import { useState } from "react"
 
@@ -111,9 +112,9 @@ export function ContactDetail({ contact, q, filter, sort, sort_dir }: ContactDet
             {contact.archived ? <ArchiveRestore className="size-4" /> : <Archive className="size-4" />}
           </Button>
           <Button size="icon-sm" variant="outline" asChild>
-            <a href={editContactPath(contact.id, listParams)} title="Edit">
+            <ModalLink navigate href={editContactPath(contact.id, listParams)} title="Edit">
               <Edit className="size-4" />
-            </a>
+            </ModalLink>
           </Button>
           <Button
             size="icon-sm"

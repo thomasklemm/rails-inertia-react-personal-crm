@@ -1,4 +1,5 @@
-import { router, usePage } from "@inertiajs/react"
+import { router } from "@inertiajs/react"
+import { ModalLink } from "@inertiaui/modal-react"
 import { Mail, MessageSquare, Pencil, Phone, Trash2 } from "lucide-react"
 import { useState } from "react"
 
@@ -43,7 +44,6 @@ interface ActivityItemProps {
 export function ActivityItem({ activity, showContact = false, isLast = true }: ActivityItemProps) {
   const Icon = KIND_ICONS[activity.kind]
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
-  const { url } = usePage()
 
   function confirmDelete() {
     router.delete(activityPath(activity.id), { preserveScroll: true })
@@ -85,9 +85,9 @@ export function ActivityItem({ activity, showContact = false, isLast = true }: A
             </div>
             <div className="flex shrink-0 gap-1 opacity-0 transition-opacity group-hover:opacity-100">
               <Button size="icon" variant="ghost" className="size-6" asChild>
-                <a href={editActivityPath(activity.id, { return_to: url })}>
+                <ModalLink navigate href={editActivityPath(activity.id)}>
                   <Pencil className="size-3" />
-                </a>
+                </ModalLink>
               </Button>
               <Button
                 size="icon"

@@ -137,6 +137,8 @@ GEM
       concurrent-ruby (~> 1.0)
     inertia_rails (3.17.0)
       railties (>= 6)
+    inertia_rails-contrib (0.5.2)
+      inertia_rails (>= 3.5.0)
     io-console (0.8.2)
     irb (1.17.0)
       pp (>= 0.6.0)
@@ -433,6 +435,7 @@ DEPENDENCIES
   debug
   factory_bot_rails
   inertia_rails (~> 3.6)
+  inertia_rails-contrib (~> 0.5.2)
   jbuilder
   js-routes
   kamal

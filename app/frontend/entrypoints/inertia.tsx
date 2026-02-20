@@ -1,5 +1,6 @@
 import type { ResolvedComponent } from "@inertiajs/react"
 import { createInertiaApp } from "@inertiajs/react"
+import { renderApp } from "@inertiaui/modal-react"
 import { StrictMode } from "react"
 import { createRoot } from "react-dom/client"
 
@@ -36,14 +37,9 @@ void createInertiaApp({
   },
 
   setup({ el, App, props }) {
-    // Uncomment the following to enable SSR hydration:
-    // if (el.hasChildNodes()) {
-    //   hydrateRoot(el, <App {...props} />)
-    //   return
-    // }
     createRoot(el).render(
       <StrictMode>
-        <App {...props} />
+        {renderApp(App, props)}
       </StrictMode>,
     )
   },

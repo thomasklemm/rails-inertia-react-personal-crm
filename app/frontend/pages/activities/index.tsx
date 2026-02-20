@@ -1,4 +1,5 @@
 import { Head, router, usePage } from "@inertiajs/react"
+import { ModalLink } from "@inertiaui/modal-react"
 import { Mail, MessageSquare, Pencil, Phone, Search, Trash2 } from "lucide-react"
 import type { ReactNode } from "react"
 import { useState } from "react"
@@ -94,7 +95,6 @@ function timeAgo(dateString: string) {
 
 function ActivityActions({ activity }: { activity: Activity }) {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
-  const { url } = usePage()
 
   function confirmDelete() {
     router.delete(activityPath(activity.id), { preserveScroll: true })
@@ -104,9 +104,9 @@ function ActivityActions({ activity }: { activity: Activity }) {
     <>
       <div className="flex shrink-0 gap-1 opacity-0 transition-opacity group-hover:opacity-100">
         <Button size="icon" variant="ghost" className="size-6" asChild>
-          <a href={editActivityPath(activity.id, { return_to: url })}>
+          <ModalLink navigate href={editActivityPath(activity.id)}>
             <Pencil className="size-3" />
-          </a>
+          </ModalLink>
         </Button>
         <Button
           size="icon"

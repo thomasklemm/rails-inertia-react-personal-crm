@@ -1,4 +1,5 @@
 import { router } from "@inertiajs/react"
+import { ModalLink } from "@inertiaui/modal-react"
 import { Edit, ExternalLink, Mail, MapPin, Phone, Star, Trash2 } from "lucide-react"
 import { useState } from "react"
 
@@ -18,8 +19,8 @@ import { companiesPath, companyPath, editCompanyPath, starCompanyPath } from "@/
 import type { Company, Contact } from "@/types"
 
 import { CompanyAvatar } from "./company-avatar"
-import { CompanyTagBadge } from "./tag-badge"
 import { ContactRow } from "./contact-row"
+import { CompanyTagBadge } from "./tag-badge"
 
 interface CompanyDetailProps {
   company: Company
@@ -84,9 +85,9 @@ export function CompanyDetail({
             />
           </Button>
           <Button size="icon-sm" variant="outline" asChild>
-            <a href={editCompanyPath(company.id, listParams)} title="Edit">
+            <ModalLink navigate href={editCompanyPath(company.id, listParams)} title="Edit">
               <Edit className="size-4" />
-            </a>
+            </ModalLink>
           </Button>
           <Button
             size="icon-sm"

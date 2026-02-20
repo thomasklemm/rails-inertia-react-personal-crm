@@ -1,4 +1,5 @@
 import { Head } from "@inertiajs/react"
+import { ModalLink } from "@inertiaui/modal-react"
 import { Building2, Plus } from "lucide-react"
 import type { ReactNode } from "react"
 
@@ -27,10 +28,10 @@ export default function CompaniesIndex() {
           </p>
         </div>
         <Button asChild>
-          <a href={newCompanyPath()}>
+          <ModalLink navigate href={newCompanyPath()}>
             <Plus className="size-4" />
             Add Company
-          </a>
+          </ModalLink>
         </Button>
       </div>
     </>

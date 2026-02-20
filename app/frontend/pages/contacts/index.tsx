@@ -1,4 +1,5 @@
 import { Head } from "@inertiajs/react"
+import { ModalLink } from "@inertiaui/modal-react"
 import { User } from "lucide-react"
 import type { ReactNode } from "react"
 
@@ -27,7 +28,7 @@ export default function ContactsIndex() {
           </p>
         </div>
         <Button asChild>
-          <a href={newContactPath()}>Add Contact</a>
+          <ModalLink navigate href={newContactPath()}>Add Contact</ModalLink>
         </Button>
       </div>
     </>

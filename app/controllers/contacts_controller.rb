@@ -27,14 +27,9 @@ class ContactsController < InertiaController
   end
 
   def new
-    render inertia: "contacts/new", props: {
-      contacts: filtered_contacts.as_json(include: :company),
-      companies: Current.user.companies.order(:name).as_json,
-      q: params[:q],
-      filter: params[:filter],
-      sort: params[:sort],
-      sort_dir: params[:sort_dir]
-    }
+    render inertia_modal: "contacts/new", props: {
+      companies: Current.user.companies.order(:name).as_json
+    }, base_url: contacts_path
   end
 
   def create
@@ -47,15 +42,10 @@ class ContactsController < InertiaController
   end
 
   def edit
-    render inertia: "contacts/edit", props: {
-      contacts: filtered_contacts.as_json(include: :company),
+    render inertia_modal: "contacts/edit", props: {
       contact: @contact.as_json(include: :company),
-      companies: Current.user.companies.order(:name).as_json,
-      q: params[:q],
-      filter: params[:filter],
-      sort: params[:sort],
-      sort_dir: params[:sort_dir]
-    }
+      companies: Current.user.companies.order(:name).as_json
+    }, base_url: contact_path(@contact)
   end
 
   def update

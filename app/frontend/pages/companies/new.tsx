@@ -1,16 +1,8 @@
 import { Head, useForm } from "@inertiajs/react"
-import type { ReactNode } from "react"
+import { Modal } from "@inertiaui/modal-react"
 
 import { CompanyForm, type CompanyFormData } from "@/components/crm/company-form"
-import AppLayout from "@/layouts/app-layout"
-import { CompaniesLayout } from "@/layouts/companies-layout"
 import { companiesPath } from "@/routes"
-import type { BreadcrumbItem } from "@/types"
-
-const breadcrumbs: BreadcrumbItem[] = [
-  { title: "Companies", href: companiesPath() },
-  { title: "New Company", href: "#" },
-]
 
 export default function CompaniesNew() {
   const form = useForm<CompanyFormData>({
@@ -29,20 +21,16 @@ export default function CompaniesNew() {
   }
 
   return (
-    <>
+    <Modal>
       <Head title="New Company" />
-      <div className="h-full overflow-y-auto p-6">
+      <div className="p-6">
         <h2 className="mb-6 text-xl font-semibold">New Company</h2>
-        <form onSubmit={handleSubmit} className="max-w-sm">
+        <form onSubmit={handleSubmit}>
           <CompanyForm form={form} cancelHref={companiesPath()} submitLabel="Create Company" />
         </form>
       </div>
-    </>
+    </Modal>
   )
 }
 
-CompaniesNew.layout = (page: ReactNode) => (
-  <AppLayout breadcrumbs={breadcrumbs}>
-    <CompaniesLayout>{page}</CompaniesLayout>
-  </AppLayout>
-)
+CompaniesNew.layout = (page: React.ReactNode) => <>{page}</>

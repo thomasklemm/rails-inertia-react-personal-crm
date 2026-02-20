@@ -1,25 +1,16 @@
-import { Head, useForm, usePage } from "@inertiajs/react"
-import type { ReactNode } from "react"
+import { Head, useForm } from "@inertiajs/react"
+import { Modal } from "@inertiaui/modal-react"
 
 import { ContactForm, type ContactFormData } from "@/components/crm/contact-form"
-import AppLayout from "@/layouts/app-layout"
-import { CrmLayout } from "@/layouts/crm-layout"
-import { contactPath, contactsPath } from "@/routes"
-import type { BreadcrumbItem, Company, Contact } from "@/types"
+import { contactPath } from "@/routes"
+import type { Company, Contact } from "@/types"
 
 interface Props {
   contact: Contact
   companies: Company[]
-  q?: string
-  filter?: string
-  sort?: string
-  sort_dir?: string
-  [key: string]: unknown
 }
 
-export default function ContactsEdit() {
-  const { contact, companies, q, filter, sort, sort_dir } = usePage<Props>().props
-
+export default function ContactsEdit({ contact, companies }: Props) {
   const form = useForm<ContactFormData>({
     first_name: contact.first_name,
     last_name: contact.last_name,
@@ -30,19 +21,15 @@ export default function ContactsEdit() {
     tags: contact.tags,
   })
 
-  const listParams = Object.fromEntries(
-    Object.entries({ q, filter, sort, sort_dir }).filter(([, v]) => v !== undefined),
-  )
-
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     form.patch(contactPath(contact.id))
   }
 
   return (
-    <>
+    <Modal>
       <Head title={`Edit ${contact.first_name} ${contact.last_name}`} />
-      <div className="h-full overflow-y-auto p-6">
+      <div className="p-6">
         <div className="mb-6">
           <h2 className="text-xl font-semibold">Edit Contact</h2>
           <p className="mt-0.5 text-sm text-muted-foreground">
@@ -53,28 +40,13 @@ export default function ContactsEdit() {
           <ContactForm
             form={form}
             companies={companies}
-            cancelHref={contactPath(contact.id, listParams)}
+            cancelHref={contactPath(contact.id)}
             submitLabel="Save Changes"
           />
         </form>
       </div>
-    </>
+    </Modal>
   )
 }
 
-ContactsEdit.layout = (page: ReactNode) => {
-  const { contact } = (page as React.ReactElement).props as Props
-  const breadcrumbs: BreadcrumbItem[] = [
-    { title: "Contacts", href: contactsPath() },
-    {
-      title: `${contact?.first_name ?? ""} ${contact?.last_name ?? ""}`,
-      href: contact ? contactPath(contact.id) : "#",
-    },
-    { title: "Edit", href: "#" },
-  ]
-  return (
-    <AppLayout breadcrumbs={breadcrumbs}>
-      <CrmLayout>{page}</CrmLayout>
-    </AppLayout>
-  )
-}
+ContactsEdit.layout = (page: React.ReactNode) => <>{page}</>

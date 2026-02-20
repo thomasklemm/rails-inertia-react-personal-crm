@@ -1,5 +1,6 @@
 import type { InertiaFormProps } from "@inertiajs/react"
 
+import { TAG_LABELS, TAG_STYLES } from "@/components/crm/tag-badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -11,7 +12,6 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
-import { TAG_LABELS, TAG_STYLES } from "@/components/crm/tag-badge"
 import { cn } from "@/lib/utils"
 import type { Company, Tag } from "@/types"
 

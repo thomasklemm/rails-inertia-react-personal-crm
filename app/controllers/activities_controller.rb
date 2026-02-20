@@ -42,13 +42,12 @@ class ActivitiesController < InertiaController
   end
 
   def edit
-    render inertia: "activities/edit", props: {
+    render inertia_modal: "activities/edit", props: {
       activity: @activity.as_json(include: {
         contact: { only: [:id, :first_name, :last_name] },
         company: { only: [:id, :name] }
-      }),
-      return_to: params[:return_to]
-    }
+      })
+    }, base_url: activities_path
   end
 
   def update

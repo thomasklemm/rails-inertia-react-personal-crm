@@ -1,5 +1,5 @@
-import { Head, useForm, usePage } from "@inertiajs/react"
-import type { ReactNode } from "react"
+import { Head, useForm } from "@inertiajs/react"
+import { Modal } from "@inertiaui/modal-react"
 
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
@@ -11,25 +11,19 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
-import AppLayout from "@/layouts/app-layout"
-import { activitiesPath, activityPath, companyPath, contactPath } from "@/routes"
-import type { Activity, ActivityKind, BreadcrumbItem } from "@/types"
+import { activityPath } from "@/routes"
+import type { Activity, ActivityKind } from "@/types"
 
 interface Props {
   activity: Activity
-  return_to?: string
-  [key: string]: unknown
 }
 
-export default function ActivitiesEdit() {
-  const { activity, return_to } = usePage<Props>().props
-
+export default function ActivitiesEdit({ activity }: Props) {
   const form = useForm({
     kind: activity.kind,
     body: activity.body,
     contact_id: activity.contact ? String(activity.contact.id) : "",
     company_id: activity.company ? String(activity.company.id) : "",
-    return_to: return_to ?? "",
   })
   const { data, setData, patch, processing, errors } = form
 
@@ -37,19 +31,13 @@ export default function ActivitiesEdit() {
     ? `${activity.contact.first_name} ${activity.contact.last_name}`
     : (activity.company?.name ?? "")
 
-  const cancelHref =
-    return_to ??
-    (activity.contact
-      ? contactPath(activity.contact.id)
-      : companyPath(activity.company!.id))
-
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     patch(activityPath(activity.id))
   }
 
   return (
-    <>
+    <Modal>
       <Head title={`Edit Activity${subjectName ? ` for ${subjectName}` : ""}`} />
       <div className="p-6">
         <div className="mb-6">
@@ -92,21 +80,11 @@ export default function ActivitiesEdit() {
             <Button type="submit" disabled={processing}>
               Save Changes
             </Button>
-            <Button variant="outline" asChild>
-              <a href={cancelHref}>Cancel</a>
-            </Button>
           </div>
         </form>
       </div>
-    </>
+    </Modal>
   )
 }
 
-const breadcrumbs: BreadcrumbItem[] = [
-  { title: "Activity Log", href: activitiesPath() },
-  { title: "Edit", href: "#" },
-]
-
-ActivitiesEdit.layout = (page: ReactNode) => (
-  <AppLayout breadcrumbs={breadcrumbs}>{page}</AppLayout>
-)
+ActivitiesEdit.layout = (page: React.ReactNode) => <>{page}</>
