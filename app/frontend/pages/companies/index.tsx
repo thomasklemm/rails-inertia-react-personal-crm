@@ -1,5 +1,5 @@
 import { Head, usePage } from "@inertiajs/react"
-import { Building2 } from "lucide-react"
+import { Building2, Plus } from "lucide-react"
 import type { ReactNode } from "react"
 
 import { CompanyRow } from "@/components/crm/company-row"
@@ -27,7 +27,7 @@ export default function CompaniesIndex() {
         <div className="mb-6 flex items-center justify-between">
           <h1 className="text-xl font-semibold">Companies</h1>
           <Button asChild>
-            <a href={newCompanyPath()}>Add company</a>
+            <a href={newCompanyPath()}><Plus className="size-4" />Add company</a>
           </Button>
         </div>
 
@@ -41,7 +41,7 @@ export default function CompaniesIndex() {
               <p className="mt-1 text-sm text-muted-foreground">Add your first company to get started.</p>
             </div>
             <Button asChild>
-              <a href={newCompanyPath()}>Add company</a>
+              <a href={newCompanyPath()}><Plus className="size-4" />Add company</a>
             </Button>
           </div>
         ) : (
