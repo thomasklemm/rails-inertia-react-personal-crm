@@ -64,7 +64,7 @@ export function ContactList({ contacts, q, filter, sort, activeContactId }: Cont
         <Button size="sm" variant="outline" title="New contact" asChild>
           <a href={newContactPath({ q, filter, sort })}>
             <UserPlus className="size-4" />
-            New
+            Add
           </a>
         </Button>
       </div>
