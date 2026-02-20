@@ -7,7 +7,7 @@ RSpec.describe "Contacts", type: :system do
   let!(:company) { create(:company, name: "Acme Corp", user: user) }
   let!(:contact) { create(:contact, first_name: "Zara", last_name: "Ahmed", email: "zara@acme.example.com", company: company, starred: false, user: user) }
 
-  before { sign_in_via_browser(user) }
+  before { sign_in_system(user) }
 
   describe "contacts list" do
     it "shows the contact list in the sidebar" do

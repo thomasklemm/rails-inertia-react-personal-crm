@@ -17,7 +17,22 @@ module AuthenticationHelpers
     cookies.delete(:session_token)
   end
 
-  # For system tests — signs in through the browser UI
+  # For system tests — injects a signed session cookie directly, skipping the UI.
+  # Use sign_in_via_browser only in specs that test the login flow itself.
+  def sign_in_system(user)
+    session = user.sessions.create!
+
+    request = ActionDispatch::Request.new(Rails.application.env_config)
+    jar = request.cookie_jar
+    jar.signed.permanent[:session_token] = {value: session.id, httponly: true}
+    signed_value = jar[:session_token]
+
+    # Selenium requires at least one page visit before cookies can be set for the domain.
+    visit "/"
+    page.driver.browser.manage.add_cookie(name: "session_token", value: signed_value, path: "/")
+  end
+
+  # For system tests — signs in through the browser UI (use for login flow specs only)
   def sign_in_via_browser(user, password: "Secret1*3*5*")
     visit sign_in_path
     fill_in "Email address", with: user.email

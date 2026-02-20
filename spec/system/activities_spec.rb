@@ -7,7 +7,7 @@ RSpec.describe "Activities", type: :system do
   let!(:contact) { create(:contact, first_name: "Zara", last_name: "Ahmed", user: user) }
   let!(:activity) { create(:activity, contact: contact, kind: "note", body: "Discussed renewal terms.", user: user) }
 
-  before { sign_in_via_browser(user) }
+  before { sign_in_system(user) }
 
   describe "activity log page" do
     it "shows all activities across contacts" do

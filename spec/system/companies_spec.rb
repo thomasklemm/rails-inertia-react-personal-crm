@@ -6,7 +6,7 @@ RSpec.describe "Companies", type: :system do
   let(:user) { create(:user) }
   let!(:company) { create(:company, name: "Acme Corp", website: "https://acme.example.com", user: user) }
 
-  before { sign_in_via_browser(user) }
+  before { sign_in_system(user) }
 
   describe "companies list" do
     it "shows all companies in a grid" do
