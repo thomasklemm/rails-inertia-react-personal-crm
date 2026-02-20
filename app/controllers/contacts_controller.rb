@@ -28,7 +28,8 @@ class ContactsController < InertiaController
 
   def new
     render inertia_modal: "contacts/new", props: {
-      companies: Current.user.companies.order(:name).as_json
+      companies: Current.user.companies.order(:name).as_json,
+      company_id: params[:company_id]
     }, base_url: contacts_path
   end
 

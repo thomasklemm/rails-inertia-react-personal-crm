@@ -1,6 +1,6 @@
 import { router } from "@inertiajs/react"
 import { ModalLink } from "@inertiaui/modal-react"
-import { Edit, ExternalLink, Mail, MapPin, Phone, Star, Trash2 } from "lucide-react"
+import { Edit, ExternalLink, Mail, MapPin, Phone, Plus, Star, Trash2 } from "lucide-react"
 import { useState } from "react"
 
 import {
@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
-import { companiesPath, companyPath, editCompanyPath, starCompanyPath } from "@/routes"
+import { companiesPath, companyPath, editCompanyPath, newContactPath, starCompanyPath } from "@/routes"
 import type { Company, Contact } from "@/types"
 
 import { CompanyAvatar } from "./company-avatar"
@@ -179,11 +179,18 @@ export function CompanyDetail({
 
       {/* Contacts */}
       <div>
-        <div className="mb-3 flex items-center gap-2">
-          <h2 className="text-sm font-semibold">Contacts</h2>
-          <span className="text-xs text-muted-foreground">
-            {contacts.length} {contacts.length === 1 ? "contact" : "contacts"}
-          </span>
+        <div className="mb-3 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <h2 className="text-sm font-semibold">Contacts</h2>
+            <span className="text-xs text-muted-foreground">
+              {contacts.length} {contacts.length === 1 ? "contact" : "contacts"}
+            </span>
+          </div>
+          <Button size="icon-sm" variant="outline" asChild title="New Contact">
+            <ModalLink navigate href={newContactPath({ company_id: String(company.id) })}>
+              <Plus className="size-4" />
+            </ModalLink>
+          </Button>
         </div>
         {contacts.length === 0 ? (
           <p className="text-sm text-muted-foreground">No contacts at this company.</p>

@@ -7,16 +7,17 @@ import type { Company } from "@/types"
 
 interface Props {
   companies: Company[]
+  company_id?: string
 }
 
-export default function ContactsNew({ companies }: Props) {
+export default function ContactsNew({ companies, company_id }: Props) {
   const form = useForm<ContactFormData>({
     first_name: "",
     last_name: "",
     email: "",
     phone: "",
     notes: "",
-    company_id: "",
+    company_id: company_id ?? "",
     tags: [],
   })
 
