@@ -82,7 +82,8 @@ RSpec.describe "Contacts", type: :system do
   describe "deleting a contact" do
     it "deletes the contact and redirects to contacts list" do
       visit contact_path(contact)
-      accept_confirm { click_button "Delete" }
+      find("button[title='Delete']").click
+      within("[role='alertdialog']") { click_button "Delete" }
       expect(page).to have_current_path(contacts_path)
       expect(page).not_to have_text("Zara Ahmed")
     end
@@ -91,15 +92,17 @@ RSpec.describe "Contacts", type: :system do
   describe "starring a contact" do
     it "toggles the star on a contact" do
       visit contact_path(contact)
-      click_button "Star"
-      expect(page).to have_button("Unstar")
+      find("button[title='Star']").click
+      expect(page).to have_css("button[title='Unstar']")
     end
   end
 
   describe "archiving a contact" do
     it "archives the contact and removes from active list" do
       visit contact_path(contact)
-      click_button "Archive"
+      find("button[title='Archive']").click
+      within("[role='alertdialog']") { click_button "Archive" }
+      # Archive redirects back to the contact page — navigate to the list to verify
       visit contacts_path
       expect(page).not_to have_text("Zara Ahmed")
       click_button "Archived"
