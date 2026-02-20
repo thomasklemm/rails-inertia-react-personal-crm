@@ -4,13 +4,13 @@ require "rails_helper"
 
 RSpec.describe "Companies", type: :system do
   let(:user) { create(:user) }
-  let!(:company) { create(:company, name: "Acme Corp", website: "https://acme.example.com") }
+  let!(:company) { create(:company, name: "Acme Corp", website: "https://acme.example.com", user: user) }
 
   before { sign_in_via_browser(user) }
 
   describe "companies list" do
     it "shows all companies in a grid" do
-      create(:company, name: "Beta Corp")
+      create(:company, name: "Beta Corp", user: user)
       visit companies_path
       expect(page).to have_text("Acme Corp")
       expect(page).to have_text("Beta Corp")
@@ -19,7 +19,7 @@ RSpec.describe "Companies", type: :system do
 
   describe "viewing a company" do
     it "shows company details and its contacts" do
-      contact = create(:contact, first_name: "Bob", last_name: "Smith", company: company)
+      contact = create(:contact, first_name: "Bob", last_name: "Smith", company: company, user: user)
       visit company_path(company)
       expect(page).to have_text("Acme Corp")
       expect(page).to have_text("acme.example.com")

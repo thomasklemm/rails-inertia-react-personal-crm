@@ -1,6 +1,7 @@
 class Contact < ApplicationRecord
   TAGS = %w[customer friend investor lead partner prospect vip vendor].freeze
 
+  belongs_to :user
   belongs_to :company, optional: true
   has_many :activities, dependent: :destroy
 

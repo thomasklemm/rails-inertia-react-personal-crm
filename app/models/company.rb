@@ -1,6 +1,7 @@
 class Company < ApplicationRecord
   TAGS = %w[saas fintech healthcare agency consulting ecommerce media manufacturing logistics education nonprofit].freeze
 
+  belongs_to :user
   has_many :contacts, dependent: :nullify
   has_many :activities, dependent: :destroy
 

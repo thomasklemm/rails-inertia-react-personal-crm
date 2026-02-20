@@ -18,7 +18,7 @@ class ContactsController < InertiaController
       contacts: filtered_contacts.as_json(include: :company),
       contact: @contact.as_json(include: :company),
       activities: @contact.activities.as_json(include: { contact: { only: [:id, :first_name, :last_name] } }),
-      companies: Company.order(:name).as_json,
+      companies: Current.user.companies.order(:name).as_json,
       q: params[:q],
       filter: params[:filter],
       sort: params[:sort],
@@ -29,7 +29,7 @@ class ContactsController < InertiaController
   def new
     render inertia: "contacts/new", props: {
       contacts: filtered_contacts.as_json(include: :company),
-      companies: Company.order(:name).as_json,
+      companies: Current.user.companies.order(:name).as_json,
       q: params[:q],
       filter: params[:filter],
       sort: params[:sort],
@@ -38,7 +38,7 @@ class ContactsController < InertiaController
   end
 
   def create
-    @contact = Contact.new(contact_params)
+    @contact = Current.user.contacts.new(contact_params)
     if @contact.save
       redirect_to contact_path(@contact), notice: "Contact created."
     else
@@ -50,7 +50,7 @@ class ContactsController < InertiaController
     render inertia: "contacts/edit", props: {
       contacts: filtered_contacts.as_json(include: :company),
       contact: @contact.as_json(include: :company),
-      companies: Company.order(:name).as_json,
+      companies: Current.user.companies.order(:name).as_json,
       q: params[:q],
       filter: params[:filter],
       sort: params[:sort],
@@ -84,7 +84,7 @@ class ContactsController < InertiaController
   private
 
   def set_contact
-    @contact = Contact.includes(:company, :activities).find(params[:id])
+    @contact = Current.user.contacts.includes(:company, :activities).find(params[:id])
   end
 
   def contact_params
@@ -92,7 +92,7 @@ class ContactsController < InertiaController
   end
 
   def filtered_contacts
-    scope = Contact.includes(:company).order(:last_name, :first_name)
+    scope = Current.user.contacts.includes(:company).order(:last_name, :first_name)
 
     scope = case params[:filter]
             when "starred"  then scope.where(starred: true)

@@ -1,6 +1,7 @@
 class Activity < ApplicationRecord
   KINDS = %w[note call email].freeze
 
+  belongs_to :user
   belongs_to :contact, optional: true
   belongs_to :company, optional: true
 

@@ -9,6 +9,9 @@ import { Spinner } from "@/components/ui/spinner"
 import AuthLayout from "@/layouts/auth-layout"
 import { newIdentityPasswordResetPath, signInPath, signUpPath } from "@/routes"
 
+const DEMO_EMAIL = "demo@example.com"
+const DEMO_PASSWORD = "password123456"
+
 export default function Login() {
   return (
     <AuthLayout
@@ -16,6 +19,17 @@ export default function Login() {
       description="Enter your email and password below to log in"
     >
       <Head title="Log in" />
+
+      <div className="rounded-lg border border-dashed bg-muted/40 px-4 py-3 text-sm">
+        <p className="font-medium text-foreground">Demo credentials</p>
+        <p className="mt-1 text-muted-foreground">
+          Email: <span className="font-mono text-foreground">{DEMO_EMAIL}</span>
+        </p>
+        <p className="text-muted-foreground">
+          Password: <span className="font-mono text-foreground">{DEMO_PASSWORD}</span>
+        </p>
+      </div>
+
       <Form
         method="post"
         action={signInPath()}
@@ -36,6 +50,7 @@ export default function Login() {
                   tabIndex={1}
                   autoComplete="email"
                   placeholder="email@example.com"
+                  defaultValue={DEMO_EMAIL}
                 />
                 <InputError messages={errors.email} />
               </div>
@@ -59,6 +74,7 @@ export default function Login() {
                   tabIndex={2}
                   autoComplete="current-password"
                   placeholder="Password"
+                  defaultValue={DEMO_PASSWORD}
                 />
                 <InputError messages={errors.password} />
               </div>

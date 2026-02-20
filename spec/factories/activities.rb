@@ -2,6 +2,7 @@
 
 FactoryBot.define do
   factory :activity do
+    user
     kind    { "note" }
     body    { "Some notes here." }
     contact { association :contact }

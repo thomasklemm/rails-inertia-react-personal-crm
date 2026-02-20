@@ -2,6 +2,7 @@
 
 FactoryBot.define do
   factory :contact do
+    user
     sequence(:first_name) { |n| "First#{n}" }
     sequence(:last_name)  { |n| "Last#{n}" }
     sequence(:email)      { |n| "contact#{n}@example.com" }

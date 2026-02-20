@@ -23,7 +23,7 @@ class CompaniesController < InertiaController
       sort_dir: params[:sort_dir],
       filter: params[:filter],
       activities: @company.activities.as_json(include: { contact: { only: [:id, :first_name, :last_name] } }),
-      contact_activities: Activity.where(contact_id: @company.contacts.pluck(:id))
+      contact_activities: Current.user.activities.where(contact_id: @company.contacts.pluck(:id))
                                   .order(created_at: :desc)
                                   .as_json(include: { contact: { only: [:id, :first_name, :last_name] } })
     }
@@ -40,7 +40,7 @@ class CompaniesController < InertiaController
   end
 
   def create
-    @company = Company.new(company_params)
+    @company = Current.user.companies.new(company_params)
     if @company.save
       redirect_to company_path(@company), notice: "Company created."
     else
@@ -80,7 +80,7 @@ class CompaniesController < InertiaController
   private
 
   def set_company
-    @company = Company.find(params[:id])
+    @company = Current.user.companies.find(params[:id])
   end
 
   def company_params
@@ -88,7 +88,7 @@ class CompaniesController < InertiaController
   end
 
   def filtered_companies
-    scope = Company.left_joins(:contacts)
+    scope = Current.user.companies.left_joins(:contacts)
                    .group(:id)
                    .select("companies.*, COUNT(contacts.id) AS contacts_count")
                    .order(:name)

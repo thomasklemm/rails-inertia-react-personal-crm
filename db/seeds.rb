@@ -7,6 +7,14 @@ Activity.delete_all
 Contact.delete_all
 Company.delete_all
 
+# ── Demo user ─────────────────────────────────────────────────────────────────
+
+demo_user = User.find_or_create_by!(email: "demo@example.com") do |u|
+  u.name     = "Demo User"
+  u.password = "password123456"
+  u.verified = true
+end
+
 # ── Companies ────────────────────────────────────────────────────────────────
 
 companies = Company.create!([
@@ -130,7 +138,7 @@ companies = Company.create!([
     tags: %w[media ecommerce],
     starred: false,
   },
-])
+].map { |h| h.merge(user: demo_user) })
 
 acme, bright, cascade, dune, echo, frontier, gravity, harbor,
   indigo, jasper, keystone, luminary = companies
@@ -177,7 +185,7 @@ contacts_data = [
   { first_name: "Kofi",     last_name: "Jensen",    email: "kofi@personal.example.com",       phone: "+1 555-0136", company: nil,       tags: %w[friend vendor],      starred: false, archived: false },
 ]
 
-contacts = Contact.create!(contacts_data)
+contacts = Contact.create!(contacts_data.map { |h| h.merge(user: demo_user) })
 
 by_name = contacts.index_by(&:last_name)
 zara      = by_name["Ahmed"]
@@ -494,7 +502,7 @@ activities += [
   { contact: kofi, kind: "email", body: "Sent final approval and invoice payment confirmation.", created_at: 2.weeks.ago },
 ]
 
-Activity.create!(activities)
+Activity.create!(activities.map { |h| h.merge(user: demo_user) })
 
 # ── Direct company activities ─────────────────────────────────────────────────
 
@@ -561,6 +569,6 @@ company_activities += [
   { company: luminary, kind: "note",  body: "Content syndication agreement signed. First joint article goes live next month.", created_at: 2.weeks.ago },
 ]
 
-Activity.create!(company_activities)
+Activity.create!(company_activities.map { |h| h.merge(user: demo_user) })
 
 puts "Seeded: #{Company.count} companies, #{Contact.count} contacts, #{Activity.count} activities"

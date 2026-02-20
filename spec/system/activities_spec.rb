@@ -4,21 +4,21 @@ require "rails_helper"
 
 RSpec.describe "Activities", type: :system do
   let(:user) { create(:user) }
-  let!(:contact) { create(:contact, first_name: "Zara", last_name: "Ahmed") }
-  let!(:activity) { create(:activity, contact: contact, kind: "note", body: "Discussed renewal terms.") }
+  let!(:contact) { create(:contact, first_name: "Zara", last_name: "Ahmed", user: user) }
+  let!(:activity) { create(:activity, contact: contact, kind: "note", body: "Discussed renewal terms.", user: user) }
 
   before { sign_in_via_browser(user) }
 
   describe "activity log page" do
     it "shows all activities across contacts" do
-      create(:activity, contact: contact, kind: "call", body: "Called to follow up.")
+      create(:activity, contact: contact, kind: "call", body: "Called to follow up.", user: user)
       visit activities_path
       expect(page).to have_text("Discussed renewal terms.")
       expect(page).to have_text("Called to follow up.")
     end
 
     it "filters activities by kind" do
-      create(:activity, contact: contact, kind: "call", body: "Called to follow up.")
+      create(:activity, contact: contact, kind: "call", body: "Called to follow up.", user: user)
       visit activities_path
       click_button "Calls"
       expect(page).not_to have_text("Discussed renewal terms.")

@@ -18,8 +18,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_20_000005) do
     t.datetime "created_at", null: false
     t.string "kind", null: false
     t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
     t.index ["company_id"], name: "index_activities_on_company_id"
     t.index ["contact_id"], name: "index_activities_on_contact_id"
+    t.index ["user_id"], name: "index_activities_on_user_id"
   end
 
   create_table "companies", force: :cascade do |t|
@@ -32,7 +34,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_20_000005) do
     t.boolean "starred", default: false, null: false
     t.json "tags", default: [], null: false
     t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
     t.string "website"
+    t.index ["user_id"], name: "index_companies_on_user_id"
   end
 
   create_table "contacts", force: :cascade do |t|
@@ -47,7 +51,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_20_000005) do
     t.boolean "starred", default: false, null: false
     t.json "tags", default: [], null: false
     t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
     t.index ["company_id"], name: "index_contacts_on_company_id"
+    t.index ["user_id"], name: "index_contacts_on_user_id"
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -71,6 +77,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_20_000005) do
 
   add_foreign_key "activities", "companies"
   add_foreign_key "activities", "contacts"
+  add_foreign_key "activities", "users"
+  add_foreign_key "companies", "users"
   add_foreign_key "contacts", "companies"
+  add_foreign_key "contacts", "users"
   add_foreign_key "sessions", "users"
 end

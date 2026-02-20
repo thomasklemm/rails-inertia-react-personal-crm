@@ -4,8 +4,8 @@ require "rails_helper"
 
 RSpec.describe "Contacts", type: :system do
   let(:user) { create(:user) }
-  let!(:company) { create(:company, name: "Acme Corp") }
-  let!(:contact) { create(:contact, first_name: "Zara", last_name: "Ahmed", email: "zara@acme.example.com", company: company, starred: false) }
+  let!(:company) { create(:company, name: "Acme Corp", user: user) }
+  let!(:contact) { create(:contact, first_name: "Zara", last_name: "Ahmed", email: "zara@acme.example.com", company: company, starred: false, user: user) }
 
   before { sign_in_via_browser(user) }
 
@@ -17,7 +17,7 @@ RSpec.describe "Contacts", type: :system do
     end
 
     it "searches for contacts by name" do
-      create(:contact, first_name: "Other", last_name: "Person")
+      create(:contact, first_name: "Other", last_name: "Person", user: user)
       visit contacts_path
       fill_in "Search contacts…", with: "Zara"
       expect(page).to have_text("Zara Ahmed")
@@ -26,7 +26,7 @@ RSpec.describe "Contacts", type: :system do
 
     it "filters starred contacts" do
       contact.update!(starred: true)
-      create(:contact, first_name: "Bob", last_name: "Plain", starred: false)
+      create(:contact, first_name: "Bob", last_name: "Plain", starred: false, user: user)
       visit contacts_path
       click_button "Starred"
       expect(page).to have_text("Zara Ahmed")

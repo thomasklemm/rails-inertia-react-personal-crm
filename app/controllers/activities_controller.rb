@@ -4,7 +4,7 @@ class ActivitiesController < InertiaController
   before_action :set_activity, only: [:show, :edit, :update, :destroy]
 
   def index
-    scope = Activity.includes(contact: :company).order(created_at: :desc)
+    scope = Current.user.activities.includes(contact: :company).order(created_at: :desc)
 
     if params[:q].present?
       q = "%#{params[:q]}%"
@@ -29,7 +29,7 @@ class ActivitiesController < InertiaController
   end
 
   def create
-    @activity = Activity.new(activity_params)
+    @activity = Current.user.activities.new(activity_params)
     if @activity.save
       if @activity.company_id?
         redirect_to company_path(@activity.company), notice: "Activity logged."
@@ -77,7 +77,7 @@ class ActivitiesController < InertiaController
   private
 
   def set_activity
-    @activity = Activity.find(params[:id])
+    @activity = Current.user.activities.find(params[:id])
   end
 
   def activity_params
