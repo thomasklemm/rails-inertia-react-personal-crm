@@ -104,7 +104,7 @@ class ContactsController < InertiaController
             when "first"   then scope.reorder(:first_name, :last_name)
             when "added"   then scope.reorder(created_at: :desc)
             when "company" then scope.joins("LEFT JOIN companies ON companies.id = contacts.company_id")
-                                     .reorder("companies.name NULLS LAST, contacts.last_name")
+                                     .reorder(Arel.sql("companies.name NULLS LAST, contacts.last_name"))
             else scope
             end
 
