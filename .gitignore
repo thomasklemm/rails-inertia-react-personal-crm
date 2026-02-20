@@ -42,6 +42,3 @@ node_modules
 
 # Agents
 .agents
-
-# Local plans (not committed)
-/plans
