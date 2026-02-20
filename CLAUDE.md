@@ -59,6 +59,10 @@ Use `js-routes` helpers from `@/routes` (e.g., `signInPath()`, `dashboardPath()`
 - **Architecture**: Server owns routing, data, and auth. React renders only. See `inertia-rails-architecture` for the decision matrix.
 - **Modals**: `@inertiaui/modal-react` — use the `inertia-modal` skill when opening any route in a modal or slideover, replacing `<Link>` with `<ModalLink>`, wrapping page content in `<Modal>`, or building inline local modals.
 
+## Skills
+
+- **`/agent-browser`**: Very useful for interacting with the running app — navigate pages, click buttons, fill forms, take screenshots, and verify UI behavior in a real browser session.
+
 ## UI Text Conventions
 
 - **Title Case everywhere**: All button labels, form headings, page titles, and breadcrumbs use Title Case.
