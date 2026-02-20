@@ -97,7 +97,7 @@ export default function ActivitiesIndex() {
   return (
     <>
       <Head title="Activity Log" />
-      <div className="mx-auto max-w-2xl px-6 py-8">
+      <div className="mx-auto w-full max-w-2xl px-6 py-8">
         {/* Header */}
         <div className="mb-6">
           <h1 className="text-2xl font-bold">Activity Log</h1>

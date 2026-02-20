@@ -62,7 +62,8 @@ RSpec.describe "Companies", type: :system do
   describe "deleting a company" do
     it "deletes the company and redirects to companies list" do
       visit company_path(company)
-      accept_confirm { find("[data-testid='delete-company']").click }
+      find("button[title='Delete']").click
+      within("[role='alertdialog']") { click_button "Delete" }
       expect(page).to have_current_path(companies_path)
       expect(page).not_to have_text("Acme Corp")
     end
