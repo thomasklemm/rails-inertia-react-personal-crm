@@ -1,5 +1,16 @@
 import { router } from "@inertiajs/react"
-import { ArrowDown, ArrowDownAZ, ArrowUp, ArrowUpAZ, Search, UserPlus } from "lucide-react"
+import {
+  Archive,
+  ArrowDown,
+  ArrowDownAZ,
+  ArrowUp,
+  ArrowUpAZ,
+  Building2,
+  Search,
+  Star,
+  UserPlus,
+  Users,
+} from "lucide-react"
 import { useCallback, useRef } from "react"
 
 import { Button } from "@/components/ui/button"
@@ -19,15 +30,15 @@ interface ContactListProps {
 }
 
 const FILTERS = [
-  { label: "All", value: undefined },
-  { label: "Starred", value: "starred" },
-  { label: "Archived", value: "archived" },
+  { label: "All", value: undefined, icon: Users },
+  { label: "Starred", value: "starred", icon: Star },
+  { label: "Archived", value: "archived", icon: Archive },
 ]
 
 const SORTS = [
   { label: "Name", value: undefined, defaultDir: "asc", iconAsc: ArrowUpAZ, iconDesc: ArrowDownAZ },
   { label: "Newest", value: "added", defaultDir: "desc", iconAsc: ArrowUp, iconDesc: ArrowDown },
-  { label: "Company", value: "company", defaultDir: "asc", iconAsc: ArrowUpAZ, iconDesc: ArrowDownAZ },
+  { label: "Company", value: "company", defaultDir: "asc", iconAsc: Building2, iconDesc: Building2 },
 ] as const
 
 export function ContactList({ contacts, q, filter, sort, sort_dir, activeContactId }: ContactListProps) {
@@ -42,7 +53,6 @@ export function ContactList({ contacts, q, filter, sort, sort_dir, activeContact
         sort_dir: sort_dir ?? "",
         ...params,
       }
-      // Remove empty params
       const clean = Object.fromEntries(
         Object.entries(merged).filter(([, v]) => v !== "" && v !== undefined),
       )
@@ -86,19 +96,20 @@ export function ContactList({ contacts, q, filter, sort, sort_dir, activeContact
       </div>
 
       {/* Filter tabs */}
-      <div className="flex gap-1 px-3 pb-2">
+      <div className="flex gap-0.5 px-3 pb-2">
         {FILTERS.map((f) => {
           const isActive = (filter ?? undefined) === f.value
           return (
             <button
               key={f.label}
               onClick={() => navigate({ filter: f.value })}
-              className={`rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${
+              className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${
                 isActive
                   ? "bg-sidebar-accent text-sidebar-accent-foreground"
                   : "text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground"
               }`}
             >
+              <f.icon className="size-3" />
               {f.label}
             </button>
           )
@@ -106,8 +117,7 @@ export function ContactList({ contacts, q, filter, sort, sort_dir, activeContact
       </div>
 
       {/* Sort row */}
-      <div className="flex items-center gap-1 px-3 pb-2">
-        <span className="text-xs text-muted-foreground">Sort:</span>
+      <div className="flex items-center gap-0.5 px-3 pb-2">
         {SORTS.map((s) => {
           const isActive = (sort ?? undefined) === s.value
           const effectiveDir = isActive ? (sort_dir ?? s.defaultDir) : s.defaultDir
@@ -123,14 +133,14 @@ export function ContactList({ contacts, q, filter, sort, sort_dir, activeContact
                   navigate({ sort: s.value, sort_dir: s.defaultDir })
                 }
               }}
-              className={`flex cursor-pointer items-center gap-0.5 rounded-md px-2 py-0.5 text-xs transition-colors ${
+              className={`flex cursor-pointer items-center gap-1 rounded-md px-2 py-0.5 text-xs transition-colors ${
                 isActive
                   ? "font-semibold text-foreground"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
+              <Icon className="size-3" />
               {s.label}
-              {isActive && <Icon className="size-3" />}
             </button>
           )
         })}

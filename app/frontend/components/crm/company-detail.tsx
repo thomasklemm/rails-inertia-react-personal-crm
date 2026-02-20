@@ -15,10 +15,8 @@ import {
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { companiesPath, companyPath, editCompanyPath, starCompanyPath } from "@/routes"
-import type { Activity, Company, Contact } from "@/types"
+import type { Company, Contact } from "@/types"
 
-import { ActivityForm } from "./activity-form"
-import { ActivityLog } from "./activity-log"
 import { CompanyAvatar } from "./company-avatar"
 import { CompanyTagBadge } from "./tag-badge"
 import { ContactRow } from "./contact-row"
@@ -26,8 +24,6 @@ import { ContactRow } from "./contact-row"
 interface CompanyDetailProps {
   company: Company
   contacts: Contact[]
-  activities: Activity[]
-  contactActivities: Activity[]
   q?: string
   filter?: string
   sort?: string
@@ -37,8 +33,6 @@ interface CompanyDetailProps {
 export function CompanyDetail({
   company,
   contacts,
-  activities,
-  contactActivities,
   q,
   filter,
   sort,
@@ -63,49 +57,49 @@ export function CompanyDetail({
   return (
     <div className="flex flex-col gap-6 p-6">
       {/* Header */}
-      <div className="flex items-start gap-4">
-        <CompanyAvatar company={company} size="lg" />
+      <div className="flex items-start gap-3">
+        <CompanyAvatar company={company} size="md" />
 
         <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-2">
-            <h1 className="truncate text-xl font-semibold">{company.name}</h1>
-            {company.starred && <Star className="size-4 shrink-0 fill-amber-400 text-amber-400" />}
+          <div className="flex items-center gap-1.5">
+            <h1 className="truncate text-base font-semibold leading-snug">{company.name}</h1>
+            {company.starred && <Star className="size-3.5 shrink-0 fill-amber-400 text-amber-400" />}
           </div>
-          {company.tags.length > 0 && (
-            <div className="mt-2 flex flex-wrap gap-1.5">
+
+          {/* Tags + Actions */}
+          <div className="mt-2 flex items-start justify-between gap-2">
+            <div className="flex flex-wrap gap-1">
               {company.tags.map((tag) => (
                 <CompanyTagBadge key={tag} tag={tag} />
               ))}
             </div>
-          )}
-        </div>
-
-        {/* Actions */}
-        <div className="flex shrink-0 gap-1.5">
-          <Button
-            size="icon-sm"
-            variant="outline"
-            onClick={handleStar}
-            title={company.starred ? "Unstar" : "Star"}
-          >
-            <Star
-              className={`size-4 ${company.starred ? "fill-amber-400 text-amber-400" : ""}`}
-            />
-          </Button>
-          <Button size="icon-sm" variant="outline" asChild>
-            <a href={editCompanyPath(company.id, listParams)} title="Edit">
-              <Edit className="size-4" />
-            </a>
-          </Button>
-          <Button
-            size="icon-sm"
-            variant="ghost"
-            className="hover:bg-destructive/10 hover:text-destructive dark:hover:bg-destructive/20"
-            onClick={() => setDeleteDialogOpen(true)}
-            title="Delete"
-          >
-            <Trash2 className="size-4" />
-          </Button>
+            <div className="flex shrink-0 gap-1">
+              <Button
+                size="icon-xs"
+                variant="outline"
+                onClick={handleStar}
+                title={company.starred ? "Unstar" : "Star"}
+              >
+                <Star
+                  className={`size-3 ${company.starred ? "fill-amber-400 text-amber-400" : ""}`}
+                />
+              </Button>
+              <Button size="icon-xs" variant="outline" asChild>
+                <a href={editCompanyPath(company.id, listParams)} title="Edit">
+                  <Edit className="size-3" />
+                </a>
+              </Button>
+              <Button
+                size="icon-xs"
+                variant="ghost"
+                className="hover:bg-destructive/10 hover:text-destructive dark:hover:bg-destructive/20"
+                onClick={() => setDeleteDialogOpen(true)}
+                title="Delete"
+              >
+                <Trash2 className="size-3" />
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -202,26 +196,6 @@ export function CompanyDetail({
           </div>
         )}
       </div>
-
-      <Separator />
-
-      {/* Company activity */}
-      <div className="space-y-4">
-        <ActivityForm companyId={company.id} />
-        <ActivityLog activities={activities} />
-      </div>
-
-      {/* Contact activity aggregated */}
-      {contactActivities.length > 0 && (
-        <>
-          <Separator />
-          <ActivityLog
-            activities={contactActivities}
-            title="Activity from contacts"
-            showContact={true}
-          />
-        </>
-      )}
 
       {/* Delete confirmation */}
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>

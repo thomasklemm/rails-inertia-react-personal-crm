@@ -31,7 +31,7 @@ export default function CompaniesNew() {
   return (
     <>
       <Head title="New Company" />
-      <div className="p-6">
+      <div className="h-full overflow-y-auto p-6">
         <h2 className="mb-6 text-xl font-semibold">New Company</h2>
         <form onSubmit={handleSubmit} className="max-w-sm">
           <CompanyForm form={form} cancelHref={companiesPath()} submitLabel="Create Company" />

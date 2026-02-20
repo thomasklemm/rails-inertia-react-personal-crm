@@ -1,5 +1,14 @@
 import { router } from "@inertiajs/react"
-import { ArrowDown, ArrowDownAZ, ArrowUp, ArrowUpAZ, Building2, Search } from "lucide-react"
+import {
+  ArrowDown,
+  ArrowDownAZ,
+  ArrowUp,
+  ArrowUpAZ,
+  Building2,
+  Search,
+  Star,
+  Users,
+} from "lucide-react"
 import { useCallback, useRef } from "react"
 
 import { Button } from "@/components/ui/button"
@@ -19,14 +28,14 @@ interface CompanyListProps {
 }
 
 const FILTERS = [
-  { label: "All", value: undefined },
-  { label: "Starred", value: "starred" },
+  { label: "All", value: undefined, icon: Building2 },
+  { label: "Starred", value: "starred", icon: Star },
 ]
 
 const SORTS = [
   { label: "Name", value: undefined, defaultDir: "asc", iconAsc: ArrowUpAZ, iconDesc: ArrowDownAZ },
   { label: "Newest", value: "added", defaultDir: "desc", iconAsc: ArrowUp, iconDesc: ArrowDown },
-  { label: "Contacts", value: "contacts", defaultDir: "desc", iconAsc: ArrowUp, iconDesc: ArrowDown },
+  { label: "Contacts", value: "contacts", defaultDir: "desc", iconAsc: Users, iconDesc: Users },
 ] as const
 
 export function CompanyList({ companies, q, filter, sort, sort_dir, activeCompanyId }: CompanyListProps) {
@@ -84,19 +93,20 @@ export function CompanyList({ companies, q, filter, sort, sort_dir, activeCompan
       </div>
 
       {/* Filter tabs */}
-      <div className="flex gap-1 px-3 pb-2">
+      <div className="flex gap-0.5 px-3 pb-2">
         {FILTERS.map((f) => {
           const isActive = (filter ?? undefined) === f.value
           return (
             <button
               key={f.label}
               onClick={() => navigate({ filter: f.value })}
-              className={`rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${
+              className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${
                 isActive
                   ? "bg-sidebar-accent text-sidebar-accent-foreground"
                   : "text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground"
               }`}
             >
+              <f.icon className="size-3" />
               {f.label}
             </button>
           )
@@ -104,8 +114,7 @@ export function CompanyList({ companies, q, filter, sort, sort_dir, activeCompan
       </div>
 
       {/* Sort row */}
-      <div className="flex items-center gap-1 px-3 pb-2">
-        <span className="text-xs text-muted-foreground">Sort:</span>
+      <div className="flex items-center gap-0.5 px-3 pb-2">
         {SORTS.map((s) => {
           const isActive = (sort ?? undefined) === s.value
           const effectiveDir = isActive ? (sort_dir ?? s.defaultDir) : s.defaultDir
@@ -121,14 +130,14 @@ export function CompanyList({ companies, q, filter, sort, sort_dir, activeCompan
                   navigate({ sort: s.value, sort_dir: s.defaultDir })
                 }
               }}
-              className={`flex cursor-pointer items-center gap-0.5 rounded-md px-2 py-0.5 text-xs transition-colors ${
+              className={`flex cursor-pointer items-center gap-1 rounded-md px-2 py-0.5 text-xs transition-colors ${
                 isActive
                   ? "font-semibold text-foreground"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
+              <Icon className="size-3" />
               {s.label}
-              {isActive && <Icon className="size-3" />}
             </button>
           )
         })}
