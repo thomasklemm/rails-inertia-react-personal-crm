@@ -14,8 +14,6 @@ Rails.application.routes.draw do
     resource :password_reset,     only: [:new, :edit, :create, :update]
   end
 
-  get :dashboard, to: "dashboard#index"
-
   resources :contacts do
     member do
       patch :star

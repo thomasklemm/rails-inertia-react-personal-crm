@@ -1,5 +1,5 @@
 import { Link, usePage } from "@inertiajs/react"
-import { BookOpen, Folder, LayoutGrid, Menu, Search } from "lucide-react"
+import { Menu, Search, Users } from "lucide-react"
 
 import { Breadcrumbs } from "@/components/breadcrumbs"
 import { Icon } from "@/components/icon"
@@ -32,7 +32,7 @@ import {
 import { UserMenuContent } from "@/components/user-menu-content"
 import { useInitials } from "@/hooks/use-initials"
 import { cn } from "@/lib/utils"
-import { dashboardPath } from "@/routes"
+import { contactsPath } from "@/routes"
 import type { BreadcrumbItem, NavItem } from "@/types"
 
 import AppLogo from "./app-logo"
@@ -40,24 +40,13 @@ import AppLogoIcon from "./app-logo-icon"
 
 const mainNavItems: NavItem[] = [
   {
-    title: "Dashboard",
-    href: dashboardPath(),
-    icon: LayoutGrid,
+    title: "Contacts",
+    href: contactsPath(),
+    icon: Users,
   },
 ]
 
-const rightNavItems: NavItem[] = [
-  {
-    title: "Repository",
-    href: "https://github.com/inertia-rails/react-starter-kit",
-    icon: Folder,
-  },
-  {
-    title: "Documentation",
-    href: "https://inertia-rails.dev",
-    icon: BookOpen,
-  },
-]
+const rightNavItems: NavItem[] = []
 
 const activeItemStyles =
   "text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100"
@@ -134,7 +123,7 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
           </div>
 
           <Link
-            href={dashboardPath()}
+            href={contactsPath()}
             prefetch
             className="flex items-center space-x-2"
           >

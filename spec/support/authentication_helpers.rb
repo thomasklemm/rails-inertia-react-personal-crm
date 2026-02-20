@@ -38,6 +38,6 @@ module AuthenticationHelpers
     fill_in "Email address", with: user.email
     fill_in "Password", with: password
     click_button "Log in"
-    expect(page).to have_current_path(dashboard_path)
+    expect(page).to have_current_path(contacts_path)
   end
 end

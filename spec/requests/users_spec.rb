@@ -14,7 +14,7 @@ RSpec.describe "Users", type: :request do
     it "creates a new user and redirects to the root url" do
       expect { post sign_up_url, params: attributes_for(:user) }.to change(User, :count).by(1)
 
-      expect(response).to redirect_to(dashboard_url)
+      expect(response).to redirect_to(contacts_url)
     end
   end
 end

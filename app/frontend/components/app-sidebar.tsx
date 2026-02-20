@@ -1,5 +1,5 @@
 import { Link } from "@inertiajs/react"
-import { ActivitySquare, BookOpen, Building2, Folder, LayoutGrid, Users } from "lucide-react"
+import { ActivitySquare, Building2, Github, Users } from "lucide-react"
 
 import { NavFooter } from "@/components/nav-footer"
 import { NavMain } from "@/components/nav-main"
@@ -13,17 +13,12 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { activitiesPath, companiesPath, contactsPath, dashboardPath } from "@/routes"
+import { activitiesPath, companiesPath, contactsPath } from "@/routes"
 import type { NavItem } from "@/types"
 
 import AppLogo from "./app-logo"
 
 const mainNavItems: NavItem[] = [
-  {
-    title: "Dashboard",
-    href: dashboardPath(),
-    icon: LayoutGrid,
-  },
   {
     title: "Contacts",
     href: contactsPath(),
@@ -44,13 +39,8 @@ const mainNavItems: NavItem[] = [
 const footerNavItems: NavItem[] = [
   {
     title: "Repository",
-    href: "https://github.com/inertia-rails/react-starter-kit",
-    icon: Folder,
-  },
-  {
-    title: "Documentation",
-    href: "https://inertia-rails.dev",
-    icon: BookOpen,
+    href: "https://github.com/thomasklemm/rails-inertia-react-personal-crm",
+    icon: Github,
   },
 ]
 
@@ -61,7 +51,7 @@ export function AppSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <Link href={dashboardPath()} prefetch>
+              <Link href={contactsPath()} prefetch>
                 <AppLogo />
               </Link>
             </SidebarMenuButton>

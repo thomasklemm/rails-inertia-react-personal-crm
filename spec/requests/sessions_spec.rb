@@ -16,9 +16,9 @@ RSpec.describe "Sessions", type: :request do
     context "with valid credentials" do
       it "redirects to the root url" do
         post sign_in_url, params: {email: user.email, password: "Secret1*3*5*"}
-        expect(response).to redirect_to(dashboard_url)
+        expect(response).to redirect_to(contacts_url)
 
-        get dashboard_url
+        get contacts_url
         expect(response).to have_http_status(:success)
       end
     end
@@ -31,7 +31,7 @@ RSpec.describe "Sessions", type: :request do
         expect(response).to redirect_to(sign_in_url)
         expect(flash[:alert]).to eq("That email or password is incorrect")
 
-        get dashboard_url
+        get contacts_url
         expect(response).to redirect_to(sign_in_url)
       end
     end
