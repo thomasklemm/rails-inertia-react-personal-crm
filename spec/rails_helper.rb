@@ -22,13 +22,33 @@ end
 
 Capybara.default_max_wait_time = 1
 
+# Demo mode: headed browser with slow-motion delays so you can follow along.
+# Usage: DEMO_MODE=1 bundle exec rspec spec/system
+if ENV["DEMO_MODE"]
+  DEMO_DELAY = ENV.fetch("DEMO_DELAY", "0.4").to_f
+
+  module CapybaraDemoSlowMotion
+    def click(*args, **kwargs)
+      sleep DEMO_DELAY
+      super
+    end
+
+    def set(*args, **kwargs)
+      super
+      sleep DEMO_DELAY
+    end
+  end
+
+  Capybara::Selenium::Node.prepend(CapybaraDemoSlowMotion)
+end
+
 RSpec.configure do |config|
   config.use_transactional_fixtures = true
   config.infer_spec_type_from_file_location!
   config.filter_rails_from_backtrace!
 
   config.before(type: :system) do
-    browser = ENV["HEADED"] ? :chrome : :headless_chrome
+    browser = (ENV["DEMO_MODE"] || ENV["HEADED"]) ? :chrome : :headless_chrome
     driven_by :selenium, using: browser, screen_size: [1400, 1400]
   end
 
