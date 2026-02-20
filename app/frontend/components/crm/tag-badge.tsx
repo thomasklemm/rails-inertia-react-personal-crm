@@ -36,28 +36,30 @@ export const COMPANY_TAG_STYLES: Record<CompanyTag, string> = {
 
 interface TagBadgeProps {
   tag: Tag
+  className?: string
 }
 
 interface CompanyTagBadgeProps {
   tag: CompanyTag
+  className?: string
 }
 
-export function TagBadge({ tag }: TagBadgeProps) {
+export function TagBadge({ tag, className }: TagBadgeProps) {
   return (
     <Badge
       variant="outline"
-      className={`border-0 px-1.5 py-0 text-[10px] font-medium capitalize leading-5 ${TAG_STYLES[tag]}`}
+      className={`border-0 px-1.5 py-0 text-[10px] font-medium capitalize leading-5 ${TAG_STYLES[tag]} ${className ?? ""}`}
     >
       {TAG_LABELS[tag] ?? tag}
     </Badge>
   )
 }
 
-export function CompanyTagBadge({ tag }: CompanyTagBadgeProps) {
+export function CompanyTagBadge({ tag, className }: CompanyTagBadgeProps) {
   return (
     <Badge
       variant="outline"
-      className={`border-0 px-1.5 py-0 text-[10px] font-medium capitalize leading-5 ${COMPANY_TAG_STYLES[tag]}`}
+      className={`border-0 px-1.5 py-0 text-[10px] font-medium capitalize leading-5 ${COMPANY_TAG_STYLES[tag]} ${className ?? ""}`}
     >
       {COMPANY_TAG_LABELS[tag] ?? tag}
     </Badge>

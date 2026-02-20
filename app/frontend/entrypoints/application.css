@@ -183,22 +183,22 @@
 @layer utilities {
   .scrollbar-subtle {
     scrollbar-width: thin;
-    scrollbar-color: oklch(0.83 0.012 75) transparent;
+    scrollbar-color: oklch(0.83 0.012 75 / 0.5) transparent;
   }
   .scrollbar-subtle::-webkit-scrollbar {
-    width: 4px;
+    width: 3px;
   }
   .scrollbar-subtle::-webkit-scrollbar-track {
     background: transparent;
   }
   .scrollbar-subtle::-webkit-scrollbar-thumb {
-    background-color: oklch(0.83 0.012 75);
+    background-color: oklch(0.83 0.012 75 / 0.5);
     border-radius: 9999px;
   }
   .dark .scrollbar-subtle {
-    scrollbar-color: oklch(0.310 0.028 260) transparent;
+    scrollbar-color: oklch(0.310 0.028 260 / 0.6) transparent;
   }
   .dark .scrollbar-subtle::-webkit-scrollbar-thumb {
-    background-color: oklch(0.310 0.028 260);
+    background-color: oklch(0.310 0.028 260 / 0.6);
   }
 }

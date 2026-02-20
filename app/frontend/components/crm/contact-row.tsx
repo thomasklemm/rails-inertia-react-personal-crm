@@ -61,14 +61,14 @@ export function ContactRow({ contact, isActive, q, filter, sort, sort_dir }: Con
               <span className="text-xs text-muted-foreground/50">·</span>
             )}
             {contact.tags.length > 0 && (
-              <>
+              <span className="flex items-center gap-1">
                 <TagBadge tag={contact.tags[0]} />
                 {contact.tags.length > 1 && (
                   <span className="rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
                     +{contact.tags.length - 1}
                   </span>
                 )}
-              </>
+              </span>
             )}
           </div>
         )}

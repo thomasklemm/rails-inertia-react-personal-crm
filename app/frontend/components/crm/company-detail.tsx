@@ -64,29 +64,26 @@ export function CompanyDetail({
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
             <h1 className="truncate text-lg font-semibold leading-snug">{company.name}</h1>
-            {company.starred && <Star className="size-4 shrink-0 fill-amber-400 text-amber-400" />}
+            <button
+              onClick={handleStar}
+              title={company.starred ? "Unstar" : "Star"}
+              className="inline-flex shrink-0 items-center transition-opacity hover:opacity-70"
+            >
+              <Star className={`size-5 ${company.starred ? "fill-amber-400 text-amber-400" : "text-muted-foreground/40"}`} />
+            </button>
           </div>
           <div className="mt-2 flex flex-wrap gap-1">
             {company.tags.map((tag) => (
-              <CompanyTagBadge key={tag} tag={tag} />
+              <CompanyTagBadge key={tag} tag={tag} className="px-2 py-0.5 text-xs" />
             ))}
           </div>
         </div>
 
         <div className="flex shrink-0 gap-1">
-          <Button
-            size="icon-sm"
-            variant="outline"
-            onClick={handleStar}
-            title={company.starred ? "Unstar" : "Star"}
-          >
-            <Star
-              className={`size-4 ${company.starred ? "fill-amber-400 text-amber-400" : ""}`}
-            />
-          </Button>
-          <Button size="icon-sm" variant="outline" asChild>
+          <Button size="sm" variant="outline" asChild>
             <ModalLink navigate href={editCompanyPath(company.id, listParams)} title="Edit">
               <Edit className="size-4" />
+              Edit
             </ModalLink>
           </Button>
           <Button

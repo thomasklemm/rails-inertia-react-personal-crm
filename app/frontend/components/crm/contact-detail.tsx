@@ -69,7 +69,13 @@ export function ContactDetail({ contact, q, filter, sort, sort_dir }: ContactDet
             <h1 className="truncate text-lg font-semibold leading-snug">
               {contact.first_name} {contact.last_name}
             </h1>
-            {contact.starred && <Star className="size-4 shrink-0 fill-amber-400 text-amber-400" />}
+            <button
+              onClick={handleStar}
+              title={contact.starred ? "Unstar" : "Star"}
+              className="inline-flex shrink-0 items-center transition-opacity hover:opacity-70"
+            >
+              <Star className={`size-5 ${contact.starred ? "fill-amber-400 text-amber-400" : "text-muted-foreground/40"}`} />
+            </button>
             {contact.archived && (
               <span className="shrink-0 rounded bg-muted px-1.5 py-0.5 text-xs text-muted-foreground">
                 Archived
@@ -87,21 +93,17 @@ export function ContactDetail({ contact, q, filter, sort, sort_dir }: ContactDet
           )}
           <div className="mt-2 flex flex-wrap gap-1">
             {contact.tags.map((tag) => (
-              <TagBadge key={tag} tag={tag} />
+              <TagBadge key={tag} tag={tag} className="px-2 py-0.5 text-xs" />
             ))}
           </div>
         </div>
 
         <div className="flex shrink-0 gap-1">
-          <Button
-            size="icon-sm"
-            variant="outline"
-            onClick={handleStar}
-            title={contact.starred ? "Unstar" : "Star"}
-          >
-            <Star
-              className={`size-4 ${contact.starred ? "fill-amber-400 text-amber-400" : ""}`}
-            />
+          <Button size="sm" variant="outline" asChild>
+            <ModalLink navigate href={editContactPath(contact.id, listParams)} title="Edit">
+              <Edit className="size-4" />
+              Edit
+            </ModalLink>
           </Button>
           <Button
             size="icon-sm"
@@ -110,11 +112,6 @@ export function ContactDetail({ contact, q, filter, sort, sort_dir }: ContactDet
             title={contact.archived ? "Restore" : "Archive"}
           >
             {contact.archived ? <ArchiveRestore className="size-4" /> : <Archive className="size-4" />}
-          </Button>
-          <Button size="icon-sm" variant="outline" asChild>
-            <ModalLink navigate href={editContactPath(contact.id, listParams)} title="Edit">
-              <Edit className="size-4" />
-            </ModalLink>
           </Button>
           <Button
             size="icon-sm"
