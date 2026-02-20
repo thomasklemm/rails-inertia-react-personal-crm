@@ -25,8 +25,7 @@ const FILTERS = [
 
 const SORTS = [
   { label: "Name", value: undefined },
-  { label: "First", value: "first" },
-  { label: "Added", value: "added" },
+  { label: "Newest", value: "added" },
   { label: "Company", value: "company" },
 ]
 
@@ -62,9 +61,10 @@ export function ContactList({ contacts, q, filter, sort, activeContactId }: Cont
       {/* Header */}
       <div className="flex items-center justify-between px-3 py-3">
         <h2 className="text-sm font-semibold">Contacts</h2>
-        <Button size="icon" variant="ghost" className="size-7" asChild>
+        <Button size="sm" variant="outline" title="New contact" asChild>
           <a href={newContactPath({ q, filter, sort })}>
             <UserPlus className="size-4" />
+            New
           </a>
         </Button>
       </div>

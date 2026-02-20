@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge"
 import type { Tag } from "@/types"
 
-const TAG_STYLES: Record<Tag, string> = {
+export const TAG_STYLES: Record<Tag, string> = {
   customer: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300",
   friend: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300",
   investor: "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300",
@@ -16,7 +16,7 @@ interface TagBadgeProps {
   tag: Tag
 }
 
-const TAG_LABELS: Partial<Record<Tag, string>> = {
+export const TAG_LABELS: Partial<Record<Tag, string>> = {
   vip: "VIP",
 }
 

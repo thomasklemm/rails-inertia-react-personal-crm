@@ -1,7 +1,6 @@
 import type { InertiaFormProps } from "@inertiajs/react"
 
 import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import {
@@ -12,6 +11,8 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
+import { TAG_LABELS, TAG_STYLES } from "@/components/crm/tag-badge"
+import { cn } from "@/lib/utils"
 import type { Company, Tag } from "@/types"
 
 const ALL_TAGS: Tag[] = [
@@ -133,19 +134,25 @@ export function ContactForm({ form, companies, cancelHref, submitLabel }: Contac
       {/* Tags */}
       <div className="space-y-2">
         <Label>Tags</Label>
-        <div className="flex flex-wrap gap-x-4 gap-y-2">
-          {ALL_TAGS.map((tag) => (
-            <div key={tag} className="flex items-center gap-1.5">
-              <Checkbox
-                id={`tag-${tag}`}
-                checked={data.tags.includes(tag)}
-                onCheckedChange={() => toggleTag(tag)}
-              />
-              <Label htmlFor={`tag-${tag}`} className="cursor-pointer capitalize">
-                {tag}
-              </Label>
-            </div>
-          ))}
+        <div className="flex flex-wrap gap-1.5">
+          {ALL_TAGS.map((tag) => {
+            const isSelected = data.tags.includes(tag)
+            return (
+              <button
+                key={tag}
+                type="button"
+                onClick={() => toggleTag(tag)}
+                className={cn(
+                  "rounded-full border px-2.5 py-0.5 text-xs font-medium capitalize transition-colors",
+                  isSelected
+                    ? TAG_STYLES[tag]
+                    : "border-border text-muted-foreground hover:border-foreground/40 hover:text-foreground",
+                )}
+              >
+                {TAG_LABELS[tag] ?? tag}
+              </button>
+            )
+          })}
         </div>
       </div>
 
