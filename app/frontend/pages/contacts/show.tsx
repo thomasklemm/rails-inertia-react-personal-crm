@@ -31,7 +31,7 @@ export default function ContactsShow() {
     <>
       <Head title={`${contact.first_name} ${contact.last_name}`} />
       <div className="scrollbar-subtle h-full overflow-y-auto">
-        <div className="max-w-2xl">
+        <div className="mx-auto w-full max-w-2xl">
           <ContactDetail contact={contact} q={q} filter={filter} sort={sort} sort_dir={sort_dir} />
           <div className="space-y-4 border-t px-6 py-5">
             {isLogging ? (
