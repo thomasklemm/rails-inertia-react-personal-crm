@@ -1,5 +1,5 @@
-import { router } from "@inertiajs/react"
-import { Check, Mail, MessageSquare, Pencil, Phone, Trash2, X } from "lucide-react"
+import { router, useForm } from "@inertiajs/react"
+import { Building2, Check, Mail, MessageSquare, Pencil, Phone, Trash2, User, X } from "lucide-react"
 import { useRef, useState } from "react"
 
 import {
@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
-import { activityPath, companyPath, contactPath } from "@/routes"
+import { activityPath, activitiesPath, companyPath, contactPath } from "@/routes"
 import type { Activity, ActivityKind } from "@/types"
 
 const KIND_ICONS = {
@@ -175,8 +175,13 @@ export function ActivityItem({ activity, showSubject = false, isLast = true }: A
                           ? contactPath(activity.subject.id)
                           : companyPath(activity.subject.id)
                       }
-                      className="text-xs font-medium text-primary hover:underline"
+                      className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
                     >
+                      {activity.subject.type === "Contact" ? (
+                        <User className="size-3 shrink-0" />
+                      ) : (
+                        <Building2 className="size-3 shrink-0" />
+                      )}
                       {activity.subject.name}
                     </a>
                   )}
@@ -230,5 +235,120 @@ export function ActivityItem({ activity, showSubject = false, isLast = true }: A
         </AlertDialogContent>
       </AlertDialog>
     </>
+  )
+}
+
+interface ActivityNewItemProps {
+  subjectType: string
+  subjectId: number
+  onCancel: () => void
+  isLast?: boolean
+}
+
+export function ActivityNewItem({ subjectType, subjectId, onCancel, isLast = true }: ActivityNewItemProps) {
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const { data, setData, post, processing, errors } = useForm({
+    subject_type: subjectType,
+    subject_id: subjectId,
+    kind: "note" as ActivityKind,
+    body: "",
+  })
+
+  const KindIcon = KIND_ICONS[data.kind]
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    if (!data.body.trim()) return
+    post(activitiesPath(), {
+      preserveScroll: true,
+      onSuccess: () => onCancel(),
+    })
+  }
+
+  return (
+    <div className="relative flex gap-3">
+      {/* Icon + connector */}
+      <div className="flex flex-col items-center">
+        <div className="flex size-6 shrink-0 items-center justify-center rounded-full bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">
+          <KindIcon className="size-3" />
+        </div>
+        {!isLast && <div className="mt-1 w-px flex-1 bg-border" />}
+      </div>
+
+      {/* Content — matches ActivityItem editing mode exactly */}
+      <div className={`min-w-0 flex-1 ${isLast ? "pb-0" : "pb-3"}`}>
+        <form onSubmit={handleSubmit} className="space-y-2">
+          {/* Kind picker */}
+          <div className="flex gap-1">
+            {KINDS.map(({ value, label, icon: KIcon }) => (
+              <button
+                key={value}
+                type="button"
+                onClick={() => {
+                  setData("kind", value)
+                  textareaRef.current?.focus()
+                }}
+                className={`flex items-center gap-1 rounded px-2 py-1 text-xs font-medium transition-colors ${
+                  data.kind === value
+                    ? "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300"
+                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                }`}
+              >
+                <KIcon className="size-3" />
+                {label}
+              </button>
+            ))}
+          </div>
+
+          {/* Textarea */}
+          <Textarea
+            ref={textareaRef}
+            value={data.body}
+            onChange={(e) => setData("body", e.target.value)}
+            autoFocus
+            placeholder={
+              data.kind === "note"
+                ? "Add a note…"
+                : data.kind === "call"
+                  ? "What was discussed?"
+                  : "Email summary…"
+            }
+            rows={3}
+            className="resize-none text-sm"
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
+                if (data.body.trim()) handleSubmit(e as unknown as React.FormEvent)
+              }
+              if (e.key === "Escape") onCancel()
+            }}
+          />
+          {errors.body && <p className="mt-1 text-xs text-destructive">{errors.body}</p>}
+
+          {/* Actions */}
+          <div className="flex gap-1.5">
+            <Button
+              type="submit"
+              size="sm"
+              className="h-7 gap-1 px-2.5 text-xs"
+              disabled={processing || !data.body.trim()}
+            >
+              <Check className="size-3" />
+              Log {KINDS.find((k) => k.value === data.kind)?.label}
+            </Button>
+            <Button
+              type="button"
+              size="sm"
+              variant="ghost"
+              className="h-7 gap-1 px-2.5 text-xs"
+              onClick={onCancel}
+              disabled={processing}
+            >
+              <X className="size-3" />
+              Cancel
+            </Button>
+          </div>
+        </form>
+      </div>
+    </div>
   )
 }

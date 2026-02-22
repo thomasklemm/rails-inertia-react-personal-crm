@@ -1,9 +1,10 @@
-import { Mail, MessageSquare, Phone } from "lucide-react"
-import { useState } from "react"
+import { Mail, MessageSquare, Phone, Plus } from "lucide-react"
+import { useMemo, useState } from "react"
 
+import { Button } from "@/components/ui/button"
 import type { Activity, ActivityKind } from "@/types"
 
-import { ActivityItem } from "./activity-item"
+import { ActivityItem, ActivityNewItem } from "./activity-item"
 
 const FILTERS: { label: string; value: ActivityKind | undefined; icon?: React.ElementType }[] = [
   { label: "All", value: undefined },
@@ -51,41 +52,95 @@ function groupByDate(activities: Activity[]) {
 interface ActivityLogProps {
   activities: Activity[]
   title?: string
+  description?: string
   showSubject?: boolean
+  subjectType?: string
+  subjectId?: number
 }
 
-export function ActivityLog({ activities, title = "Activity Log", showSubject = false }: ActivityLogProps) {
+export function ActivityLog({
+  activities,
+  title = "Activity Log",
+  description,
+  showSubject = false,
+  subjectType,
+  subjectId,
+}: ActivityLogProps) {
   const [kindFilter, setKindFilter] = useState<ActivityKind | undefined>(undefined)
+  const [isLogging, setIsLogging] = useState(false)
+
+  const canLog = subjectType != null && subjectId != null
 
   const filtered = kindFilter ? activities.filter((a) => a.kind === kindFilter) : activities
   const groups = groupByDate(filtered)
 
+  const todayKey = useMemo(() => {
+    const now = new Date()
+    return new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString()
+  }, [])
+  const hasTodayGroup = groups.length > 0 && groups[0].key === todayKey
+
   return (
     <div>
-      <div className="mb-3 flex items-center justify-between">
-        <h3 className="text-base font-semibold tracking-tight">{title}</h3>
-        <div className="inline-flex rounded-lg border bg-muted p-0.5">
-          {FILTERS.map((f) => (
-            <button
-              key={f.label}
-              onClick={() => setKindFilter(f.value)}
-              className={`flex items-center gap-1.5 rounded-md px-3 py-1 text-xs font-medium transition-all ${
-                kindFilter === f.value
-                  ? "bg-background text-foreground shadow-sm"
-                  : "text-muted-foreground hover:bg-background/70 hover:text-foreground"
-              }`}
+      <div className="mb-4">
+        <div className="flex items-center gap-2">
+          <h3 className="text-base font-semibold tracking-tight">{title}</h3>
+          {canLog && !isLogging && (
+            <Button
+              size="sm"
+              variant="outline"
+              className="h-7 gap-1 px-2 text-xs font-medium"
+              onClick={() => setIsLogging(true)}
             >
-              {f.icon && <f.icon className="size-3.5" />}
-              {f.label}
-            </button>
-          ))}
+              <Plus className="size-3" />
+              Log Activity
+            </Button>
+          )}
+          <div className="ml-auto inline-flex rounded-lg border bg-muted p-0.5">
+            {FILTERS.map((f) => (
+              <button
+                key={f.label}
+                onClick={() => setKindFilter(f.value)}
+                className={`flex items-center gap-1.5 rounded-md px-3 py-1 text-xs font-medium transition-all ${
+                  kindFilter === f.value
+                    ? "bg-background text-foreground shadow-sm"
+                    : "text-muted-foreground hover:bg-background/70 hover:text-foreground"
+                }`}
+              >
+                {f.icon && <f.icon className="size-3.5" />}
+                {f.label}
+              </button>
+            ))}
+          </div>
         </div>
+        {description && (
+          <p className="mt-1 text-xs text-muted-foreground">{description}</p>
+        )}
       </div>
 
-      {groups.length === 0 ? (
+      {groups.length === 0 && !isLogging ? (
         <p className="py-8 text-center text-sm text-muted-foreground">No activities yet.</p>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-6">
+          {/* Prepend standalone Today group when logging but no today activities exist */}
+          {isLogging && !hasTodayGroup && subjectType && subjectId != null && (
+            <div>
+              <div className="mb-2">
+                <span className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                  Today
+                </span>
+              </div>
+              <div>
+                <ActivityNewItem
+                  subjectType={subjectType}
+                  subjectId={subjectId}
+                  onCancel={() => setIsLogging(false)}
+                  isLast={true}
+                />
+              </div>
+            </div>
+          )}
+
           {groups.map((group) => (
             <div key={group.key}>
               <div className="mb-2 flex items-baseline justify-between">
@@ -97,6 +152,15 @@ export function ActivityLog({ activities, title = "Activity Log", showSubject = 
                 </span>
               </div>
               <div>
+                {/* Inject new item at top of existing Today group */}
+                {isLogging && group.key === todayKey && subjectType && subjectId != null && (
+                  <ActivityNewItem
+                    subjectType={subjectType}
+                    subjectId={subjectId}
+                    onCancel={() => setIsLogging(false)}
+                    isLast={false}
+                  />
+                )}
                 {group.items.map((activity, i) => (
                   <ActivityItem
                     key={activity.id}
