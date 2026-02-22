@@ -60,7 +60,7 @@ RSpec.describe Activity, type: :model do
       contact = create(:contact, first_name: "Jane", last_name: "Doe")
       activity = create(:activity, subject: contact)
       json = activity.as_activity_json
-      expect(json).to include("subject" => { id: contact.id, type: "Contact", name: "Jane Doe" })
+      expect(json).to include("subject" => {id: contact.id, type: "Contact", name: "Jane Doe"})
       expect(json.keys).not_to include("subject_type", "subject_id", "user_id")
       expect(json).to include("id", "kind", "body", "created_at", "updated_at")
     end
@@ -69,7 +69,7 @@ RSpec.describe Activity, type: :model do
       company = create(:company, name: "Acme Corp")
       activity = create(:activity, subject: company)
       json = activity.as_activity_json
-      expect(json).to include("subject" => { id: company.id, type: "Company", name: "Acme Corp" })
+      expect(json).to include("subject" => {id: company.id, type: "Company", name: "Acme Corp"})
       expect(json.keys).not_to include("subject_type", "subject_id", "user_id")
     end
   end

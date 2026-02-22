@@ -42,7 +42,7 @@ class ActivitiesController < InertiaController
     if @activity.save
       redirect_to url_for(@activity.subject), notice: "Activity logged."
     else
-      redirect_back_or_to contacts_path, inertia: { errors: @activity.errors.as_json }
+      redirect_back_or_to contacts_path, inertia: {errors: @activity.errors.as_json}
     end
   end
 
@@ -63,7 +63,7 @@ class ActivitiesController < InertiaController
     if @activity.update(activity_update_params)
       redirect_to safe_return_path(params[:return_to], url_for(@activity.subject)), notice: "Activity updated."
     else
-      redirect_to edit_activity_path(@activity, return_to: params[:return_to]), inertia: { errors: @activity.errors.as_json }
+      redirect_to edit_activity_path(@activity, return_to: params[:return_to]), inertia: {errors: @activity.errors.as_json}
     end
   end
 

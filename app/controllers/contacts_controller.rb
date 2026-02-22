@@ -38,7 +38,7 @@ class ContactsController < InertiaController
     if @contact.save
       redirect_to contact_path(@contact), notice: "Contact created."
     else
-      redirect_to new_contact_path, inertia: { errors: @contact.errors.as_json }
+      redirect_to new_contact_path, inertia: {errors: @contact.errors.as_json}
     end
   end
 
@@ -53,7 +53,7 @@ class ContactsController < InertiaController
     if @contact.update(contact_params)
       redirect_to contact_path(@contact), notice: "Contact updated."
     else
-      redirect_to edit_contact_path(@contact), inertia: { errors: @contact.errors.as_json }
+      redirect_to edit_contact_path(@contact), inertia: {errors: @contact.errors.as_json}
     end
   end
 
@@ -86,10 +86,10 @@ class ContactsController < InertiaController
     scope = Current.user.contacts.includes(:company).order(:last_name, :first_name)
 
     scope = case params[:filter]
-            when "starred"  then scope.where(starred: true)
-            when "archived" then scope.where(archived: true)
-            else                 scope.where(archived: false)
-            end
+    when "starred"  then scope.where(starred: true)
+    when "archived" then scope.where(archived: true)
+    else                 scope.where(archived: false)
+    end
 
     if params[:q].present?
       scope = scope.search(params[:q])
@@ -98,15 +98,15 @@ class ContactsController < InertiaController
     dir = params[:sort_dir] == "desc" ? :desc : :asc
 
     scope = case params[:sort]
-            when "added"
-              scope.reorder(created_at: dir)
-            when "company"
-              dir_sql = dir == :desc ? "DESC" : "ASC"
-              scope.joins("LEFT JOIN companies ON companies.id = contacts.company_id")
-                   .reorder(Arel.sql("companies.name #{dir_sql} NULLS LAST, contacts.last_name #{dir_sql}"))
-            else
-              dir == :desc ? scope.reorder(last_name: :desc, first_name: :desc) : scope
-            end
+    when "added"
+      scope.reorder(created_at: dir)
+    when "company"
+      dir_sql = dir == :desc ? "DESC" : "ASC"
+      scope.joins("LEFT JOIN companies ON companies.id = contacts.company_id")
+           .reorder(Arel.sql("companies.name #{dir_sql} NULLS LAST, contacts.last_name #{dir_sql}"))
+    else
+      dir == :desc ? scope.reorder(last_name: :desc, first_name: :desc) : scope
+    end
 
     scope
   end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Contact < ApplicationRecord
   TAGS = %w[customer friend investor lead partner prospect vip vendor].freeze
 
