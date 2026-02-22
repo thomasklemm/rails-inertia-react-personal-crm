@@ -59,7 +59,7 @@ class ActivitiesController < InertiaController
   end
 
   def update
-    if @activity.update(activity_params)
+    if @activity.update(activity_update_params)
       redirect_to safe_return_path(params[:return_to], url_for(@activity.subject)), notice: "Activity updated."
     else
       redirect_to edit_activity_path(@activity, return_to: params[:return_to]), inertia: { errors: @activity.errors.as_json }
@@ -80,5 +80,9 @@ class ActivitiesController < InertiaController
 
   def activity_params
     params.permit(:kind, :body, :subject_type, :subject_id)
+  end
+
+  def activity_update_params
+    params.permit(:kind, :body)
   end
 end

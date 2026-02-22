@@ -77,7 +77,7 @@ export function ActivityItem({ activity, showSubject = false, isLast = true }: A
     setSaving(true)
     router.patch(
       activityPath(activity.id),
-      { kind: editKind, body: editBody, subject_type: activity.subject.type, subject_id: activity.subject.id },
+      { kind: editKind, body: editBody },
       {
         preserveScroll: true,
         onSuccess: () => { setEditing(false); setSaving(false) },
