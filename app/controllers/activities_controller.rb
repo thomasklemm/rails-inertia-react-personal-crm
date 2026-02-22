@@ -7,8 +7,16 @@ class ActivitiesController < InertiaController
     scope = Current.user.activities.includes(:subject).order(created_at: :desc)
 
     if params[:q].present?
-      q = "%#{params[:q]}%"
-      scope = scope.where("activities.body LIKE ?", q)
+      scope = scope
+        .joins("LEFT JOIN contacts ON activities.subject_type = 'Contact' AND activities.subject_id = contacts.id")
+        .joins("LEFT JOIN companies ON activities.subject_type = 'Company' AND activities.subject_id = companies.id")
+      params[:q].split.each do |word|
+        w = "%#{word}%"
+        scope = scope.where(
+          "activities.body LIKE :w OR (contacts.first_name || ' ' || contacts.last_name) LIKE :w OR companies.name LIKE :w",
+          w: w
+        )
+      end
     end
 
     if params[:kind].present? && Activity::KINDS.include?(params[:kind])
