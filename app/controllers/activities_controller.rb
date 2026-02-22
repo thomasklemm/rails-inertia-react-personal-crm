@@ -2,6 +2,7 @@
 
 class ActivitiesController < InertiaController
   before_action :set_activity, only: [:show, :edit, :update, :destroy]
+  before_action :authorize_subject, only: [:create]
 
   def index
     scope = Current.user.activities.includes(:subject).order(created_at: :desc)
@@ -76,6 +77,17 @@ class ActivitiesController < InertiaController
 
   def set_activity
     @activity = Current.user.activities.includes(:subject).find(params[:id])
+  end
+
+  def authorize_subject
+    case params[:subject_type]
+    when "Contact"
+      Current.user.contacts.find(params[:subject_id])
+    when "Company"
+      Current.user.companies.find(params[:subject_id])
+    else
+      raise ActiveRecord::RecordNotFound
+    end
   end
 
   def activity_params

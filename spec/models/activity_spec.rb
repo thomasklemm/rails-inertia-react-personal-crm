@@ -21,6 +21,13 @@ RSpec.describe Activity, type: :model do
         expect(build(:activity, kind: kind)).to be_valid
       end
     end
+
+    it "rejects subject_type values outside Contact and Company" do
+      activity = build(:activity)
+      activity.subject_type = "User"
+      expect(activity).not_to be_valid
+      expect(activity.errors[:subject_type]).to be_present
+    end
   end
 
   describe "associations" do
