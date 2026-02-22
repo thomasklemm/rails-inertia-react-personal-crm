@@ -45,3 +45,6 @@ node_modules
 
 # Firecrawl
 .firecrawl
+
+# Claude Code hooks
+.github/hooks/
