@@ -35,7 +35,7 @@ class CompaniesController < InertiaController
     if @company.save
       redirect_to company_path(@company), notice: "Company created."
     else
-      redirect_to new_company_path, inertia: { errors: @company.errors.as_json }
+      redirect_to new_company_path, inertia: {errors: @company.errors.as_json}
     end
   end
 
@@ -49,7 +49,7 @@ class CompaniesController < InertiaController
     if @company.update(company_params)
       redirect_to company_path(@company), notice: "Company updated."
     else
-      redirect_to edit_company_path(@company), inertia: { errors: @company.errors.as_json }
+      redirect_to edit_company_path(@company), inertia: {errors: @company.errors.as_json}
     end
   end
 
@@ -95,13 +95,13 @@ class CompaniesController < InertiaController
     dir = params[:sort_dir] == "desc" ? :desc : :asc
 
     scope = case params[:sort]
-            when "added"
-              scope.reorder(created_at: dir)
-            when "contacts"
-              scope.reorder(Arel.sql("contacts_count #{dir == :desc ? 'DESC' : 'ASC'}, companies.name"))
-            else
-              dir == :desc ? scope.reorder(name: :desc) : scope
-            end
+    when "added"
+      scope.reorder(created_at: dir)
+    when "contacts"
+      scope.reorder(Arel.sql("contacts_count #{dir == :desc ? 'DESC' : 'ASC'}, companies.name"))
+    else
+      dir == :desc ? scope.reorder(name: :desc) : scope
+    end
 
     scope
   end
