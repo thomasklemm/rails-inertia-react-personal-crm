@@ -68,4 +68,69 @@ RSpec.describe "Companies", type: :system do
       expect(page).not_to have_text("Acme Corp")
     end
   end
+
+  describe "activity log" do
+    it "shows the company's own activities" do
+      create(:activity, subject: company, body: "QBR meeting completed.", user: user)
+      visit company_path(company)
+      expect(page).to have_text("QBR meeting completed.")
+    end
+
+    it "shows activities for contacts at the company in the merged log" do
+      contact = create(:contact, first_name: "Bob", last_name: "Smith", company: company, user: user)
+      create(:activity, subject: contact, body: "Called Bob about the renewal.", user: user)
+      visit company_path(company)
+      expect(page).to have_text("Called Bob about the renewal.")
+    end
+
+    it "logs an activity inline" do
+      visit company_path(company)
+      click_button "Log Activity"
+      fill_in "Add a note…", with: "Quarterly check-in completed."
+      click_button "Log Note"
+      expect(page).to have_text("Quarterly check-in completed.")
+    end
+
+    it "cancels logging and restores the Log Activity button" do
+      visit company_path(company)
+      click_button "Log Activity"
+      click_button "Cancel"
+      expect(page).to have_button("Log Activity")
+      expect(page).not_to have_css("textarea")
+    end
+  end
+
+  describe "editing company notes inline" do
+    let!(:company_with_notes) { create(:company, name: "Notes Corp", notes: "Original notes here.", user: user) }
+
+    it "opens editing by clicking the pencil icon (hover-revealed)" do
+      visit company_path(company_with_notes)
+      find("button[title='Edit notes']", visible: :all).click
+      expect(page).to have_css("textarea")
+    end
+
+    it "saves updated notes by double-clicking the text" do
+      visit company_path(company_with_notes)
+      find("p", text: "Original notes here.").double_click
+      find("textarea").set("Updated company notes.")
+      click_button "Save"
+      expect(page).to have_text("Updated company notes.")
+      expect(page).not_to have_text("Original notes here.")
+    end
+
+    it "cancels editing and restores original notes" do
+      visit company_path(company_with_notes)
+      find("p", text: "Original notes here.").double_click
+      find("textarea").set("Should not be saved.")
+      click_button "Cancel"
+      expect(page).to have_text("Original notes here.")
+      expect(page).not_to have_css("textarea")
+    end
+
+    it "opens editing by clicking the placeholder when no notes exist" do
+      visit company_path(company)
+      find("p", text: "Add notes…").click
+      expect(page).to have_css("textarea")
+    end
+  end
 end

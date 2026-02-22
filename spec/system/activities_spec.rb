@@ -38,6 +38,75 @@ RSpec.describe "Activities", type: :system do
     end
   end
 
+  describe "searching activities" do
+    let!(:other_contact) { create(:contact, first_name: "Carlos", last_name: "Ruiz", user: user) }
+    let!(:other_activity) { create(:activity, subject: other_contact, body: "Partnership call.", user: user) }
+
+    it "finds activities by body text" do
+      visit activities_path
+      fill_in "Search activities or contacts…", with: "renewal"
+      expect(page).to have_text("Discussed renewal terms.")
+      expect(page).not_to have_text("Partnership call.")
+    end
+
+    it "finds activities by contact name" do
+      visit activities_path
+      fill_in "Search activities or contacts…", with: "Zara"
+      expect(page).to have_text("Discussed renewal terms.")
+      expect(page).not_to have_text("Partnership call.")
+    end
+
+    it "finds activities by company name" do
+      create(:activity, subject: company, body: "Company review meeting.", user: user)
+      visit activities_path
+      fill_in "Search activities or contacts…", with: "Acme"
+      expect(page).to have_text("Company review meeting.")
+      expect(page).not_to have_text("Discussed renewal terms.")
+    end
+
+    it "matches each search word independently across subject and body" do
+      visit activities_path
+      fill_in "Search activities or contacts…", with: "Zara renewal"
+      expect(page).to have_text("Discussed renewal terms.")
+      expect(page).not_to have_text("Partnership call.")
+    end
+
+    it "returns no results when words don't all match" do
+      visit activities_path
+      fill_in "Search activities or contacts…", with: "Zara partnership"
+      expect(page).not_to have_text("Discussed renewal terms.")
+      expect(page).not_to have_text("Partnership call.")
+    end
+  end
+
+  describe "inline editing an activity" do
+    it "edits the body by double-clicking the text" do
+      visit activities_path
+      find("p", text: "Discussed renewal terms.").double_click
+      find("textarea").set("Updated via inline edit.")
+      click_button "Save"
+      expect(page).to have_text("Updated via inline edit.")
+      expect(page).not_to have_text("Discussed renewal terms.")
+    end
+
+    it "changes the activity kind inline" do
+      visit activities_path
+      find("p", text: "Discussed renewal terms.").double_click
+      find("button", text: "Call", exact_text: true).click
+      click_button "Save"
+      expect(page).to have_text("Call")
+    end
+
+    it "cancels inline editing and restores the original text" do
+      visit activities_path
+      find("p", text: "Discussed renewal terms.").double_click
+      find("textarea").set("This should not be saved.")
+      click_button "Cancel"
+      expect(page).to have_text("Discussed renewal terms.")
+      expect(page).not_to have_text("This should not be saved.")
+    end
+  end
+
   describe "logging an activity from a contact" do
     it "logs a note" do
       visit new_activity_path(subject_type: "Contact", subject_id: contact.id)
