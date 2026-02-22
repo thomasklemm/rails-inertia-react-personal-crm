@@ -1,11 +1,11 @@
 import { Head, usePage } from "@inertiajs/react"
 import { ModalLink } from "@inertiaui/modal-react"
+import { Plus } from "lucide-react"
 import type { ReactNode } from "react"
 
 import { ActivityLog } from "@/components/crm/activity-log"
 import { CompanyDetail } from "@/components/crm/company-detail"
 import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
 import AppLayout from "@/layouts/app-layout"
 import { CompaniesLayout } from "@/layouts/companies-layout"
 import { companiesPath, newActivityPath } from "@/routes"
@@ -15,7 +15,6 @@ interface Props {
   company: Company
   contacts: Contact[]
   activities: Activity[]
-  contact_activities: Activity[]
   q?: string
   filter?: string
   sort?: string
@@ -24,8 +23,7 @@ interface Props {
 }
 
 export default function CompaniesShow() {
-  const { company, contacts, activities, contact_activities, q, filter, sort, sort_dir } =
-    usePage<Props>().props
+  const { company, contacts, activities, q, filter, sort, sort_dir } = usePage<Props>().props
 
   return (
     <>
@@ -39,21 +37,14 @@ export default function CompaniesShow() {
           sort={sort}
           sort_dir={sort_dir}
         />
-        <div className="space-y-5 border-t px-6 py-5">
+        <div className="space-y-4 border-t px-6 py-5">
           <ModalLink href={newActivityPath({ subject_type: "Company", subject_id: company.id })}>
-            <Button size="sm">Log Activity</Button>
+            <Button size="sm" variant="outline" className="gap-1.5 font-medium">
+              <Plus className="size-3.5" />
+              Log Activity
+            </Button>
           </ModalLink>
-          <ActivityLog activities={activities} />
-          {contact_activities.length > 0 && (
-            <>
-              <Separator />
-              <ActivityLog
-                activities={contact_activities}
-                title="Activity from Contacts"
-                showContact={true}
-              />
-            </>
-          )}
+          <ActivityLog activities={activities} showSubject={true} />
         </div>
       </div>
     </>

@@ -51,10 +51,10 @@ function groupByDate(activities: Activity[]) {
 interface ActivityLogProps {
   activities: Activity[]
   title?: string
-  showContact?: boolean
+  showSubject?: boolean
 }
 
-export function ActivityLog({ activities, title = "Activity Log", showContact = false }: ActivityLogProps) {
+export function ActivityLog({ activities, title = "Activity Log", showSubject = false }: ActivityLogProps) {
   const [kindFilter, setKindFilter] = useState<ActivityKind | undefined>(undefined)
 
   const filtered = kindFilter ? activities.filter((a) => a.kind === kindFilter) : activities
@@ -63,7 +63,7 @@ export function ActivityLog({ activities, title = "Activity Log", showContact = 
   return (
     <div>
       <div className="mb-3 flex items-center justify-between">
-        <h3 className="text-sm font-semibold">{title}</h3>
+        <h3 className="text-sm font-semibold tracking-tight">{title}</h3>
         <div className="inline-flex rounded-lg border bg-muted p-0.5">
           {FILTERS.map((f) => (
             <button
@@ -72,7 +72,7 @@ export function ActivityLog({ activities, title = "Activity Log", showContact = 
               className={`flex items-center gap-1.5 rounded-md px-3 py-1 text-xs font-medium transition-all ${
                 kindFilter === f.value
                   ? "bg-background text-foreground shadow-sm"
-                  : "text-muted-foreground hover:text-foreground"
+                  : "text-muted-foreground hover:bg-background/70 hover:text-foreground"
               }`}
             >
               {f.icon && <f.icon className="size-3.5" />}
@@ -101,7 +101,7 @@ export function ActivityLog({ activities, title = "Activity Log", showContact = 
                   <ActivityItem
                     key={activity.id}
                     activity={activity}
-                    showContact={showContact}
+                    showSubject={showSubject}
                     isLast={i === group.items.length - 1}
                   />
                 ))}

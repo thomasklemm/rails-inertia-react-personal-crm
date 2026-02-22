@@ -169,7 +169,7 @@ export function CompanyDetail({
         <div className="w-full lg:w-2/5 lg:pr-8">
           <div className="mb-3 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <h2 className="text-sm font-semibold">Contacts</h2>
+              <h2 className="text-sm font-semibold tracking-tight">Contacts</h2>
               <span className="text-xs text-muted-foreground">
                 {contacts.length} {contacts.length === 1 ? "contact" : "contacts"}
               </span>

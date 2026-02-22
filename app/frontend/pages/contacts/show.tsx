@@ -1,5 +1,6 @@
 import { Head, usePage } from "@inertiajs/react"
 import { ModalLink } from "@inertiaui/modal-react"
+import { Plus } from "lucide-react"
 import type { ReactNode } from "react"
 
 import { ActivityLog } from "@/components/crm/activity-log"
@@ -29,9 +30,12 @@ export default function ContactsShow() {
       <Head title={`${contact.first_name} ${contact.last_name}`} />
       <div className="scrollbar-subtle h-full overflow-y-auto">
         <ContactDetail contact={contact} q={q} filter={filter} sort={sort} sort_dir={sort_dir} />
-        <div className="space-y-5 border-t px-6 py-5">
+        <div className="space-y-4 border-t px-6 py-5">
           <ModalLink href={newActivityPath({ subject_type: "Contact", subject_id: contact.id })}>
-            <Button size="sm">Log Activity</Button>
+            <Button size="sm" variant="outline" className="gap-1.5 font-medium">
+              <Plus className="size-3.5" />
+              Log Activity
+            </Button>
           </ModalLink>
           <ActivityLog activities={activities} />
         </div>
