@@ -1,7 +1,7 @@
 import { Head, useForm } from "@inertiajs/react"
-import { useRef } from "react"
 import { Modal } from "@inertiaui/modal-react"
 import { Mail, MessageSquare, Phone } from "lucide-react"
+import { useRef } from "react"
 
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"

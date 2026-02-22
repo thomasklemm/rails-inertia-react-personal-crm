@@ -5,6 +5,7 @@ import { StrictMode } from "react"
 import { createRoot } from "react-dom/client"
 
 import { initializeTheme } from "@/hooks/use-appearance"
+import PersistentLayout from "@/layouts/persistent-layout"
 
 putConfig({
   modal: {
@@ -13,7 +14,6 @@ putConfig({
       "bg-card dark:bg-card text-foreground rounded-lg shadow-xl border border-border/60 dark:border dark:border-border",
   },
 })
-import PersistentLayout from "@/layouts/persistent-layout"
 
 const appName = import.meta.env.VITE_APP_NAME ?? "React Starter Kit"
 

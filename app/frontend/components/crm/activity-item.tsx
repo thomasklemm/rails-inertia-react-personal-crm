@@ -25,8 +25,8 @@ import {
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import {
-  activityPath,
   activitiesPath,
+  activityPath,
   companyPath,
   contactPath,
 } from "@/routes"
