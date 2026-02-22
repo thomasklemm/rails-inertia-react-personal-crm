@@ -26,6 +26,8 @@ class Activity < ApplicationRecord
       {id: subject_id, type: "Contact", name: subject.full_name}
     when "Company"
       {id: subject_id, type: "Company", name: subject.name}
+    else
+      raise ArgumentError, "Unsupported subject_type: #{subject_type.inspect} for Activity##{id}"
     end
   end
 end
