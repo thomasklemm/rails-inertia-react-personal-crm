@@ -12,6 +12,12 @@ class Activity < ApplicationRecord
 
   default_scope { order(created_at: :desc) }
 
+  def as_activity_json
+    as_json(except: %w[subject_type subject_id user_id]).merge("subject" => subject_json)
+  end
+
+  private
+
   def subject_json
     case subject_type
     when "Contact"
@@ -19,9 +25,5 @@ class Activity < ApplicationRecord
     when "Company"
       { id: subject_id, type: "Company", name: subject.name }
     end
-  end
-
-  def as_activity_json
-    as_json(except: %w[subject_type subject_id user_id]).merge("subject" => subject_json)
   end
 end
