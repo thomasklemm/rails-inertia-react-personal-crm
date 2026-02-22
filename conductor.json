@@ -1,0 +1,7 @@
+{
+    "scripts": {
+        "setup": "bin/setup --skip-server",
+        "run": "bin/dev",
+        "archive": "rm -rf node_modules"
+    }
+}
