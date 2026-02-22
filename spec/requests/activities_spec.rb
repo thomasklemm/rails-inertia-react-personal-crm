@@ -141,6 +141,20 @@ RSpec.describe "Activities", type: :request do
         post activities_path, params: { subject_type: "Contact", subject_id: contact.id, kind: "note", body: "" }
       }.not_to change(Activity, :count)
     end
+
+    it "does not allow creating an activity for another user's contact" do
+      other_contact = create(:contact, user: create(:user))
+      expect {
+        post activities_path, params: { subject_type: "Contact", subject_id: other_contact.id, kind: "note", body: "Unauthorized." }
+      }.not_to change(Activity, :count)
+    end
+
+    it "does not allow creating an activity for another user's company" do
+      other_company = create(:company, user: create(:user))
+      expect {
+        post activities_path, params: { subject_type: "Company", subject_id: other_company.id, kind: "note", body: "Unauthorized." }
+      }.not_to change(Activity, :count)
+    end
   end
 
   describe "PATCH /activities/:id" do
