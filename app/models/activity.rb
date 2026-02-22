@@ -2,22 +2,25 @@ class Activity < ApplicationRecord
   KINDS = %w[note call email].freeze
 
   belongs_to :user
-  belongs_to :contact, optional: true
-  belongs_to :company, optional: true
+  belongs_to :subject, polymorphic: true
 
   enum :kind, note: "note", call: "call", email: "email"
 
   validates :kind, presence: true, inclusion: { in: KINDS }
   validates :body, presence: true
-  validate  :contact_or_company_present
 
   default_scope { order(created_at: :desc) }
 
-  private
-
-  def contact_or_company_present
-    if contact.nil? && company.nil?
-      errors.add(:base, "must belong to a contact or a company")
+  def subject_json
+    case subject_type
+    when "Contact"
+      { id: subject_id, type: "Contact", name: subject.full_name }
+    when "Company"
+      { id: subject_id, type: "Company", name: subject.name }
     end
+  end
+
+  def as_activity_json
+    as_json(except: %w[subject_type subject_id user_id]).merge("subject" => subject_json)
   end
 end

@@ -238,22 +238,12 @@ export default function ActivitiesIndex() {
                               <span className="text-xs text-muted-foreground">
                                 {timeAgo(activity.created_at)}
                               </span>
-                              {activity.contact && (
-                                <a
-                                  href={contactPath(activity.contact.id)}
-                                  className="text-xs font-medium text-amber-700 hover:underline dark:text-amber-400"
-                                >
-                                  {activity.contact.first_name} {activity.contact.last_name}
-                                </a>
-                              )}
-                              {activity.company && !activity.contact && (
-                                <a
-                                  href={companyPath(activity.company.id)}
-                                  className="text-xs font-medium text-amber-700 hover:underline dark:text-amber-400"
-                                >
-                                  {activity.company.name}
-                                </a>
-                              )}
+                              <a
+                                href={activity.subject.type === "Contact" ? contactPath(activity.subject.id) : companyPath(activity.subject.id)}
+                                className="text-xs font-medium text-amber-700 hover:underline dark:text-amber-400"
+                              >
+                                {activity.subject.name}
+                              </a>
                             </div>
                             <ActivityActions activity={activity} />
                           </div>

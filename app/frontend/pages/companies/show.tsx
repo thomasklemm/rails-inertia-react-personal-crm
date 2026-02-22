@@ -40,7 +40,7 @@ export default function CompaniesShow() {
           sort_dir={sort_dir}
         />
         <div className="space-y-5 border-t px-6 py-5">
-          <ModalLink href={newActivityPath({ company_id: company.id })}>
+          <ModalLink href={newActivityPath({ subject_type: "Company", subject_id: company.id })}>
             <Button size="sm">Log Activity</Button>
           </ModalLink>
           <ActivityLog activities={activities} />

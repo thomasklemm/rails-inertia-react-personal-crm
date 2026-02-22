@@ -3,7 +3,7 @@ class Contact < ApplicationRecord
 
   belongs_to :user
   belongs_to :company, optional: true
-  has_many :activities, dependent: :destroy
+  has_many :activities, as: :subject, dependent: :destroy
 
   validates :first_name, presence: true
   validates :last_name,  presence: true

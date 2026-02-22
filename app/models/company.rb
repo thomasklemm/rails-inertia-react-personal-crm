@@ -3,7 +3,7 @@ class Company < ApplicationRecord
 
   belongs_to :user
   has_many :contacts, dependent: :nullify
-  has_many :activities, dependent: :destroy
+  has_many :activities, as: :subject, dependent: :destroy
 
   validates :name, presence: true
   validate  :tags_must_be_valid

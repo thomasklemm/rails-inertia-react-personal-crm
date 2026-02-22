@@ -10,17 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_20_000005) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_23_000001) do
   create_table "activities", force: :cascade do |t|
     t.text "body", null: false
-    t.integer "company_id"
-    t.integer "contact_id"
     t.datetime "created_at", null: false
     t.string "kind", null: false
+    t.integer "subject_id", null: false
+    t.string "subject_type", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
-    t.index ["company_id"], name: "index_activities_on_company_id"
-    t.index ["contact_id"], name: "index_activities_on_contact_id"
+    t.index ["subject_type", "subject_id"], name: "index_activities_on_subject_type_and_subject_id"
     t.index ["user_id"], name: "index_activities_on_user_id"
   end
 
@@ -75,8 +74,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_20_000005) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
-  add_foreign_key "activities", "companies"
-  add_foreign_key "activities", "contacts"
   add_foreign_key "activities", "users"
   add_foreign_key "companies", "users"
   add_foreign_key "contacts", "companies"

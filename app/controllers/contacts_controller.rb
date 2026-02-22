@@ -17,7 +17,7 @@ class ContactsController < InertiaController
     render inertia: "contacts/show", props: {
       contacts: filtered_contacts.as_json(include: :company),
       contact: @contact.as_json(include: :company),
-      activities: @contact.activities.as_json(include: { contact: { only: [:id, :first_name, :last_name] } }),
+      activities: @contact.activities.includes(:subject).map(&:as_activity_json),
       companies: Current.user.companies.order(:name).as_json,
       q: params[:q],
       filter: params[:filter],

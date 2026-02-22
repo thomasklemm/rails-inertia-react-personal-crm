@@ -102,12 +102,17 @@ export interface Contact {
   updated_at: string
 }
 
+export interface ActivitySubject {
+  id: number
+  type: "Contact" | "Company"
+  name: string
+}
+
 export interface Activity {
   id: number
   kind: ActivityKind
   body: string
-  contact: Pick<Contact, "id" | "first_name" | "last_name"> | null
-  company: Pick<Company, "id" | "name"> | null
+  subject: ActivitySubject
   created_at: string
   updated_at: string
 }

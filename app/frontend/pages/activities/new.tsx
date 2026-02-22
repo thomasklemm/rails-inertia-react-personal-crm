@@ -15,18 +15,18 @@ const KINDS: { value: ActivityKind; label: string; icon: React.ElementType }[] =
 ]
 
 interface Props {
-  contact_id?: number | null
-  company_id?: number | null
+  subject_type?: string | null
+  subject_id?: number | null
 }
 
-export default function ActivitiesNew({ contact_id, company_id }: Props) {
+export default function ActivitiesNew({ subject_type, subject_id }: Props) {
   const bodyRef = useRef<HTMLTextAreaElement>(null)
 
   const { data, setData, post, processing, errors } = useForm({
     kind: "note" as ActivityKind,
     body: "",
-    ...(contact_id ? { contact_id } : {}),
-    ...(company_id ? { company_id } : {}),
+    ...(subject_type ? { subject_type } : {}),
+    ...(subject_id ? { subject_id } : {}),
   })
 
   return (
