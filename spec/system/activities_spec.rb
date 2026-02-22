@@ -146,9 +146,11 @@ RSpec.describe "Activities", type: :system do
   end
 
   describe "deleting an activity" do
-    it "removes the activity" do
-      activity.destroy
+    it "removes the activity via the delete button and confirmation dialog" do
       visit activities_path
+      find("p", text: "Discussed renewal terms.").hover
+      find("button[title='Delete']").click
+      within("[role='alertdialog']") { click_button "Delete" }
       expect(page).not_to have_text("Discussed renewal terms.")
     end
   end

@@ -200,6 +200,7 @@ export function ActivityItem({ activity, showSubject = false, isLast = true }: A
                     size="icon"
                     variant="ghost"
                     className="size-6 hover:text-destructive"
+                    title="Delete"
                     onClick={() => setDeleteDialogOpen(true)}
                   >
                     <Trash2 className="size-3" />

@@ -7,6 +7,7 @@ class Activity < ApplicationRecord
   enum :kind, note: "note", call: "call", email: "email"
 
   validates :kind, presence: true, inclusion: { in: KINDS }
+  validates :subject_type, inclusion: { in: %w[Contact Company] }
   validates :body, presence: true
 
   default_scope { order(created_at: :desc) }
