@@ -59,7 +59,7 @@ export function ContactRow({
             <Archive className="text-muted-foreground size-3 shrink-0" />
           )}
         </div>
-        {(contact.company || contact.tags.length > 0) && (
+        {(contact.company != null || contact.tags.length > 0) && (
           <div className="mt-0.5 flex items-center gap-2 overflow-hidden">
             {contact.company && (
               <p className="text-muted-foreground shrink-0 truncate text-xs">
