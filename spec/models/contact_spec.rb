@@ -80,7 +80,7 @@ RSpec.describe Contact, type: :model do
 
     it "destroys activities on destroy" do
       contact = create(:contact)
-      activity = create(:activity, contact: contact)
+      activity = create(:activity, subject: contact)
       contact.destroy
       expect { activity.reload }.to raise_error(ActiveRecord::RecordNotFound)
     end

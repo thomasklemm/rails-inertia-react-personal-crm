@@ -66,20 +66,12 @@ export function ActivityItem({ activity, showContact = false, isLast = true }: A
             <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
               <span className="text-sm font-medium capitalize">{activity.kind}</span>
               <span className="text-xs text-muted-foreground">{timeAgo(activity.created_at)}</span>
-              {showContact && activity.contact && (
+              {showContact && (
                 <a
-                  href={contactPath(activity.contact.id)}
+                  href={activity.subject.type === "Contact" ? contactPath(activity.subject.id) : companyPath(activity.subject.id)}
                   className="text-xs font-medium text-primary hover:underline"
                 >
-                  {activity.contact.first_name} {activity.contact.last_name}
-                </a>
-              )}
-              {showContact && activity.company && !activity.contact && (
-                <a
-                  href={companyPath(activity.company.id)}
-                  className="text-xs font-medium text-primary hover:underline"
-                >
-                  {activity.company.name}
+                  {activity.subject.name}
                 </a>
               )}
             </div>

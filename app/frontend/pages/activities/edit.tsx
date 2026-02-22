@@ -22,14 +22,12 @@ export default function ActivitiesEdit({ activity }: Props) {
   const form = useForm({
     kind: activity.kind,
     body: activity.body,
-    contact_id: activity.contact ? String(activity.contact.id) : "",
-    company_id: activity.company ? String(activity.company.id) : "",
+    subject_type: activity.subject.type,
+    subject_id: activity.subject.id,
   })
   const { data, setData, patch, processing, errors } = form
 
-  const subjectName = activity.contact
-    ? `${activity.contact.first_name} ${activity.contact.last_name}`
-    : (activity.company?.name ?? "")
+  const subjectName = activity.subject.name
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()

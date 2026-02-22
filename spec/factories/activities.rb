@@ -5,6 +5,6 @@ FactoryBot.define do
     user
     kind    { "note" }
     body    { "Some notes here." }
-    contact { association :contact }
+    association :subject, factory: :contact
   end
 end

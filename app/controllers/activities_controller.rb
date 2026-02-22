@@ -4,7 +4,7 @@ class ActivitiesController < InertiaController
   before_action :set_activity, only: [:show, :edit, :update, :destroy]
 
   def index
-    scope = Current.user.activities.includes(contact: :company).order(created_at: :desc)
+    scope = Current.user.activities.includes(:subject).order(created_at: :desc)
 
     if params[:q].present?
       q = "%#{params[:q]}%"
@@ -16,7 +16,7 @@ class ActivitiesController < InertiaController
     end
 
     render inertia: "activities/index", props: {
-      activities: scope.as_json(include: { contact: { only: [:id, :first_name, :last_name] } }),
+      activities: scope.map(&:as_activity_json),
       q: params[:q],
       kind: params[:kind]
     }
@@ -24,18 +24,14 @@ class ActivitiesController < InertiaController
 
   def show
     render inertia: "activities/show", props: {
-      activity: @activity.as_json(include: { contact: { only: [:id, :first_name, :last_name] } })
+      activity: @activity.as_activity_json
     }
   end
 
   def create
     @activity = Current.user.activities.new(activity_params)
     if @activity.save
-      if @activity.company_id?
-        redirect_to company_path(@activity.company), notice: "Activity logged."
-      else
-        redirect_to contact_path(@activity.contact), notice: "Activity logged."
-      end
+      redirect_to url_for(@activity.subject), notice: "Activity logged."
     else
       redirect_back_or_to contacts_path, inertia: { errors: @activity.errors.as_json }
     end
@@ -43,39 +39,27 @@ class ActivitiesController < InertiaController
 
   def new
     render inertia_modal: "activities/new", props: {
-      contact_id: params[:contact_id]&.to_i,
-      company_id: params[:company_id]&.to_i
+      subject_type: params[:subject_type],
+      subject_id: params[:subject_id]&.to_i
     }, base_url: activities_path
   end
 
   def edit
     render inertia_modal: "activities/edit", props: {
-      activity: @activity.as_json(include: {
-        contact: { only: [:id, :first_name, :last_name] },
-        company: { only: [:id, :name] }
-      })
+      activity: @activity.as_activity_json
     }, base_url: activities_path
   end
 
   def update
     if @activity.update(activity_params)
-      redirect_path = if @activity.company_id?
-                        company_path(@activity.company)
-                      else
-                        contact_path(@activity.contact)
-                      end
-      redirect_to safe_return_path(params[:return_to], redirect_path), notice: "Activity updated."
+      redirect_to safe_return_path(params[:return_to], url_for(@activity.subject)), notice: "Activity updated."
     else
       redirect_to edit_activity_path(@activity, return_to: params[:return_to]), inertia: { errors: @activity.errors.as_json }
     end
   end
 
   def destroy
-    redirect_path = if @activity.company_id?
-                      company_path(@activity.company)
-                    else
-                      contact_path(@activity.contact)
-                    end
+    redirect_path = url_for(@activity.subject)
     @activity.destroy
     redirect_back_or_to redirect_path, notice: "Activity deleted."
   end
@@ -83,10 +67,10 @@ class ActivitiesController < InertiaController
   private
 
   def set_activity
-    @activity = Current.user.activities.find(params[:id])
+    @activity = Current.user.activities.includes(:subject).find(params[:id])
   end
 
   def activity_params
-    params.permit(:kind, :body, :contact_id, :company_id)
+    params.permit(:kind, :body, :subject_type, :subject_id)
   end
 end

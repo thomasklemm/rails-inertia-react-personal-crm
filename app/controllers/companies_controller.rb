@@ -22,10 +22,12 @@ class CompaniesController < InertiaController
       sort: params[:sort],
       sort_dir: params[:sort_dir],
       filter: params[:filter],
-      activities: @company.activities.as_json(include: { contact: { only: [:id, :first_name, :last_name] } }),
-      contact_activities: Current.user.activities.where(contact_id: @company.contacts.pluck(:id))
+      activities: @company.activities.includes(:subject).map(&:as_activity_json),
+      contact_activities: Current.user.activities
+                                  .where(subject_type: "Contact", subject_id: @company.contacts.pluck(:id))
+                                  .includes(:subject)
                                   .order(created_at: :desc)
-                                  .as_json(include: { contact: { only: [:id, :first_name, :last_name] } })
+                                  .map(&:as_activity_json)
     }
   end
 

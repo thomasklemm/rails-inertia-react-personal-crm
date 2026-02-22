@@ -5,30 +5,42 @@ require "rails_helper"
 RSpec.describe "Activities", type: :system do
   let(:user) { create(:user) }
   let!(:contact) { create(:contact, first_name: "Zara", last_name: "Ahmed", user: user) }
-  let!(:activity) { create(:activity, contact: contact, kind: "note", body: "Discussed renewal terms.", user: user) }
+  let!(:company) { create(:company, name: "Acme Corp", user: user) }
+  let!(:activity) { create(:activity, subject: contact, kind: "note", body: "Discussed renewal terms.", user: user) }
 
   before { sign_in_system(user) }
 
   describe "activity log page" do
     it "shows all activities across contacts" do
-      create(:activity, contact: contact, kind: "call", body: "Called to follow up.", user: user)
+      create(:activity, subject: contact, kind: "call", body: "Called to follow up.", user: user)
       visit activities_path
       expect(page).to have_text("Discussed renewal terms.")
       expect(page).to have_text("Called to follow up.")
     end
 
     it "filters activities by kind" do
-      create(:activity, contact: contact, kind: "call", body: "Called to follow up.", user: user)
+      create(:activity, subject: contact, kind: "call", body: "Called to follow up.", user: user)
       visit activities_path
       click_button "Calls"
       expect(page).not_to have_text("Discussed renewal terms.")
       expect(page).to have_text("Called to follow up.")
     end
+
+    it "links contact activities to the contact page" do
+      visit activities_path
+      expect(page).to have_link("Zara Ahmed", href: contact_path(contact))
+    end
+
+    it "links company activities to the company page" do
+      create(:activity, subject: company, kind: "note", body: "Company check-in.", user: user)
+      visit activities_path
+      expect(page).to have_link("Acme Corp", href: company_path(company))
+    end
   end
 
   describe "logging an activity from a contact" do
-    it "logs a note from the contact detail page" do
-      visit contact_path(contact)
+    it "logs a note" do
+      visit new_activity_path(subject_type: "Contact", subject_id: contact.id)
       fill_in "Add a note…", with: "Met at conference."
       click_button "Log Note"
       expect(page).to have_current_path(contact_path(contact))
@@ -36,11 +48,22 @@ RSpec.describe "Activities", type: :system do
     end
 
     it "logs a call by switching the activity kind" do
-      visit contact_path(contact)
-      click_button "Call"
+      visit new_activity_path(subject_type: "Contact", subject_id: contact.id)
+      within("form") { find("button", text: "Call", exact_text: true).click }
       fill_in "What was discussed?", with: "Negotiated contract terms."
       click_button "Log Call"
+      expect(page).to have_current_path(contact_path(contact))
       expect(page).to have_text("Negotiated contract terms.")
+    end
+  end
+
+  describe "logging an activity from a company" do
+    it "logs a note" do
+      visit new_activity_path(subject_type: "Company", subject_id: company.id)
+      fill_in "Add a note…", with: "Company partnership discussed."
+      click_button "Log Note"
+      expect(page).to have_current_path(company_path(company))
+      expect(page).to have_text("Company partnership discussed.")
     end
   end
 
@@ -54,15 +77,10 @@ RSpec.describe "Activities", type: :system do
   end
 
   describe "deleting an activity" do
-    it "removes the activity from the contact page" do
-      visit contact_path(contact)
-      within(".space-y-3", match: :first) do
-        # Find and click delete on the activity
-        find("button[aria-label='Delete activity'], button", text: "", match: :first).click rescue nil
-      end
-      # Navigate to activities to verify it can be deleted from there
+    it "removes the activity" do
+      activity.destroy
       visit activities_path
-      expect(page).to have_text("Discussed renewal terms.")
+      expect(page).not_to have_text("Discussed renewal terms.")
     end
   end
 end

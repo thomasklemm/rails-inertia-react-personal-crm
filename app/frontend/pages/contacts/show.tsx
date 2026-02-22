@@ -30,7 +30,7 @@ export default function ContactsShow() {
       <div className="scrollbar-subtle h-full overflow-y-auto">
         <ContactDetail contact={contact} q={q} filter={filter} sort={sort} sort_dir={sort_dir} />
         <div className="space-y-5 border-t px-6 py-5">
-          <ModalLink href={newActivityPath({ contact_id: contact.id })}>
+          <ModalLink href={newActivityPath({ subject_type: "Contact", subject_id: contact.id })}>
             <Button size="sm">Log Activity</Button>
           </ModalLink>
           <ActivityLog activities={activities} />
