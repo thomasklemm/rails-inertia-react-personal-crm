@@ -72,9 +72,9 @@ export function ContactDetail({ contact, q, filter, sort, sort_dir }: ContactDet
             <button
               onClick={handleStar}
               title={contact.starred ? "Unstar" : "Star"}
-              className="inline-flex shrink-0 items-center transition-opacity hover:opacity-70"
+              className="inline-flex shrink-0 items-center rounded p-0.5 transition-colors hover:bg-amber-50 dark:hover:bg-amber-900/20"
             >
-              <Star className={`size-5 ${contact.starred ? "fill-amber-400 text-amber-400" : "text-muted-foreground/40"}`} />
+              <Star className={`size-4 transition-colors ${contact.starred ? "fill-amber-400 text-amber-400 hover:fill-amber-500 hover:text-amber-500" : "text-muted-foreground/40 hover:text-amber-400"}`} />
             </button>
             {contact.archived && (
               <span className="shrink-0 rounded bg-muted px-1.5 py-0.5 text-xs text-muted-foreground">

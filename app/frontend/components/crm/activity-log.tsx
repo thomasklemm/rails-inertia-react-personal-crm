@@ -63,7 +63,7 @@ export function ActivityLog({ activities, title = "Activity Log", showSubject = 
   return (
     <div>
       <div className="mb-3 flex items-center justify-between">
-        <h3 className="text-sm font-semibold tracking-tight">{title}</h3>
+        <h3 className="text-base font-semibold tracking-tight">{title}</h3>
         <div className="inline-flex rounded-lg border bg-muted p-0.5">
           {FILTERS.map((f) => (
             <button

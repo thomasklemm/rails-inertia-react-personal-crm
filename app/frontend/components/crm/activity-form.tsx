@@ -1,5 +1,6 @@
 import { useForm } from "@inertiajs/react"
 import { Mail, MessageSquare, Phone } from "lucide-react"
+import { useRef } from "react"
 
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
@@ -13,14 +14,16 @@ const KINDS: { value: ActivityKind; label: string; icon: React.ElementType }[] =
 ]
 
 interface ActivityFormProps {
-  subjectType?: string
-  subjectId?: number
+  subjectType: string
+  subjectId: number
+  onCancel: () => void
 }
 
-export function ActivityForm({ subjectType, subjectId }: ActivityFormProps) {
+export function ActivityForm({ subjectType, subjectId, onCancel }: ActivityFormProps) {
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
   const { data, setData, post, processing, reset, errors } = useForm({
-    ...(subjectType ? { subject_type: subjectType } : {}),
-    ...(subjectId ? { subject_id: subjectId } : {}),
+    subject_type: subjectType,
+    subject_id: subjectId,
     kind: "note" as ActivityKind,
     body: "",
   })
@@ -29,28 +32,32 @@ export function ActivityForm({ subjectType, subjectId }: ActivityFormProps) {
     e.preventDefault()
     post(activitiesPath(), {
       preserveScroll: true,
-      onSuccess: () => reset("body"),
+      onSuccess: () => {
+        reset("body")
+        onCancel()
+      },
     })
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-3">
-      <h3 className="text-sm font-semibold">Log Activity</h3>
-
-      {/* Kind selector */}
+    <form onSubmit={handleSubmit} className="space-y-2 rounded-lg border bg-muted/30 px-3 py-3">
+      {/* Kind picker */}
       <div className="flex gap-1">
         {KINDS.map(({ value, label, icon: Icon }) => (
           <button
             key={value}
             type="button"
-            onClick={() => setData("kind", value)}
-            className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
+            onClick={() => {
+              setData("kind", value)
+              textareaRef.current?.focus()
+            }}
+            className={`flex items-center gap-1 rounded px-2 py-1 text-xs font-medium transition-colors ${
               data.kind === value
-                ? "bg-primary text-primary-foreground"
-                : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+                ? "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300"
+                : "text-muted-foreground hover:bg-muted hover:text-foreground"
             }`}
           >
-            <Icon className="size-3.5" />
+            <Icon className="size-3" />
             {label}
           </button>
         ))}
@@ -59,6 +66,7 @@ export function ActivityForm({ subjectType, subjectId }: ActivityFormProps) {
       {/* Body */}
       <div>
         <Textarea
+          ref={textareaRef}
           name="body"
           value={data.body}
           onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setData("body", e.target.value)}
@@ -70,18 +78,23 @@ export function ActivityForm({ subjectType, subjectId }: ActivityFormProps) {
                 ? "What was discussed?"
                 : "Email summary…"
           }
-          rows={2}
+          rows={3}
           className="resize-none text-sm"
+          onKeyDown={(e) => {
+            if (e.key === "Escape") onCancel()
+          }}
         />
         {errors.body && <p className="mt-1 text-xs text-destructive">{errors.body}</p>}
       </div>
 
-      {subjectType && <input type="hidden" name="subject_type" value={subjectType} />}
-      {subjectId && <input type="hidden" name="subject_id" value={subjectId} />}
-
-      <Button type="submit" size="sm" disabled={processing || !data.body.trim()}>
-        Log {KINDS.find((k) => k.value === data.kind)?.label ?? data.kind}
-      </Button>
+      <div className="flex gap-1.5">
+        <Button type="submit" size="sm" className="h-7 px-2.5 text-xs" disabled={processing || !data.body.trim()}>
+          Log {KINDS.find((k) => k.value === data.kind)?.label ?? data.kind}
+        </Button>
+        <Button type="button" size="sm" variant="ghost" className="h-7 px-2.5 text-xs" onClick={onCancel}>
+          Cancel
+        </Button>
+      </div>
     </form>
   )
 }

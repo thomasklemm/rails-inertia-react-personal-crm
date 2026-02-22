@@ -1,14 +1,15 @@
 import { Head, usePage } from "@inertiajs/react"
-import { ModalLink } from "@inertiaui/modal-react"
 import { Plus } from "lucide-react"
+import { useState } from "react"
 import type { ReactNode } from "react"
 
+import { ActivityForm } from "@/components/crm/activity-form"
 import { ActivityLog } from "@/components/crm/activity-log"
 import { CompanyDetail } from "@/components/crm/company-detail"
 import { Button } from "@/components/ui/button"
 import AppLayout from "@/layouts/app-layout"
 import { CompaniesLayout } from "@/layouts/companies-layout"
-import { companiesPath, newActivityPath } from "@/routes"
+import { companiesPath } from "@/routes"
 import type { Activity, BreadcrumbItem, Company, Contact } from "@/types"
 
 interface Props {
@@ -24,6 +25,7 @@ interface Props {
 
 export default function CompaniesShow() {
   const { company, contacts, activities, q, filter, sort, sort_dir } = usePage<Props>().props
+  const [isLogging, setIsLogging] = useState(false)
 
   return (
     <>
@@ -38,12 +40,23 @@ export default function CompaniesShow() {
           sort_dir={sort_dir}
         />
         <div className="space-y-4 border-t px-6 py-5">
-          <ModalLink href={newActivityPath({ subject_type: "Company", subject_id: company.id })}>
-            <Button size="sm" variant="outline" className="gap-1.5 font-medium">
+          {isLogging ? (
+            <ActivityForm
+              subjectType="Company"
+              subjectId={company.id}
+              onCancel={() => setIsLogging(false)}
+            />
+          ) : (
+            <Button
+              size="sm"
+              variant="outline"
+              className="gap-1.5 font-medium"
+              onClick={() => setIsLogging(true)}
+            >
               <Plus className="size-3.5" />
               Log Activity
             </Button>
-          </ModalLink>
+          )}
           <ActivityLog activities={activities} showSubject={true} />
         </div>
       </div>

@@ -67,9 +67,9 @@ export function CompanyDetail({
             <button
               onClick={handleStar}
               title={company.starred ? "Unstar" : "Star"}
-              className="inline-flex shrink-0 items-center transition-opacity hover:opacity-70"
+              className="inline-flex shrink-0 items-center rounded p-0.5 transition-colors hover:bg-amber-50 dark:hover:bg-amber-900/20"
             >
-              <Star className={`size-5 ${company.starred ? "fill-amber-400 text-amber-400" : "text-muted-foreground/40"}`} />
+              <Star className={`size-4 transition-colors ${company.starred ? "fill-amber-400 text-amber-400 hover:fill-amber-500 hover:text-amber-500" : "text-muted-foreground/40 hover:text-amber-400"}`} />
             </button>
           </div>
           <div className="mt-2 flex flex-wrap gap-1">
@@ -169,7 +169,7 @@ export function CompanyDetail({
         <div className="w-full lg:w-2/5 lg:pr-8">
           <div className="mb-3 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <h2 className="text-sm font-semibold tracking-tight">Contacts</h2>
+              <h2 className="text-base font-semibold tracking-tight">Contacts</h2>
               <span className="text-xs text-muted-foreground">
                 {contacts.length} {contacts.length === 1 ? "contact" : "contacts"}
               </span>

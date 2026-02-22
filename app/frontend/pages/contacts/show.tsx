@@ -1,14 +1,15 @@
 import { Head, usePage } from "@inertiajs/react"
-import { ModalLink } from "@inertiaui/modal-react"
 import { Plus } from "lucide-react"
+import { useState } from "react"
 import type { ReactNode } from "react"
 
+import { ActivityForm } from "@/components/crm/activity-form"
 import { ActivityLog } from "@/components/crm/activity-log"
 import { ContactDetail } from "@/components/crm/contact-detail"
 import { Button } from "@/components/ui/button"
 import AppLayout from "@/layouts/app-layout"
 import { CrmLayout } from "@/layouts/crm-layout"
-import { contactsPath, newActivityPath } from "@/routes"
+import { contactsPath } from "@/routes"
 import type { Activity, BreadcrumbItem, Company, Contact } from "@/types"
 
 interface Props {
@@ -24,6 +25,7 @@ interface Props {
 
 export default function ContactsShow() {
   const { contact, activities, q, filter, sort, sort_dir } = usePage<Props>().props
+  const [isLogging, setIsLogging] = useState(false)
 
   return (
     <>
@@ -31,12 +33,23 @@ export default function ContactsShow() {
       <div className="scrollbar-subtle h-full overflow-y-auto">
         <ContactDetail contact={contact} q={q} filter={filter} sort={sort} sort_dir={sort_dir} />
         <div className="space-y-4 border-t px-6 py-5">
-          <ModalLink href={newActivityPath({ subject_type: "Contact", subject_id: contact.id })}>
-            <Button size="sm" variant="outline" className="gap-1.5 font-medium">
+          {isLogging ? (
+            <ActivityForm
+              subjectType="Contact"
+              subjectId={contact.id}
+              onCancel={() => setIsLogging(false)}
+            />
+          ) : (
+            <Button
+              size="sm"
+              variant="outline"
+              className="gap-1.5 font-medium"
+              onClick={() => setIsLogging(true)}
+            >
               <Plus className="size-3.5" />
               Log Activity
             </Button>
-          </ModalLink>
+          )}
           <ActivityLog activities={activities} />
         </div>
       </div>
