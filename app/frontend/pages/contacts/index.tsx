@@ -18,17 +18,19 @@ export default function ContactsIndex() {
     <>
       <Head title="Contacts" />
       <div className="flex h-full flex-col items-center justify-center gap-4 text-center">
-        <div className="flex size-16 items-center justify-center rounded-full bg-muted">
-          <User className="size-8 text-muted-foreground" />
+        <div className="bg-muted flex size-16 items-center justify-center rounded-full">
+          <User className="text-muted-foreground size-8" />
         </div>
         <div>
           <h3 className="text-lg font-semibold">Contacts</h3>
-          <p className="mt-1 text-sm text-muted-foreground">
+          <p className="text-muted-foreground mt-1 text-sm">
             Choose a contact from the list, or add a new one.
           </p>
         </div>
         <Button asChild>
-          <ModalLink navigate href={newContactPath()}>+ Add Contact</ModalLink>
+          <ModalLink navigate href={newContactPath()}>
+            + Add Contact
+          </ModalLink>
         </Button>
       </div>
     </>

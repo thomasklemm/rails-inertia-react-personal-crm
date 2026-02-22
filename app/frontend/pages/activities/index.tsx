@@ -19,13 +19,16 @@ const breadcrumbs: BreadcrumbItem[] = [
   { title: "Activity Log", href: activitiesPath() },
 ]
 
-const KIND_FILTERS: { label: string; value: ActivityKind | undefined; icon?: React.ElementType }[] =
-  [
-    { label: "All", value: undefined },
-    { label: "Notes", value: "note", icon: MessageSquare },
-    { label: "Calls", value: "call", icon: Phone },
-    { label: "Emails", value: "email", icon: Mail },
-  ]
+const KIND_FILTERS: {
+  label: string
+  value: ActivityKind | undefined
+  icon?: React.ElementType
+}[] = [
+  { label: "All", value: undefined },
+  { label: "Notes", value: "note", icon: MessageSquare },
+  { label: "Calls", value: "call", icon: Phone },
+  { label: "Emails", value: "email", icon: Mail },
+]
 
 function groupByDate(activities: Activity[]) {
   const groups: { label: string; key: string; items: Activity[] }[] = []
@@ -71,7 +74,11 @@ export default function ActivitiesIndex() {
     const clean = Object.fromEntries(
       Object.entries(merged).filter(([, v]) => v !== "" && v !== undefined),
     )
-    router.get(activitiesPath(clean), {}, { preserveState: true, replace: true })
+    router.get(
+      activitiesPath(clean),
+      {},
+      { preserveState: true, replace: true },
+    )
   }
 
   const groups = groupByDate(activities)
@@ -79,18 +86,20 @@ export default function ActivitiesIndex() {
   return (
     <>
       <Head title="Activity Log" />
-      <div className="flex flex-1 min-h-0 flex-col">
+      <div className="flex min-h-0 flex-1 flex-col">
         {/* Sticky header + filters */}
         <div className="mx-auto w-full max-w-3xl shrink-0 px-6 pt-8 pb-6">
           <div className="mb-6">
             <h1 className="text-2xl font-bold">Activity Log</h1>
-            <p className="mt-0.5 text-sm text-muted-foreground">All activities across contacts and companies</p>
+            <p className="text-muted-foreground mt-0.5 text-sm">
+              All activities across contacts and companies
+            </p>
           </div>
 
           {/* Search + filter */}
           <div className="flex flex-wrap items-center gap-3">
             <div className="relative min-w-0 flex-1">
-              <Search className="absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
+              <Search className="text-muted-foreground absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2" />
               <Input
                 className="h-9 pl-8"
                 placeholder="Search activities or contacts…"
@@ -99,7 +108,7 @@ export default function ActivitiesIndex() {
               />
             </div>
 
-            <div className="inline-flex rounded-lg border bg-muted p-0.5">
+            <div className="bg-muted inline-flex rounded-lg border p-0.5">
               {KIND_FILTERS.map((f) => {
                 const isActive = (kind ?? undefined) === f.value
                 return (
@@ -124,17 +133,20 @@ export default function ActivitiesIndex() {
         {/* Scrollable activity groups */}
         <div className="scrollbar-subtle mx-auto min-h-0 w-full max-w-3xl flex-1 overflow-y-auto px-6 pb-8">
           {groups.length === 0 ? (
-            <p className="py-12 text-center text-sm text-muted-foreground">No activities found.</p>
+            <p className="text-muted-foreground py-12 text-center text-sm">
+              No activities found.
+            </p>
           ) : (
             <div className="space-y-8">
               {groups.map((group) => (
                 <div key={group.key}>
                   <div className="mb-4 flex items-baseline justify-between">
-                    <span className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                    <span className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
                       {group.label}
                     </span>
-                    <span className="text-xs text-muted-foreground">
-                      {group.items.length} {group.items.length === 1 ? "activity" : "activities"}
+                    <span className="text-muted-foreground text-xs">
+                      {group.items.length}{" "}
+                      {group.items.length === 1 ? "activity" : "activities"}
                     </span>
                   </div>
                   <div>

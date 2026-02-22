@@ -2,7 +2,7 @@
 
 @import "tailwindcss";
 
-@source '../../../node_modules/@inertiaui/modal-react';
+@source "../../../node_modules/@inertiaui/modal-react";
 
 @import "tw-animate-css";
 @plugin "@tailwindcss/typography";
@@ -13,7 +13,7 @@
 :root {
   /* ── Aureate · Light Mode ─────────────────────────────────────────────── */
   /* Warm parchment backgrounds, deep sepia text, rich amber accents        */
-  --background: oklch(0.955 0.010 82);
+  --background: oklch(0.955 0.01 82);
   --foreground: oklch(0.15 0.02 52);
   --card: oklch(0.972 0.008 82);
   --card-foreground: oklch(0.15 0.02 52);
@@ -64,46 +64,48 @@
   --popover-foreground: oklch(0.958 0.006 225);
 
   /* Primary — bold warm gold, dramatic contrast against deep indigo */
-  --primary: oklch(0.800 0.158 68);
+  --primary: oklch(0.8 0.158 68);
   --primary-foreground: oklch(0.132 0.035 262);
 
   /* Interactive surfaces — dusty pastel indigo tint */
   --secondary: oklch(0.238 0.052 258);
-  --secondary-foreground: oklch(0.920 0.012 225);
+  --secondary-foreground: oklch(0.92 0.012 225);
   --muted: oklch(0.225 0.044 260);
   --muted-foreground: oklch(0.598 0.055 248);
   --accent: oklch(0.252 0.058 256);
-  --accent-foreground: oklch(0.920 0.012 225);
+  --accent-foreground: oklch(0.92 0.012 225);
 
   /* Semantic */
-  --destructive: oklch(0.420 0.155 22);
-  --destructive-foreground: oklch(0.660 0.250 24);
+  --destructive: oklch(0.42 0.155 22);
+  --destructive-foreground: oklch(0.66 0.25 24);
 
   /* Borders and inputs */
-  --border: oklch(0.268 0.030 260);
-  --input: oklch(0.200 0.032 260);
-  --ring: oklch(0.800 0.158 68);
+  --border: oklch(0.268 0.03 260);
+  --input: oklch(0.2 0.032 260);
+  --ring: oklch(0.8 0.158 68);
 
   /* Charts */
-  --chart-1: oklch(0.800 0.158 68);
-  --chart-2: oklch(0.696 0.170 162.48);
-  --chart-3: oklch(0.700 0.165 290);
+  --chart-1: oklch(0.8 0.158 68);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.7 0.165 290);
   --chart-4: oklch(0.627 0.265 303.9);
   --chart-5: oklch(0.645 0.246 16.439);
 
   /* Sidebar — deepest indigo, richest saturation */
   --sidebar: oklch(0.105 0.038 262);
-  --sidebar-foreground: oklch(0.878 0.010 215);
-  --sidebar-primary: oklch(0.800 0.158 68);
+  --sidebar-foreground: oklch(0.878 0.01 215);
+  --sidebar-primary: oklch(0.8 0.158 68);
   --sidebar-primary-foreground: oklch(0.132 0.035 262);
-  --sidebar-accent: oklch(0.222 0.050 258);
+  --sidebar-accent: oklch(0.222 0.05 258);
   --sidebar-accent-foreground: oklch(0.878 0.012 218);
   --sidebar-border: oklch(0.242 0.028 260);
-  --sidebar-ring: oklch(0.800 0.158 68);
+  --sidebar-ring: oklch(0.8 0.158 68);
 }
 
 @theme inline {
-  --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-sans:
+    "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -167,15 +169,17 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground antialiased font-sans;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    @apply bg-background text-foreground font-sans antialiased;
+    font-feature-settings:
+      "rlig" 1,
+      "calt" 1;
   }
   ::selection {
     background-color: oklch(0.52 0.155 58 / 0.18);
     color: oklch(0.15 0.02 52);
   }
   .dark ::selection {
-    background-color: oklch(0.800 0.158 68 / 0.30);
+    background-color: oklch(0.8 0.158 68 / 0.3);
     color: oklch(0.958 0.006 225);
   }
 }
@@ -196,9 +200,9 @@
     border-radius: 9999px;
   }
   .dark .scrollbar-subtle {
-    scrollbar-color: oklch(0.310 0.028 260 / 0.6) transparent;
+    scrollbar-color: oklch(0.31 0.028 260 / 0.6) transparent;
   }
   .dark .scrollbar-subtle::-webkit-scrollbar-thumb {
-    background-color: oklch(0.310 0.028 260 / 0.6);
+    background-color: oklch(0.31 0.028 260 / 0.6);
   }
 }

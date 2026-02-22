@@ -1,7 +1,10 @@
 import { Head, useForm } from "@inertiajs/react"
 import { Modal } from "@inertiaui/modal-react"
 
-import { ContactForm, type ContactFormData } from "@/components/crm/contact-form"
+import {
+  ContactForm,
+  type ContactFormData,
+} from "@/components/crm/contact-form"
 import { contactPath } from "@/routes"
 import type { Company, Contact } from "@/types"
 
@@ -32,7 +35,7 @@ export default function ContactsEdit({ contact, companies }: Props) {
       <div className="p-8">
         <div className="mb-4">
           <h2 className="text-xl font-semibold">Edit Contact</h2>
-          <p className="mt-0.5 text-sm text-muted-foreground">
+          <p className="text-muted-foreground mt-0.5 text-sm">
             {contact.first_name} {contact.last_name}
           </p>
         </div>

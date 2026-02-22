@@ -1,7 +1,10 @@
 import { Head, useForm } from "@inertiajs/react"
 import { Modal } from "@inertiaui/modal-react"
 
-import { CompanyForm, type CompanyFormData } from "@/components/crm/company-form"
+import {
+  CompanyForm,
+  type CompanyFormData,
+} from "@/components/crm/company-form"
 import { companyPath } from "@/routes"
 import type { Company } from "@/types"
 
@@ -31,7 +34,7 @@ export default function CompaniesEdit({ company }: Props) {
       <div className="p-8">
         <div className="mb-4">
           <h2 className="text-xl font-semibold">Edit Company</h2>
-          <p className="mt-0.5 text-sm text-muted-foreground">{company.name}</p>
+          <p className="text-muted-foreground mt-0.5 text-sm">{company.name}</p>
         </div>
         <form onSubmit={handleSubmit}>
           <CompanyForm

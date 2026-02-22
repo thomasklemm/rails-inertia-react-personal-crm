@@ -36,16 +36,46 @@ const FILTERS = [
 ]
 
 const SORTS = [
-  { label: "Name", value: undefined, defaultDir: "asc", iconAsc: ArrowUpAZ, iconDesc: ArrowDownAZ },
-  { label: "Newest", value: "added", defaultDir: "desc", iconAsc: ArrowUp, iconDesc: ArrowDown },
-  { label: "Company", value: "company", defaultDir: "asc", iconAsc: Building2, iconDesc: Building2 },
+  {
+    label: "Name",
+    value: undefined,
+    defaultDir: "asc",
+    iconAsc: ArrowUpAZ,
+    iconDesc: ArrowDownAZ,
+  },
+  {
+    label: "Newest",
+    value: "added",
+    defaultDir: "desc",
+    iconAsc: ArrowUp,
+    iconDesc: ArrowDown,
+  },
+  {
+    label: "Company",
+    value: "company",
+    defaultDir: "asc",
+    iconAsc: Building2,
+    iconDesc: Building2,
+  },
 ] as const
 
-export function ContactList({ contacts, q, filter, sort, sort_dir, activeContactId }: ContactListProps) {
+export function ContactList({
+  contacts,
+  q,
+  filter,
+  sort,
+  sort_dir,
+  activeContactId,
+}: ContactListProps) {
   const searchRef = useRef<HTMLInputElement>(null)
 
   const navigate = useCallback(
-    (params: { q?: string; filter?: string; sort?: string; sort_dir?: string }) => {
+    (params: {
+      q?: string
+      filter?: string
+      sort?: string
+      sort_dir?: string
+    }) => {
       const merged = {
         q: q ?? "",
         filter: filter ?? "",
@@ -56,7 +86,11 @@ export function ContactList({ contacts, q, filter, sort, sort_dir, activeContact
       const clean = Object.fromEntries(
         Object.entries(merged).filter(([, v]) => v !== "" && v !== undefined),
       )
-      router.get(contactsPath(clean), {}, { preserveState: true, replace: true })
+      router.get(
+        contactsPath(clean),
+        {},
+        { preserveState: true, replace: true },
+      )
     },
     [q, filter, sort, sort_dir],
   )
@@ -84,7 +118,7 @@ export function ContactList({ contacts, q, filter, sort, sort_dir, activeContact
       {/* Search */}
       <div className="px-3 pb-2">
         <div className="relative">
-          <Search className="absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
+          <Search className="text-muted-foreground absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2" />
           <Input
             ref={searchRef}
             className="h-8 pl-8 text-sm"
@@ -117,12 +151,16 @@ export function ContactList({ contacts, q, filter, sort, sort_dir, activeContact
       </div>
 
       {/* Sort row */}
-      <div className="border-t border-b px-3 pb-2 pt-2">
+      <div className="border-t border-b px-3 pt-2 pb-2">
         <div className="flex items-center gap-0.5">
-          <span className="mr-1 text-[10px] font-medium uppercase tracking-wider text-muted-foreground/50">Sort</span>
+          <span className="text-muted-foreground/50 mr-1 text-[10px] font-medium tracking-wider uppercase">
+            Sort
+          </span>
           {SORTS.map((s) => {
             const isActive = (sort ?? undefined) === s.value
-            const effectiveDir = isActive ? (sort_dir ?? s.defaultDir) : s.defaultDir
+            const effectiveDir = isActive
+              ? (sort_dir ?? s.defaultDir)
+              : s.defaultDir
             const Icon = effectiveDir === "asc" ? s.iconAsc : s.iconDesc
 
             return (
@@ -130,14 +168,17 @@ export function ContactList({ contacts, q, filter, sort, sort_dir, activeContact
                 key={s.label}
                 onClick={() => {
                   if (isActive) {
-                    navigate({ sort: s.value, sort_dir: sort_dir === "asc" ? "desc" : "asc" })
+                    navigate({
+                      sort: s.value,
+                      sort_dir: sort_dir === "asc" ? "desc" : "asc",
+                    })
                   } else {
                     navigate({ sort: s.value, sort_dir: s.defaultDir })
                   }
                 }}
                 className={`flex cursor-pointer items-center gap-1 rounded-md px-2 py-0.5 text-xs transition-colors ${
                   isActive
-                    ? "font-semibold text-foreground"
+                    ? "text-foreground font-semibold"
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >
@@ -152,7 +193,9 @@ export function ContactList({ contacts, q, filter, sort, sort_dir, activeContact
       {/* Contact list */}
       <div className="scrollbar-subtle flex flex-1 flex-col gap-0.5 overflow-y-auto px-2 pt-2">
         {contacts.length === 0 ? (
-          <p className="px-3 py-6 text-center text-sm text-muted-foreground">No contacts found.</p>
+          <p className="text-muted-foreground px-3 py-6 text-center text-sm">
+            No contacts found.
+          </p>
         ) : (
           contacts.map((contact) => (
             <ContactRow

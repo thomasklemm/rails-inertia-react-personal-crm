@@ -20,7 +20,8 @@ interface Props {
 }
 
 export default function CompaniesShow() {
-  const { company, contacts, activities, q, filter, sort, sort_dir } = usePage<Props>().props
+  const { company, contacts, activities, q, filter, sort, sort_dir } =
+    usePage<Props>().props
 
   return (
     <>

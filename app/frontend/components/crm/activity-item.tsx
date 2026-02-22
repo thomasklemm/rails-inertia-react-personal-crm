@@ -1,5 +1,15 @@
 import { router, useForm } from "@inertiajs/react"
-import { Building2, Check, Mail, MessageSquare, Pencil, Phone, Trash2, User, X } from "lucide-react"
+import {
+  Building2,
+  Check,
+  Mail,
+  MessageSquare,
+  Pencil,
+  Phone,
+  Trash2,
+  User,
+  X,
+} from "lucide-react"
 import { useRef, useState } from "react"
 
 import {
@@ -14,7 +24,12 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
-import { activityPath, activitiesPath, companyPath, contactPath } from "@/routes"
+import {
+  activityPath,
+  activitiesPath,
+  companyPath,
+  contactPath,
+} from "@/routes"
 import type { Activity, ActivityKind } from "@/types"
 
 const KIND_ICONS = {
@@ -23,11 +38,12 @@ const KIND_ICONS = {
   email: Mail,
 }
 
-const KINDS: { value: ActivityKind; label: string; icon: React.ElementType }[] = [
-  { value: "note", label: "Note", icon: MessageSquare },
-  { value: "call", label: "Call", icon: Phone },
-  { value: "email", label: "Email", icon: Mail },
-]
+const KINDS: { value: ActivityKind; label: string; icon: React.ElementType }[] =
+  [
+    { value: "note", label: "Note", icon: MessageSquare },
+    { value: "call", label: "Call", icon: Phone },
+    { value: "email", label: "Email", icon: Mail },
+  ]
 
 export function timeAgo(dateString: string) {
   const ms = Date.now() - new Date(dateString).getTime()
@@ -47,7 +63,11 @@ interface ActivityItemProps {
   isLast?: boolean
 }
 
-export function ActivityItem({ activity, showSubject = false, isLast = true }: ActivityItemProps) {
+export function ActivityItem({
+  activity,
+  showSubject = false,
+  isLast = true,
+}: ActivityItemProps) {
   const Icon = KIND_ICONS[activity.kind]
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [editing, setEditing] = useState(false)
@@ -80,7 +100,10 @@ export function ActivityItem({ activity, showSubject = false, isLast = true }: A
       { kind: editKind, body: editBody },
       {
         preserveScroll: true,
-        onSuccess: () => { setEditing(false); setSaving(false) },
+        onSuccess: () => {
+          setEditing(false)
+          setSaving(false)
+        },
         onError: () => setSaving(false),
       },
     )
@@ -98,9 +121,13 @@ export function ActivityItem({ activity, showSubject = false, isLast = true }: A
         {/* Icon + vertical connector line */}
         <div className="flex flex-col items-center">
           <div className="flex size-6 shrink-0 items-center justify-center rounded-full bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">
-            {editing ? <EditIcon className="size-3" /> : <Icon className="size-3" />}
+            {editing ? (
+              <EditIcon className="size-3" />
+            ) : (
+              <Icon className="size-3" />
+            )}
           </div>
-          {!isLast && <div className="mt-1 w-px flex-1 bg-border" />}
+          {!isLast && <div className="bg-border mt-1 w-px flex-1" />}
         </div>
 
         {/* Content */}
@@ -166,8 +193,12 @@ export function ActivityItem({ activity, showSubject = false, isLast = true }: A
             <>
               <div className="flex items-start justify-between gap-2">
                 <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
-                  <span className="text-sm font-medium capitalize">{activity.kind}</span>
-                  <span className="text-xs text-muted-foreground">{timeAgo(activity.created_at)}</span>
+                  <span className="text-sm font-medium capitalize">
+                    {activity.kind}
+                  </span>
+                  <span className="text-muted-foreground text-xs">
+                    {timeAgo(activity.created_at)}
+                  </span>
                   {showSubject && (
                     <a
                       href={
@@ -175,7 +206,7 @@ export function ActivityItem({ activity, showSubject = false, isLast = true }: A
                           ? contactPath(activity.subject.id)
                           : companyPath(activity.subject.id)
                       }
-                      className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
+                      className="text-primary inline-flex items-center gap-1 text-xs font-medium hover:underline"
                     >
                       {activity.subject.type === "Contact" ? (
                         <User className="size-3 shrink-0" />
@@ -199,7 +230,7 @@ export function ActivityItem({ activity, showSubject = false, isLast = true }: A
                   <Button
                     size="icon"
                     variant="ghost"
-                    className="size-6 hover:text-destructive"
+                    className="hover:text-destructive size-6"
                     title="Delete"
                     onClick={() => setDeleteDialogOpen(true)}
                   >
@@ -208,7 +239,7 @@ export function ActivityItem({ activity, showSubject = false, isLast = true }: A
                 </div>
               </div>
               <p
-                className="mt-0.5 cursor-text text-sm text-foreground/80"
+                className="text-foreground/80 mt-0.5 cursor-text text-sm"
                 onDoubleClick={startEdit}
                 title="Double-click to edit"
               >
@@ -246,7 +277,12 @@ interface ActivityNewItemProps {
   isLast?: boolean
 }
 
-export function ActivityNewItem({ subjectType, subjectId, onCancel, isLast = true }: ActivityNewItemProps) {
+export function ActivityNewItem({
+  subjectType,
+  subjectId,
+  onCancel,
+  isLast = true,
+}: ActivityNewItemProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const { data, setData, post, processing, errors } = useForm({
     subject_type: subjectType,
@@ -273,7 +309,7 @@ export function ActivityNewItem({ subjectType, subjectId, onCancel, isLast = tru
         <div className="flex size-6 shrink-0 items-center justify-center rounded-full bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">
           <KindIcon className="size-3" />
         </div>
-        {!isLast && <div className="mt-1 w-px flex-1 bg-border" />}
+        {!isLast && <div className="bg-border mt-1 w-px flex-1" />}
       </div>
 
       {/* Content — matches ActivityItem editing mode exactly */}
@@ -318,12 +354,15 @@ export function ActivityNewItem({ subjectType, subjectId, onCancel, isLast = tru
             className="resize-none text-sm"
             onKeyDown={(e) => {
               if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
-                if (data.body.trim()) handleSubmit(e as unknown as React.FormEvent)
+                if (data.body.trim())
+                  handleSubmit(e as unknown as React.FormEvent)
               }
               if (e.key === "Escape") onCancel()
             }}
           />
-          {errors.body && <p className="mt-1 text-xs text-destructive">{errors.body}</p>}
+          {errors.body && (
+            <p className="text-destructive mt-1 text-xs">{errors.body}</p>
+          )}
 
           {/* Actions */}
           <div className="flex gap-1.5">

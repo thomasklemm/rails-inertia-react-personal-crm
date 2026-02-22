@@ -17,7 +17,14 @@ interface CompanyRowProps {
   sort_dir?: string
 }
 
-export function CompanyRow({ company, isActive, q, filter, sort, sort_dir }: CompanyRowProps) {
+export function CompanyRow({
+  company,
+  isActive,
+  q,
+  filter,
+  sort,
+  sort_dir,
+}: CompanyRowProps) {
   const ref = useRef<HTMLAnchorElement>(null)
   const params: Record<string, string> = {}
   if (q) params.q = q
@@ -33,7 +40,7 @@ export function CompanyRow({ company, isActive, q, filter, sort, sort_dir }: Com
     <Link
       ref={ref}
       href={companyPath(company.id, params)}
-      className={`flex items-center gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground ${
+      className={`hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground flex items-center gap-3 rounded-lg px-3 py-2.5 transition-colors ${
         isActive ? "bg-sidebar-accent text-sidebar-accent-foreground" : ""
       }`}
       prefetch
@@ -51,7 +58,7 @@ export function CompanyRow({ company, isActive, q, filter, sort, sort_dir }: Com
           <div className="mt-0.5 flex items-center gap-1.5 overflow-hidden">
             <CompanyTagBadge tag={company.tags[0]} />
             {company.tags.length > 1 && (
-              <span className="rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
+              <span className="bg-muted text-muted-foreground rounded-full px-1.5 py-0.5 text-[10px] font-medium">
                 +{company.tags.length - 1}
               </span>
             )}
@@ -60,7 +67,7 @@ export function CompanyRow({ company, isActive, q, filter, sort, sort_dir }: Com
       </div>
 
       {(company.contacts_count ?? 0) > 0 && (
-        <div className="flex shrink-0 items-center gap-0.5 text-xs text-muted-foreground">
+        <div className="text-muted-foreground flex shrink-0 items-center gap-0.5 text-xs">
           <Users className="size-3" />
           <span>{company.contacts_count}</span>
         </div>

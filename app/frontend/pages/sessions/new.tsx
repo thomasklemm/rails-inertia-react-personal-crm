@@ -20,13 +20,14 @@ export default function Login() {
     >
       <Head title="Log in" />
 
-      <div className="rounded-lg border border-dashed bg-muted/40 px-4 py-3 text-sm">
-        <p className="font-medium text-foreground">Demo credentials</p>
-        <p className="mt-1 text-muted-foreground">
-          Email: <span className="font-mono text-foreground">{DEMO_EMAIL}</span>
+      <div className="bg-muted/40 rounded-lg border border-dashed px-4 py-3 text-sm">
+        <p className="text-foreground font-medium">Demo credentials</p>
+        <p className="text-muted-foreground mt-1">
+          Email: <span className="text-foreground font-mono">{DEMO_EMAIL}</span>
         </p>
         <p className="text-muted-foreground">
-          Password: <span className="font-mono text-foreground">{DEMO_PASSWORD}</span>
+          Password:{" "}
+          <span className="text-foreground font-mono">{DEMO_PASSWORD}</span>
         </p>
       </div>
 

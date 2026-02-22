@@ -33,16 +33,46 @@ const FILTERS = [
 ]
 
 const SORTS = [
-  { label: "Name", value: undefined, defaultDir: "asc", iconAsc: ArrowUpAZ, iconDesc: ArrowDownAZ },
-  { label: "Newest", value: "added", defaultDir: "desc", iconAsc: ArrowUp, iconDesc: ArrowDown },
-  { label: "Contacts", value: "contacts", defaultDir: "desc", iconAsc: Users, iconDesc: Users },
+  {
+    label: "Name",
+    value: undefined,
+    defaultDir: "asc",
+    iconAsc: ArrowUpAZ,
+    iconDesc: ArrowDownAZ,
+  },
+  {
+    label: "Newest",
+    value: "added",
+    defaultDir: "desc",
+    iconAsc: ArrowUp,
+    iconDesc: ArrowDown,
+  },
+  {
+    label: "Contacts",
+    value: "contacts",
+    defaultDir: "desc",
+    iconAsc: Users,
+    iconDesc: Users,
+  },
 ] as const
 
-export function CompanyList({ companies, q, filter, sort, sort_dir, activeCompanyId }: CompanyListProps) {
+export function CompanyList({
+  companies,
+  q,
+  filter,
+  sort,
+  sort_dir,
+  activeCompanyId,
+}: CompanyListProps) {
   const searchRef = useRef<HTMLInputElement>(null)
 
   const navigate = useCallback(
-    (params: { q?: string; filter?: string; sort?: string; sort_dir?: string }) => {
+    (params: {
+      q?: string
+      filter?: string
+      sort?: string
+      sort_dir?: string
+    }) => {
       const merged = {
         q: q ?? "",
         filter: filter ?? "",
@@ -53,7 +83,11 @@ export function CompanyList({ companies, q, filter, sort, sort_dir, activeCompan
       const clean = Object.fromEntries(
         Object.entries(merged).filter(([, v]) => v !== "" && v !== undefined),
       )
-      router.get(companiesPath(clean), {}, { preserveState: true, replace: true })
+      router.get(
+        companiesPath(clean),
+        {},
+        { preserveState: true, replace: true },
+      )
     },
     [q, filter, sort, sort_dir],
   )
@@ -81,7 +115,7 @@ export function CompanyList({ companies, q, filter, sort, sort_dir, activeCompan
       {/* Search */}
       <div className="px-3 pb-2">
         <div className="relative">
-          <Search className="absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
+          <Search className="text-muted-foreground absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2" />
           <Input
             ref={searchRef}
             className="h-8 pl-8 text-sm"
@@ -114,42 +148,51 @@ export function CompanyList({ companies, q, filter, sort, sort_dir, activeCompan
       </div>
 
       {/* Sort row */}
-      <div className="border-t border-b px-3 pb-2 pt-2">
+      <div className="border-t border-b px-3 pt-2 pb-2">
         <div className="flex items-center gap-0.5">
-        <span className="mr-1 text-[10px] font-medium uppercase tracking-wider text-muted-foreground/50">Sort</span>
-        {SORTS.map((s) => {
-          const isActive = (sort ?? undefined) === s.value
-          const effectiveDir = isActive ? (sort_dir ?? s.defaultDir) : s.defaultDir
-          const Icon = effectiveDir === "asc" ? s.iconAsc : s.iconDesc
+          <span className="text-muted-foreground/50 mr-1 text-[10px] font-medium tracking-wider uppercase">
+            Sort
+          </span>
+          {SORTS.map((s) => {
+            const isActive = (sort ?? undefined) === s.value
+            const effectiveDir = isActive
+              ? (sort_dir ?? s.defaultDir)
+              : s.defaultDir
+            const Icon = effectiveDir === "asc" ? s.iconAsc : s.iconDesc
 
-          return (
-            <button
-              key={s.label}
-              onClick={() => {
-                if (isActive) {
-                  navigate({ sort: s.value, sort_dir: sort_dir === "asc" ? "desc" : "asc" })
-                } else {
-                  navigate({ sort: s.value, sort_dir: s.defaultDir })
-                }
-              }}
-              className={`flex cursor-pointer items-center gap-1 rounded-md px-2 py-0.5 text-xs transition-colors ${
-                isActive
-                  ? "font-semibold text-foreground"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              <Icon className="size-3" />
-              {s.label}
-            </button>
-          )
-        })}
+            return (
+              <button
+                key={s.label}
+                onClick={() => {
+                  if (isActive) {
+                    navigate({
+                      sort: s.value,
+                      sort_dir: sort_dir === "asc" ? "desc" : "asc",
+                    })
+                  } else {
+                    navigate({ sort: s.value, sort_dir: s.defaultDir })
+                  }
+                }}
+                className={`flex cursor-pointer items-center gap-1 rounded-md px-2 py-0.5 text-xs transition-colors ${
+                  isActive
+                    ? "text-foreground font-semibold"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <Icon className="size-3" />
+                {s.label}
+              </button>
+            )
+          })}
         </div>
       </div>
 
       {/* Company list */}
       <div className="scrollbar-subtle flex flex-1 flex-col gap-0.5 overflow-y-auto px-2 pt-2">
         {companies.length === 0 ? (
-          <p className="px-3 py-6 text-center text-sm text-muted-foreground">No companies found.</p>
+          <p className="text-muted-foreground px-3 py-6 text-center text-sm">
+            No companies found.
+          </p>
         ) : (
           companies.map((company) => (
             <CompanyRow
