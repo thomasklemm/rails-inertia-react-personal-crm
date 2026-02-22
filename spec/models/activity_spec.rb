@@ -48,30 +48,22 @@ RSpec.describe Activity, type: :model do
     end
   end
 
-  describe "#subject_json" do
-    it "returns id, type, and full name for a contact subject" do
-      contact = create(:contact, first_name: "Jane", last_name: "Doe")
-      activity = create(:activity, subject: contact)
-      json = activity.subject_json
-      expect(json).to eq({ id: contact.id, type: "Contact", name: "Jane Doe" })
-    end
-
-    it "returns id, type, and name for a company subject" do
-      company = create(:company, name: "Acme Corp")
-      activity = create(:activity, subject: company)
-      json = activity.subject_json
-      expect(json).to eq({ id: company.id, type: "Company", name: "Acme Corp" })
-    end
-  end
-
   describe "#as_activity_json" do
-    it "includes subject and excludes raw FK columns" do
+    it "includes contact subject with full name and excludes raw FK columns" do
       contact = create(:contact, first_name: "Jane", last_name: "Doe")
       activity = create(:activity, subject: contact)
       json = activity.as_activity_json
       expect(json).to include("subject" => { id: contact.id, type: "Contact", name: "Jane Doe" })
       expect(json.keys).not_to include("subject_type", "subject_id", "user_id")
       expect(json).to include("id", "kind", "body", "created_at", "updated_at")
+    end
+
+    it "includes company subject with name and excludes raw FK columns" do
+      company = create(:company, name: "Acme Corp")
+      activity = create(:activity, subject: company)
+      json = activity.as_activity_json
+      expect(json).to include("subject" => { id: company.id, type: "Company", name: "Acme Corp" })
+      expect(json.keys).not_to include("subject_type", "subject_id", "user_id")
     end
   end
 end

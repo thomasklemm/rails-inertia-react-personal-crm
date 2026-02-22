@@ -22,10 +22,7 @@ class CompaniesController < InertiaController
       sort: params[:sort],
       sort_dir: params[:sort_dir],
       filter: params[:filter],
-      activities: (
-        @company.activities.includes(:subject) +
-        Current.user.activities.where(subject_type: "Contact", subject_id: @company.contacts.pluck(:id)).includes(:subject)
-      ).sort_by(&:created_at).reverse.map(&:as_activity_json)
+      activities: company_activities.map(&:as_activity_json)
     }
   end
 
@@ -67,6 +64,16 @@ class CompaniesController < InertiaController
   end
 
   private
+
+  def company_activities
+    contact_ids = @company.contacts.pluck(:id)
+    scope = Current.user.activities
+                   .where(subject_type: "Company", subject_id: @company.id)
+                   .or(Current.user.activities.where(subject_type: "Contact", subject_id: contact_ids))
+                   .includes(:subject)
+                   .order(created_at: :desc)
+    scope
+  end
 
   def set_company
     @company = Current.user.companies.find(params[:id])
