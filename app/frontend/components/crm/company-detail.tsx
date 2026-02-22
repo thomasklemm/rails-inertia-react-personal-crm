@@ -1,7 +1,7 @@
 import { router } from "@inertiajs/react"
 import { ModalLink } from "@inertiaui/modal-react"
-import { Edit, ExternalLink, Mail, MapPin, Phone, Star, Trash2 } from "lucide-react"
-import { useState } from "react"
+import { Check, Edit, ExternalLink, Mail, MapPin, Pencil, Phone, Star, Trash2, X } from "lucide-react"
+import { useRef, useState } from "react"
 
 import {
   AlertDialog,
@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
+import { Textarea } from "@/components/ui/textarea"
 import { companiesPath, companyPath, editCompanyPath, newContactPath, starCompanyPath } from "@/routes"
 import type { Company, Contact } from "@/types"
 
@@ -40,6 +41,35 @@ export function CompanyDetail({
   sort_dir,
 }: CompanyDetailProps) {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [editingNotes, setEditingNotes] = useState(false)
+  const [notesValue, setNotesValue] = useState(company.notes ?? "")
+  const [savingNotes, setSavingNotes] = useState(false)
+  const notesRef = useRef<HTMLTextAreaElement>(null)
+
+  function startEditNotes() {
+    setNotesValue(company.notes ?? "")
+    setEditingNotes(true)
+    setTimeout(() => {
+      const el = notesRef.current
+      if (!el) return
+      el.focus()
+      el.setSelectionRange(el.value.length, el.value.length)
+    }, 0)
+  }
+
+  function cancelEditNotes() {
+    setEditingNotes(false)
+    setNotesValue(company.notes ?? "")
+  }
+
+  function saveNotes() {
+    setSavingNotes(true)
+    router.patch(companyPath(company.id), { notes: notesValue }, {
+      preserveScroll: true,
+      onSuccess: () => { setEditingNotes(false); setSavingNotes(false) },
+      onError: () => setSavingNotes(false),
+    })
+  }
 
   const listParams = Object.fromEntries(
     Object.entries({ q, filter, sort, sort_dir }).filter(([, v]) => v !== undefined && v !== ""),
@@ -166,7 +196,7 @@ export function CompanyDetail({
       {/* Contacts + Notes side by side */}
       <div className="flex flex-col items-start gap-6 lg:flex-row lg:gap-0">
         {/* Contacts */}
-        <div className="w-full lg:w-2/5 lg:pr-8">
+        <div className="w-full lg:w-1/2 lg:pr-8">
           <div className="mb-3 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <h2 className="text-base font-semibold tracking-tight">Contacts</h2>
@@ -194,12 +224,70 @@ export function CompanyDetail({
         <div className="hidden w-px self-stretch bg-border lg:block" />
 
         {/* Notes */}
-        <div className="w-full lg:flex-1 lg:pl-8">
-          <h3 className="mb-1.5 text-xs font-medium text-muted-foreground">Notes</h3>
-          {company.notes ? (
-            <p className="whitespace-pre-wrap text-sm">{company.notes}</p>
+        <div className="group/notes w-full lg:w-1/2 lg:pl-8">
+          <div className="mb-1.5 flex items-center gap-1.5">
+            <h3 className="text-base font-semibold tracking-tight">Notes</h3>
+            {!editingNotes && (
+              <button
+                onClick={startEditNotes}
+                className="rounded p-0.5 opacity-0 transition-opacity group-hover/notes:opacity-100 hover:bg-muted"
+                title="Edit notes"
+              >
+                <Pencil className="size-3 text-muted-foreground" />
+              </button>
+            )}
+          </div>
+          {editingNotes ? (
+            <div className="space-y-2">
+              <Textarea
+                ref={notesRef}
+                value={notesValue}
+                onChange={(e) => setNotesValue(e.target.value)}
+                placeholder="Add notes…"
+                rows={5}
+                className="resize-none text-sm"
+                onKeyDown={(e) => {
+                  if (e.key === "Escape") cancelEditNotes()
+                  if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) saveNotes()
+                }}
+              />
+              <div className="flex gap-1.5">
+                <Button
+                  size="sm"
+                  className="h-7 gap-1 px-2.5 text-xs"
+                  onClick={saveNotes}
+                  disabled={savingNotes}
+                >
+                  <Check className="size-3" />
+                  Save
+                </Button>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  className="h-7 gap-1 px-2.5 text-xs"
+                  onClick={cancelEditNotes}
+                  disabled={savingNotes}
+                >
+                  <X className="size-3" />
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          ) : company.notes ? (
+            <p
+              className="cursor-text whitespace-pre-wrap text-sm"
+              onDoubleClick={startEditNotes}
+              title="Double-click to edit"
+            >
+              {company.notes}
+            </p>
           ) : (
-            <p className="text-sm text-muted-foreground">No notes.</p>
+            <p
+              className="cursor-text text-sm text-muted-foreground"
+              onClick={startEditNotes}
+            >
+              Add notes…
+            </p>
           )}
         </div>
       </div>
