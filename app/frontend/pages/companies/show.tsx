@@ -31,33 +31,35 @@ export default function CompaniesShow() {
     <>
       <Head title={company.name} />
       <div className="scrollbar-subtle h-full overflow-y-auto">
-        <CompanyDetail
-          company={company}
-          contacts={contacts}
-          q={q}
-          filter={filter}
-          sort={sort}
-          sort_dir={sort_dir}
-        />
-        <div className="space-y-4 border-t px-6 py-5">
-          {isLogging ? (
-            <ActivityForm
-              subjectType="Company"
-              subjectId={company.id}
-              onCancel={() => setIsLogging(false)}
-            />
-          ) : (
-            <Button
-              size="sm"
-              variant="outline"
-              className="gap-1.5 font-medium"
-              onClick={() => setIsLogging(true)}
-            >
-              <Plus className="size-3.5" />
-              Log Activity
-            </Button>
-          )}
-          <ActivityLog activities={activities} showSubject={true} />
+        <div className="max-w-3xl">
+          <CompanyDetail
+            company={company}
+            contacts={contacts}
+            q={q}
+            filter={filter}
+            sort={sort}
+            sort_dir={sort_dir}
+          />
+          <div className="space-y-4 border-t px-6 py-5">
+            {isLogging ? (
+              <ActivityForm
+                subjectType="Company"
+                subjectId={company.id}
+                onCancel={() => setIsLogging(false)}
+              />
+            ) : (
+              <Button
+                size="sm"
+                variant="outline"
+                className="gap-1.5 font-medium"
+                onClick={() => setIsLogging(true)}
+              >
+                <Plus className="size-3.5" />
+                Log Activity
+              </Button>
+            )}
+            <ActivityLog activities={activities} showSubject={true} />
+          </div>
         </div>
       </div>
     </>
