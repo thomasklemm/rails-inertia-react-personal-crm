@@ -1,12 +1,8 @@
 import { Head, usePage } from "@inertiajs/react"
-import { Plus } from "lucide-react"
-import { useState } from "react"
 import type { ReactNode } from "react"
 
-import { ActivityForm } from "@/components/crm/activity-form"
 import { ActivityLog } from "@/components/crm/activity-log"
 import { CompanyDetail } from "@/components/crm/company-detail"
-import { Button } from "@/components/ui/button"
 import AppLayout from "@/layouts/app-layout"
 import { CompaniesLayout } from "@/layouts/companies-layout"
 import { companiesPath } from "@/routes"
@@ -25,7 +21,6 @@ interface Props {
 
 export default function CompaniesShow() {
   const { company, contacts, activities, q, filter, sort, sort_dir } = usePage<Props>().props
-  const [isLogging, setIsLogging] = useState(false)
 
   return (
     <>
@@ -40,25 +35,14 @@ export default function CompaniesShow() {
             sort={sort}
             sort_dir={sort_dir}
           />
-          <div className="space-y-4 border-t px-6 py-5">
-            {isLogging ? (
-              <ActivityForm
-                subjectType="Company"
-                subjectId={company.id}
-                onCancel={() => setIsLogging(false)}
-              />
-            ) : (
-              <Button
-                size="sm"
-                variant="outline"
-                className="gap-1.5 font-medium"
-                onClick={() => setIsLogging(true)}
-              >
-                <Plus className="size-3.5" />
-                Log Activity
-              </Button>
-            )}
-            <ActivityLog activities={activities} showSubject={true} />
+          <div className="border-t px-6 py-5">
+            <ActivityLog
+              activities={activities}
+              description="Includes activities logged for this company and all of its contacts."
+              showSubject={true}
+              subjectType="Company"
+              subjectId={company.id}
+            />
           </div>
         </div>
       </div>

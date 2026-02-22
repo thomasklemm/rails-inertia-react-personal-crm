@@ -174,7 +174,7 @@ export function CompanyDetail({
                 {contacts.length} {contacts.length === 1 ? "contact" : "contacts"}
               </span>
             </div>
-            <Button size="sm" variant="outline" asChild>
+            <Button size="sm" variant="outline" className="h-7 gap-1 px-2 text-xs font-medium" asChild>
               <ModalLink navigate href={newContactPath({ company_id: String(company.id) })}>
                 + Add Contact
               </ModalLink>
