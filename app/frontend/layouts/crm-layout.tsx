@@ -15,7 +15,8 @@ interface CrmPageProps {
 }
 
 export function CrmLayout({ children }: { children: ReactNode }) {
-  const { contacts, q, filter, sort, sort_dir, contact } = usePage<CrmPageProps>().props
+  const { contacts, q, filter, sort, sort_dir, contact } =
+    usePage<CrmPageProps>().props
 
   return (
     <div className="flex flex-1 overflow-hidden">
@@ -32,7 +33,9 @@ export function CrmLayout({ children }: { children: ReactNode }) {
       </div>
 
       {/* Right panel — page content */}
-      <div className="flex min-w-0 flex-1 flex-col overflow-hidden">{children}</div>
+      <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
+        {children}
+      </div>
     </div>
   )
 }

@@ -20,14 +20,21 @@ interface Props {
 }
 
 export default function ContactsShow() {
-  const { contact, activities, q, filter, sort, sort_dir } = usePage<Props>().props
+  const { contact, activities, q, filter, sort, sort_dir } =
+    usePage<Props>().props
 
   return (
     <>
       <Head title={`${contact.first_name} ${contact.last_name}`} />
       <div className="scrollbar-subtle h-full overflow-y-auto">
         <div className="mx-auto w-full max-w-4xl">
-          <ContactDetail contact={contact} q={q} filter={filter} sort={sort} sort_dir={sort_dir} />
+          <ContactDetail
+            contact={contact}
+            q={q}
+            filter={filter}
+            sort={sort}
+            sort_dir={sort_dir}
+          />
           <div className="border-t px-6 py-5">
             <ActivityLog
               activities={activities}
@@ -45,7 +52,10 @@ ContactsShow.layout = (page: ReactNode) => {
   const { contact } = (page as React.ReactElement).props as Props
   const breadcrumbs: BreadcrumbItem[] = [
     { title: "Contacts", href: contactsPath() },
-    { title: `${contact?.first_name ?? ""} ${contact?.last_name ?? ""}`, href: "#" },
+    {
+      title: `${contact?.first_name ?? ""} ${contact?.last_name ?? ""}`,
+      href: "#",
+    },
   ]
   return (
     <AppLayout breadcrumbs={breadcrumbs}>

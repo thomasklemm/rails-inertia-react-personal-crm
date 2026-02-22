@@ -1,7 +1,10 @@
 import { Head, useForm } from "@inertiajs/react"
 import { Modal } from "@inertiaui/modal-react"
 
-import { ContactForm, type ContactFormData } from "@/components/crm/contact-form"
+import {
+  ContactForm,
+  type ContactFormData,
+} from "@/components/crm/contact-form"
 import { contactsPath } from "@/routes"
 import type { Company } from "@/types"
 

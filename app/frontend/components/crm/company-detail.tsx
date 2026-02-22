@@ -1,6 +1,17 @@
 import { router } from "@inertiajs/react"
 import { ModalLink } from "@inertiaui/modal-react"
-import { Check, Edit, ExternalLink, Mail, MapPin, Pencil, Phone, Star, Trash2, X } from "lucide-react"
+import {
+  Check,
+  Edit,
+  ExternalLink,
+  Mail,
+  MapPin,
+  Pencil,
+  Phone,
+  Star,
+  Trash2,
+  X,
+} from "lucide-react"
 import { useRef, useState } from "react"
 
 import {
@@ -16,7 +27,13 @@ import {
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { Textarea } from "@/components/ui/textarea"
-import { companiesPath, companyPath, editCompanyPath, newContactPath, starCompanyPath } from "@/routes"
+import {
+  companiesPath,
+  companyPath,
+  editCompanyPath,
+  newContactPath,
+  starCompanyPath,
+} from "@/routes"
 import type { Company, Contact } from "@/types"
 
 import { CompanyAvatar } from "./company-avatar"
@@ -64,15 +81,24 @@ export function CompanyDetail({
 
   function saveNotes() {
     setSavingNotes(true)
-    router.patch(companyPath(company.id), { notes: notesValue }, {
-      preserveScroll: true,
-      onSuccess: () => { setEditingNotes(false); setSavingNotes(false) },
-      onError: () => setSavingNotes(false),
-    })
+    router.patch(
+      companyPath(company.id),
+      { notes: notesValue },
+      {
+        preserveScroll: true,
+        onSuccess: () => {
+          setEditingNotes(false)
+          setSavingNotes(false)
+        },
+        onError: () => setSavingNotes(false),
+      },
+    )
   }
 
   const listParams = Object.fromEntries(
-    Object.entries({ q, filter, sort, sort_dir }).filter(([, v]) => v !== undefined && v !== ""),
+    Object.entries({ q, filter, sort, sort_dir }).filter(
+      ([, v]) => v !== undefined && v !== "",
+    ),
   )
 
   function handleStar() {
@@ -93,25 +119,37 @@ export function CompanyDetail({
 
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
-            <h1 className="truncate text-lg font-semibold leading-snug">{company.name}</h1>
+            <h1 className="truncate text-lg leading-snug font-semibold">
+              {company.name}
+            </h1>
             <button
               onClick={handleStar}
               title={company.starred ? "Unstar" : "Star"}
               className="inline-flex shrink-0 items-center rounded p-0.5 transition-colors hover:bg-amber-50 dark:hover:bg-amber-900/20"
             >
-              <Star className={`size-4 transition-colors ${company.starred ? "fill-amber-400 text-amber-400 hover:fill-amber-500 hover:text-amber-500" : "text-muted-foreground/40 hover:text-amber-400"}`} />
+              <Star
+                className={`size-4 transition-colors ${company.starred ? "fill-amber-400 text-amber-400 hover:fill-amber-500 hover:text-amber-500" : "text-muted-foreground/40 hover:text-amber-400"}`}
+              />
             </button>
           </div>
           <div className="mt-2 flex flex-wrap gap-1">
             {company.tags.map((tag) => (
-              <CompanyTagBadge key={tag} tag={tag} className="px-2 py-0.5 text-xs" />
+              <CompanyTagBadge
+                key={tag}
+                tag={tag}
+                className="px-2 py-0.5 text-xs"
+              />
             ))}
           </div>
         </div>
 
         <div className="flex shrink-0 gap-1">
           <Button size="sm" variant="outline" asChild>
-            <ModalLink navigate href={editCompanyPath(company.id, listParams)} title="Edit">
+            <ModalLink
+              navigate
+              href={editCompanyPath(company.id, listParams)}
+              title="Edit"
+            >
               <Edit className="size-4" />
               Edit
             </ModalLink>
@@ -134,9 +172,11 @@ export function CompanyDetail({
       <dl className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         {company.website && (
           <div>
-            <dt className="text-xs font-medium text-muted-foreground">Website</dt>
+            <dt className="text-muted-foreground text-xs font-medium">
+              Website
+            </dt>
             <dd className="mt-0.5 flex items-center gap-1.5 text-sm">
-              <ExternalLink className="size-3.5 text-muted-foreground" />
+              <ExternalLink className="text-muted-foreground size-3.5" />
               <a
                 href={company.website}
                 target="_blank"
@@ -150,9 +190,9 @@ export function CompanyDetail({
         )}
         {company.phone && (
           <div>
-            <dt className="text-xs font-medium text-muted-foreground">Phone</dt>
+            <dt className="text-muted-foreground text-xs font-medium">Phone</dt>
             <dd className="mt-0.5 flex items-center gap-1.5 text-sm">
-              <Phone className="size-3.5 text-muted-foreground" />
+              <Phone className="text-muted-foreground size-3.5" />
               <a href={`tel:${company.phone}`} className="hover:underline">
                 {company.phone}
               </a>
@@ -161,9 +201,9 @@ export function CompanyDetail({
         )}
         {company.email && (
           <div>
-            <dt className="text-xs font-medium text-muted-foreground">Email</dt>
+            <dt className="text-muted-foreground text-xs font-medium">Email</dt>
             <dd className="mt-0.5 flex items-center gap-1.5 text-sm">
-              <Mail className="size-3.5 text-muted-foreground" />
+              <Mail className="text-muted-foreground size-3.5" />
               <a href={`mailto:${company.email}`} className="hover:underline">
                 {company.email}
               </a>
@@ -172,15 +212,17 @@ export function CompanyDetail({
         )}
         {company.address && (
           <div>
-            <dt className="text-xs font-medium text-muted-foreground">Address</dt>
+            <dt className="text-muted-foreground text-xs font-medium">
+              Address
+            </dt>
             <dd className="mt-0.5 flex items-center gap-1.5 text-sm">
-              <MapPin className="size-3.5 text-muted-foreground" />
+              <MapPin className="text-muted-foreground size-3.5" />
               {company.address}
             </dd>
           </div>
         )}
         <div>
-          <dt className="text-xs font-medium text-muted-foreground">Added</dt>
+          <dt className="text-muted-foreground text-xs font-medium">Added</dt>
           <dd className="mt-0.5 text-sm">
             {new Date(company.created_at).toLocaleDateString(undefined, {
               year: "numeric",
@@ -199,29 +241,46 @@ export function CompanyDetail({
         <div className="w-full lg:w-1/2 lg:pr-8">
           <div className="mb-3 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <h2 className="text-base font-semibold tracking-tight">Contacts</h2>
-              <span className="text-xs text-muted-foreground">
-                {contacts.length} {contacts.length === 1 ? "contact" : "contacts"}
+              <h2 className="text-base font-semibold tracking-tight">
+                Contacts
+              </h2>
+              <span className="text-muted-foreground text-xs">
+                {contacts.length}{" "}
+                {contacts.length === 1 ? "contact" : "contacts"}
               </span>
             </div>
-            <Button size="sm" variant="outline" className="h-7 gap-1 px-2 text-xs font-medium" asChild>
-              <ModalLink navigate href={newContactPath({ company_id: String(company.id) })}>
+            <Button
+              size="sm"
+              variant="outline"
+              className="h-7 gap-1 px-2 text-xs font-medium"
+              asChild
+            >
+              <ModalLink
+                navigate
+                href={newContactPath({ company_id: String(company.id) })}
+              >
                 + Add Contact
               </ModalLink>
             </Button>
           </div>
           {contacts.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No contacts at this company.</p>
+            <p className="text-muted-foreground text-sm">
+              No contacts at this company.
+            </p>
           ) : (
             <div className="divide-y overflow-hidden rounded-lg border">
               {contacts.map((contact) => (
-                <ContactRow key={contact.id} contact={contact} isActive={false} />
+                <ContactRow
+                  key={contact.id}
+                  contact={contact}
+                  isActive={false}
+                />
               ))}
             </div>
           )}
         </div>
 
-        <div className="hidden w-px self-stretch bg-border lg:block" />
+        <div className="bg-border hidden w-px self-stretch lg:block" />
 
         {/* Notes */}
         <div className="group/notes w-full lg:w-1/2 lg:pl-8">
@@ -230,10 +289,10 @@ export function CompanyDetail({
             {!editingNotes && (
               <button
                 onClick={startEditNotes}
-                className="rounded p-0.5 opacity-0 transition-opacity group-hover/notes:opacity-100 hover:bg-muted"
+                className="hover:bg-muted rounded p-0.5 opacity-0 transition-opacity group-hover/notes:opacity-100"
                 title="Edit notes"
               >
-                <Pencil className="size-3 text-muted-foreground" />
+                <Pencil className="text-muted-foreground size-3" />
               </button>
             )}
           </div>
@@ -275,7 +334,7 @@ export function CompanyDetail({
             </div>
           ) : company.notes ? (
             <p
-              className="cursor-text whitespace-pre-wrap text-sm"
+              className="cursor-text text-sm whitespace-pre-wrap"
               onDoubleClick={startEditNotes}
               title="Double-click to edit"
             >
@@ -283,7 +342,7 @@ export function CompanyDetail({
             </p>
           ) : (
             <p
-              className="cursor-text text-sm text-muted-foreground"
+              className="text-muted-foreground cursor-text text-sm"
               onClick={startEditNotes}
             >
               Add notes…
@@ -298,7 +357,8 @@ export function CompanyDetail({
           <AlertDialogHeader>
             <AlertDialogTitle>Delete {company.name}?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. Contacts at this company will not be deleted.
+              This action cannot be undone. Contacts at this company will not be
+              deleted.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

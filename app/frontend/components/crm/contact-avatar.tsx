@@ -27,7 +27,8 @@ interface ContactAvatarProps {
 }
 
 export function ContactAvatar({ contact, size = "md" }: ContactAvatarProps) {
-  const initials = `${contact.first_name[0]}${contact.last_name[0]}`.toUpperCase()
+  const initials =
+    `${contact.first_name[0]}${contact.last_name[0]}`.toUpperCase()
   const color = colorForName(contact.first_name + contact.last_name)
 
   const sizeClasses = {

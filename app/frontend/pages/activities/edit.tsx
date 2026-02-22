@@ -36,11 +36,17 @@ export default function ActivitiesEdit({ activity }: Props) {
 
   return (
     <Modal>
-      <Head title={`Edit Activity${subjectName ? ` for ${subjectName}` : ""}`} />
+      <Head
+        title={`Edit Activity${subjectName ? ` for ${subjectName}` : ""}`}
+      />
       <div className="p-8">
         <div className="mb-4">
           <h2 className="text-xl font-semibold">Edit Activity</h2>
-          {subjectName && <p className="mt-0.5 text-sm text-muted-foreground">{subjectName}</p>}
+          {subjectName && (
+            <p className="text-muted-foreground mt-0.5 text-sm">
+              {subjectName}
+            </p>
+          )}
         </div>
 
         <form onSubmit={handleSubmit} className="max-w-lg space-y-5">
@@ -67,11 +73,15 @@ export default function ActivitiesEdit({ activity }: Props) {
               id="body"
               name="body"
               value={data.body}
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setData("body", e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                setData("body", e.target.value)
+              }
               rows={5}
               className="resize-none"
             />
-            {errors.body && <p className="text-xs text-destructive">{errors.body}</p>}
+            {errors.body && (
+              <p className="text-destructive text-xs">{errors.body}</p>
+            )}
           </div>
 
           <div className="flex gap-3">

@@ -15,7 +15,8 @@ interface CompaniesPageProps {
 }
 
 export function CompaniesLayout({ children }: { children: ReactNode }) {
-  const { companies, q, filter, sort, sort_dir, company } = usePage<CompaniesPageProps>().props
+  const { companies, q, filter, sort, sort_dir, company } =
+    usePage<CompaniesPageProps>().props
 
   return (
     <div className="flex flex-1 overflow-hidden">
@@ -32,7 +33,9 @@ export function CompaniesLayout({ children }: { children: ReactNode }) {
       </div>
 
       {/* Right panel — page content */}
-      <div className="flex min-w-0 flex-1 flex-col overflow-hidden">{children}</div>
+      <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
+        {children}
+      </div>
     </div>
   )
 }

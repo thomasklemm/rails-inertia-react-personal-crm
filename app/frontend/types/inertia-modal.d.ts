@@ -1,9 +1,24 @@
 declare module "@inertiaui/modal-react" {
-  import type { AnchorHTMLAttributes, ComponentType, ReactElement, ReactNode } from "react"
+  import type {
+    AnchorHTMLAttributes,
+    ComponentType,
+    ReactElement,
+    ReactNode,
+  } from "react"
 
   interface ModalProps {
     children?: ReactNode
-    maxWidth?: "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "6xl" | "7xl"
+    maxWidth?:
+      | "sm"
+      | "md"
+      | "lg"
+      | "xl"
+      | "2xl"
+      | "3xl"
+      | "4xl"
+      | "5xl"
+      | "6xl"
+      | "7xl"
     closeButton?: boolean
     closeExplicitly?: boolean
     paddingClasses?: string

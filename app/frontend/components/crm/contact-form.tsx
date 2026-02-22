@@ -44,7 +44,13 @@ interface ContactFormProps {
   autoFocus?: boolean
 }
 
-export function ContactForm({ form, companies, cancelHref, submitLabel, autoFocus = true }: ContactFormProps) {
+export function ContactForm({
+  form,
+  companies,
+  cancelHref,
+  submitLabel,
+  autoFocus = true,
+}: ContactFormProps) {
   const { data, setData, errors, processing } = form
 
   function toggleTag(tag: Tag) {
@@ -68,7 +74,7 @@ export function ContactForm({ form, companies, cancelHref, submitLabel, autoFocu
             autoFocus={autoFocus}
           />
           {errors.first_name && (
-            <p className="text-xs text-destructive">{errors.first_name}</p>
+            <p className="text-destructive text-xs">{errors.first_name}</p>
           )}
         </div>
         <div className="space-y-1.5">
@@ -80,7 +86,7 @@ export function ContactForm({ form, companies, cancelHref, submitLabel, autoFocu
             onChange={(e) => setData("last_name", e.target.value)}
           />
           {errors.last_name && (
-            <p className="text-xs text-destructive">{errors.last_name}</p>
+            <p className="text-destructive text-xs">{errors.last_name}</p>
           )}
         </div>
       </div>
@@ -96,7 +102,9 @@ export function ContactForm({ form, companies, cancelHref, submitLabel, autoFocu
             value={data.email}
             onChange={(e) => setData("email", e.target.value)}
           />
-          {errors.email && <p className="text-xs text-destructive">{errors.email}</p>}
+          {errors.email && (
+            <p className="text-destructive text-xs">{errors.email}</p>
+          )}
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="phone">Phone</Label>
@@ -107,7 +115,9 @@ export function ContactForm({ form, companies, cancelHref, submitLabel, autoFocu
             value={data.phone}
             onChange={(e) => setData("phone", e.target.value)}
           />
-          {errors.phone && <p className="text-xs text-destructive">{errors.phone}</p>}
+          {errors.phone && (
+            <p className="text-destructive text-xs">{errors.phone}</p>
+          )}
         </div>
       </div>
 
@@ -164,7 +174,9 @@ export function ContactForm({ form, companies, cancelHref, submitLabel, autoFocu
           id="notes"
           name="notes"
           value={data.notes}
-          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setData("notes", e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+            setData("notes", e.target.value)
+          }
           rows={4}
           className="resize-none"
         />

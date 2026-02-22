@@ -17,7 +17,14 @@ interface ContactRowProps {
   sort_dir?: string
 }
 
-export function ContactRow({ contact, isActive, q, filter, sort, sort_dir }: ContactRowProps) {
+export function ContactRow({
+  contact,
+  isActive,
+  q,
+  filter,
+  sort,
+  sort_dir,
+}: ContactRowProps) {
   const ref = useRef<HTMLAnchorElement>(null)
   const params: Record<string, string> = {}
   if (q) params.q = q
@@ -33,7 +40,7 @@ export function ContactRow({ contact, isActive, q, filter, sort, sort_dir }: Con
     <Link
       ref={ref}
       href={contactPath(contact.id, params)}
-      className={`flex items-center gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground ${
+      className={`hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground flex items-center gap-3 rounded-lg px-3 py-2.5 transition-colors ${
         isActive ? "bg-sidebar-accent text-sidebar-accent-foreground" : ""
       }`}
       prefetch
@@ -49,22 +56,24 @@ export function ContactRow({ contact, isActive, q, filter, sort, sort_dir }: Con
             <Star className="size-3 shrink-0 fill-amber-400 text-amber-400" />
           )}
           {contact.archived && (
-            <Archive className="size-3 shrink-0 text-muted-foreground" />
+            <Archive className="text-muted-foreground size-3 shrink-0" />
           )}
         </div>
         {(contact.company || contact.tags.length > 0) && (
           <div className="mt-0.5 flex items-center gap-2 overflow-hidden">
             {contact.company && (
-              <p className="shrink-0 truncate text-xs text-muted-foreground">{contact.company.name}</p>
+              <p className="text-muted-foreground shrink-0 truncate text-xs">
+                {contact.company.name}
+              </p>
             )}
             {contact.company && contact.tags.length > 0 && (
-              <span className="text-xs text-muted-foreground/50">·</span>
+              <span className="text-muted-foreground/50 text-xs">·</span>
             )}
             {contact.tags.length > 0 && (
               <span className="flex items-center gap-1">
                 <TagBadge tag={contact.tags[0]} />
                 {contact.tags.length > 1 && (
-                  <span className="rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
+                  <span className="bg-muted text-muted-foreground rounded-full px-1.5 py-0.5 text-[10px] font-medium">
                     +{contact.tags.length - 1}
                   </span>
                 )}

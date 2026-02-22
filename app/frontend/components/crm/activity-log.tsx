@@ -6,7 +6,11 @@ import type { Activity, ActivityKind } from "@/types"
 
 import { ActivityItem, ActivityNewItem } from "./activity-item"
 
-const FILTERS: { label: string; value: ActivityKind | undefined; icon?: React.ElementType }[] = [
+const FILTERS: {
+  label: string
+  value: ActivityKind | undefined
+  icon?: React.ElementType
+}[] = [
   { label: "All", value: undefined },
   { label: "Notes", value: "note", icon: MessageSquare },
   { label: "Calls", value: "call", icon: Phone },
@@ -66,17 +70,25 @@ export function ActivityLog({
   subjectType,
   subjectId,
 }: ActivityLogProps) {
-  const [kindFilter, setKindFilter] = useState<ActivityKind | undefined>(undefined)
+  const [kindFilter, setKindFilter] = useState<ActivityKind | undefined>(
+    undefined,
+  )
   const [isLogging, setIsLogging] = useState(false)
 
   const canLog = subjectType != null && subjectId != null
 
-  const filtered = kindFilter ? activities.filter((a) => a.kind === kindFilter) : activities
+  const filtered = kindFilter
+    ? activities.filter((a) => a.kind === kindFilter)
+    : activities
   const groups = groupByDate(filtered)
 
   const todayKey = useMemo(() => {
     const now = new Date()
-    return new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString()
+    return new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+    ).toISOString()
   }, [])
   const hasTodayGroup = groups.length > 0 && groups[0].key === todayKey
 
@@ -96,7 +108,7 @@ export function ActivityLog({
               Log Activity
             </Button>
           )}
-          <div className="ml-auto inline-flex rounded-lg border bg-muted p-0.5">
+          <div className="bg-muted ml-auto inline-flex rounded-lg border p-0.5">
             {FILTERS.map((f) => (
               <button
                 key={f.label}
@@ -114,19 +126,21 @@ export function ActivityLog({
           </div>
         </div>
         {description && (
-          <p className="mt-1 text-xs text-muted-foreground">{description}</p>
+          <p className="text-muted-foreground mt-1 text-xs">{description}</p>
         )}
       </div>
 
       {groups.length === 0 && !isLogging ? (
-        <p className="py-8 text-center text-sm text-muted-foreground">No activities yet.</p>
+        <p className="text-muted-foreground py-8 text-center text-sm">
+          No activities yet.
+        </p>
       ) : (
         <div className="space-y-6">
           {/* Prepend standalone Today group when logging but no today activities exist */}
           {isLogging && !hasTodayGroup && subjectType && subjectId != null && (
             <div>
               <div className="mb-2">
-                <span className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                <span className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
                   Today
                 </span>
               </div>
@@ -144,23 +158,27 @@ export function ActivityLog({
           {groups.map((group) => (
             <div key={group.key}>
               <div className="mb-2 flex items-baseline justify-between">
-                <span className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                <span className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
                   {group.label}
                 </span>
-                <span className="text-xs text-muted-foreground">
-                  {group.items.length} {group.items.length === 1 ? "activity" : "activities"}
+                <span className="text-muted-foreground text-xs">
+                  {group.items.length}{" "}
+                  {group.items.length === 1 ? "activity" : "activities"}
                 </span>
               </div>
               <div>
                 {/* Inject new item at top of existing Today group */}
-                {isLogging && group.key === todayKey && subjectType && subjectId != null && (
-                  <ActivityNewItem
-                    subjectType={subjectType}
-                    subjectId={subjectId}
-                    onCancel={() => setIsLogging(false)}
-                    isLast={false}
-                  />
-                )}
+                {isLogging &&
+                  group.key === todayKey &&
+                  subjectType &&
+                  subjectId != null && (
+                    <ActivityNewItem
+                      subjectType={subjectType}
+                      subjectId={subjectId}
+                      onCancel={() => setIsLogging(false)}
+                      isLast={false}
+                    />
+                  )}
                 {group.items.map((activity, i) => (
                   <ActivityItem
                     key={activity.id}

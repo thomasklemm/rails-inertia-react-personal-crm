@@ -1,6 +1,15 @@
 import { router } from "@inertiajs/react"
 import { ModalLink } from "@inertiaui/modal-react"
-import { Archive, ArchiveRestore, Building2, Edit, Mail, Phone, Star, Trash2 } from "lucide-react"
+import {
+  Archive,
+  ArchiveRestore,
+  Building2,
+  Edit,
+  Mail,
+  Phone,
+  Star,
+  Trash2,
+} from "lucide-react"
 import { useState } from "react"
 
 import {
@@ -36,12 +45,20 @@ interface ContactDetailProps {
   sort_dir?: string
 }
 
-export function ContactDetail({ contact, q, filter, sort, sort_dir }: ContactDetailProps) {
+export function ContactDetail({
+  contact,
+  q,
+  filter,
+  sort,
+  sort_dir,
+}: ContactDetailProps) {
   const [archiveDialogOpen, setArchiveDialogOpen] = useState(false)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
 
   const listParams = Object.fromEntries(
-    Object.entries({ q, filter, sort, sort_dir }).filter(([, v]) => v !== undefined && v !== ""),
+    Object.entries({ q, filter, sort, sort_dir }).filter(
+      ([, v]) => v !== undefined && v !== "",
+    ),
   )
 
   function handleStar() {
@@ -66,7 +83,7 @@ export function ContactDetail({ contact, q, filter, sort, sort_dir }: ContactDet
 
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
-            <h1 className="truncate text-lg font-semibold leading-snug">
+            <h1 className="truncate text-lg leading-snug font-semibold">
               {contact.first_name} {contact.last_name}
             </h1>
             <button
@@ -74,10 +91,12 @@ export function ContactDetail({ contact, q, filter, sort, sort_dir }: ContactDet
               title={contact.starred ? "Unstar" : "Star"}
               className="inline-flex shrink-0 items-center rounded p-0.5 transition-colors hover:bg-amber-50 dark:hover:bg-amber-900/20"
             >
-              <Star className={`size-4 transition-colors ${contact.starred ? "fill-amber-400 text-amber-400 hover:fill-amber-500 hover:text-amber-500" : "text-muted-foreground/40 hover:text-amber-400"}`} />
+              <Star
+                className={`size-4 transition-colors ${contact.starred ? "fill-amber-400 text-amber-400 hover:fill-amber-500 hover:text-amber-500" : "text-muted-foreground/40 hover:text-amber-400"}`}
+              />
             </button>
             {contact.archived && (
-              <span className="shrink-0 rounded bg-muted px-1.5 py-0.5 text-xs text-muted-foreground">
+              <span className="bg-muted text-muted-foreground shrink-0 rounded px-1.5 py-0.5 text-xs">
                 Archived
               </span>
             )}
@@ -85,7 +104,7 @@ export function ContactDetail({ contact, q, filter, sort, sort_dir }: ContactDet
           {contact.company && (
             <a
               href={companyPath(contact.company.id)}
-              className="flex items-center gap-1 text-xs text-muted-foreground hover:underline"
+              className="text-muted-foreground flex items-center gap-1 text-xs hover:underline"
             >
               <Building2 className="size-3" />
               {contact.company.name}
@@ -100,7 +119,11 @@ export function ContactDetail({ contact, q, filter, sort, sort_dir }: ContactDet
 
         <div className="flex shrink-0 gap-1">
           <Button size="sm" variant="outline" asChild>
-            <ModalLink navigate href={editContactPath(contact.id, listParams)} title="Edit">
+            <ModalLink
+              navigate
+              href={editContactPath(contact.id, listParams)}
+              title="Edit"
+            >
               <Edit className="size-4" />
               Edit
             </ModalLink>
@@ -111,7 +134,11 @@ export function ContactDetail({ contact, q, filter, sort, sort_dir }: ContactDet
             onClick={() => setArchiveDialogOpen(true)}
             title={contact.archived ? "Restore" : "Archive"}
           >
-            {contact.archived ? <ArchiveRestore className="size-4" /> : <Archive className="size-4" />}
+            {contact.archived ? (
+              <ArchiveRestore className="size-4" />
+            ) : (
+              <Archive className="size-4" />
+            )}
           </Button>
           <Button
             size="icon-sm"
@@ -131,9 +158,9 @@ export function ContactDetail({ contact, q, filter, sort, sort_dir }: ContactDet
       <dl className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         {contact.email && (
           <div>
-            <dt className="text-xs font-medium text-muted-foreground">Email</dt>
+            <dt className="text-muted-foreground text-xs font-medium">Email</dt>
             <dd className="mt-0.5 flex items-center gap-1.5 text-sm">
-              <Mail className="size-3.5 text-muted-foreground" />
+              <Mail className="text-muted-foreground size-3.5" />
               <a href={`mailto:${contact.email}`} className="hover:underline">
                 {contact.email}
               </a>
@@ -142,9 +169,9 @@ export function ContactDetail({ contact, q, filter, sort, sort_dir }: ContactDet
         )}
         {contact.phone && (
           <div>
-            <dt className="text-xs font-medium text-muted-foreground">Phone</dt>
+            <dt className="text-muted-foreground text-xs font-medium">Phone</dt>
             <dd className="mt-0.5 flex items-center gap-1.5 text-sm">
-              <Phone className="size-3.5 text-muted-foreground" />
+              <Phone className="text-muted-foreground size-3.5" />
               <a href={`tel:${contact.phone}`} className="hover:underline">
                 {contact.phone}
               </a>
@@ -152,7 +179,7 @@ export function ContactDetail({ contact, q, filter, sort, sort_dir }: ContactDet
           </div>
         )}
         <div>
-          <dt className="text-xs font-medium text-muted-foreground">Added</dt>
+          <dt className="text-muted-foreground text-xs font-medium">Added</dt>
           <dd className="mt-0.5 text-sm">
             {new Date(contact.created_at).toLocaleDateString(undefined, {
               year: "numeric",
@@ -167,8 +194,10 @@ export function ContactDetail({ contact, q, filter, sort, sort_dir }: ContactDet
         <>
           <Separator />
           <div>
-            <h3 className="mb-1.5 text-xs font-medium text-muted-foreground">Notes</h3>
-            <p className="whitespace-pre-wrap text-sm">{contact.notes}</p>
+            <h3 className="text-muted-foreground mb-1.5 text-xs font-medium">
+              Notes
+            </h3>
+            <p className="text-sm whitespace-pre-wrap">{contact.notes}</p>
           </div>
         </>
       )}
@@ -178,7 +207,8 @@ export function ContactDetail({ contact, q, filter, sort, sort_dir }: ContactDet
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>
-              {contact.archived ? "Restore" : "Archive"} {contact.first_name} {contact.last_name}?
+              {contact.archived ? "Restore" : "Archive"} {contact.first_name}{" "}
+              {contact.last_name}?
             </AlertDialogTitle>
             <AlertDialogDescription>
               {contact.archived
@@ -203,8 +233,8 @@ export function ContactDetail({ contact, q, filter, sort, sort_dir }: ContactDet
               Delete {contact.first_name} {contact.last_name}?
             </AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. All activities and data for this contact will be
-              permanently deleted.
+              This action cannot be undone. All activities and data for this
+              contact will be permanently deleted.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

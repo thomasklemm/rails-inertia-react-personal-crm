@@ -45,11 +45,7 @@ void createInertiaApp({
   },
 
   setup({ el, App, props }) {
-    createRoot(el).render(
-      <StrictMode>
-        {renderApp(App, props)}
-      </StrictMode>,
-    )
+    createRoot(el).render(<StrictMode>{renderApp(App, props)}</StrictMode>)
   },
 
   defaults: {

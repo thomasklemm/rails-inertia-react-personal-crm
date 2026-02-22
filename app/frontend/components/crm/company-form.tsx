@@ -1,6 +1,9 @@
 import type { InertiaFormProps } from "@inertiajs/react"
 
-import { COMPANY_TAG_LABELS, COMPANY_TAG_STYLES } from "@/components/crm/tag-badge"
+import {
+  COMPANY_TAG_LABELS,
+  COMPANY_TAG_STYLES,
+} from "@/components/crm/tag-badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -39,7 +42,12 @@ interface CompanyFormProps {
   autoFocus?: boolean
 }
 
-export function CompanyForm({ form, cancelHref, submitLabel, autoFocus = true }: CompanyFormProps) {
+export function CompanyForm({
+  form,
+  cancelHref,
+  submitLabel,
+  autoFocus = true,
+}: CompanyFormProps) {
   const { data, setData, errors, processing } = form
 
   function toggleTag(tag: CompanyTag) {
@@ -61,7 +69,9 @@ export function CompanyForm({ form, cancelHref, submitLabel, autoFocus = true }:
           onChange={(e) => setData("name", e.target.value)}
           autoFocus={autoFocus}
         />
-        {errors.name && <p className="text-xs text-destructive">{errors.name}</p>}
+        {errors.name && (
+          <p className="text-destructive text-xs">{errors.name}</p>
+        )}
       </div>
 
       {/* Website */}
@@ -75,7 +85,9 @@ export function CompanyForm({ form, cancelHref, submitLabel, autoFocus = true }:
           onChange={(e) => setData("website", e.target.value)}
           placeholder="https://example.com"
         />
-        {errors.website && <p className="text-xs text-destructive">{errors.website}</p>}
+        {errors.website && (
+          <p className="text-destructive text-xs">{errors.website}</p>
+        )}
       </div>
 
       {/* Phone + Email */}
@@ -89,7 +101,9 @@ export function CompanyForm({ form, cancelHref, submitLabel, autoFocus = true }:
             value={data.phone}
             onChange={(e) => setData("phone", e.target.value)}
           />
-          {errors.phone && <p className="text-xs text-destructive">{errors.phone}</p>}
+          {errors.phone && (
+            <p className="text-destructive text-xs">{errors.phone}</p>
+          )}
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="email">Email</Label>
@@ -100,7 +114,9 @@ export function CompanyForm({ form, cancelHref, submitLabel, autoFocus = true }:
             value={data.email}
             onChange={(e) => setData("email", e.target.value)}
           />
-          {errors.email && <p className="text-xs text-destructive">{errors.email}</p>}
+          {errors.email && (
+            <p className="text-destructive text-xs">{errors.email}</p>
+          )}
         </div>
       </div>
 
@@ -113,7 +129,9 @@ export function CompanyForm({ form, cancelHref, submitLabel, autoFocus = true }:
           value={data.address}
           onChange={(e) => setData("address", e.target.value)}
         />
-        {errors.address && <p className="text-xs text-destructive">{errors.address}</p>}
+        {errors.address && (
+          <p className="text-destructive text-xs">{errors.address}</p>
+        )}
       </div>
 
       {/* Industry tags */}
@@ -148,7 +166,9 @@ export function CompanyForm({ form, cancelHref, submitLabel, autoFocus = true }:
           id="notes"
           name="notes"
           value={data.notes}
-          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setData("notes", e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+            setData("notes", e.target.value)
+          }
           rows={6}
           className="resize-none"
         />
