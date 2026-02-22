@@ -31,7 +31,7 @@ export default function CompaniesShow() {
     <>
       <Head title={company.name} />
       <div className="scrollbar-subtle h-full overflow-y-auto">
-        <div className="mx-auto w-full max-w-3xl">
+        <div className="mx-auto w-full max-w-4xl">
           <CompanyDetail
             company={company}
             contacts={contacts}
