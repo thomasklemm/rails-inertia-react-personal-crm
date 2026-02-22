@@ -6,8 +6,15 @@ declare module "@inertiaui/modal-react" {
     ReactNode,
   } from "react"
 
+  interface ModalRenderProps {
+    close: () => void
+    reload: () => void
+    id: string
+    index: number
+  }
+
   interface ModalProps {
-    children?: ReactNode
+    children?: ReactNode | ((props: ModalRenderProps) => ReactNode)
     maxWidth?:
       | "sm"
       | "md"
@@ -48,10 +55,7 @@ declare module "@inertiaui/modal-react" {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   export function renderApp(App: any, props: any): ReactElement
 
-  export function useModal(): {
-    close: () => void
-    reload: () => void
-    id: string
-    index: number
-  }
+  export function putConfig(config: Record<string, unknown>): void
+
+  export function useModal(): ModalRenderProps
 }
