@@ -2,7 +2,9 @@
 
 A personal CRM built with Rails 8 and React via Inertia.js. Manage contacts, companies, and activities — all in a fast, modern interface without a separate API layer.
 
-![Personal CRM screenshot](public/screenshots/screenshot.png)
+| Light mode | Dark mode |
+|-----------|----------|
+| ![Light mode](public/screenshots/light-mode.png) | ![Dark mode](public/screenshots/dark-mode.png) |
 
 ## Live Demos
 
