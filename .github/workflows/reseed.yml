@@ -1,0 +1,24 @@
+name: Reseed Database
+
+on:
+  schedule:
+    - cron: "0 * * * *" # Every hour
+  workflow_dispatch: # Allow manual trigger from GitHub Actions UI
+
+jobs:
+  reseed:
+    name: Reseed Railway database
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Railway CLI
+        run: curl -fsSL https://railway.app/install.sh | sh
+
+      - name: Reseed database
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: |
+          railway ssh \
+            --project 91c2104f-437b-49f1-b0ca-7dbd412d1acd \
+            --service rails-inertia-react-personal-crm \
+            --environment production \
+            -- bin/rails db:seed
