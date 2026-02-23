@@ -2,6 +2,15 @@
 
 A modern full-stack starter application with Rails backend and React frontend using Inertia.js based on the [Laravel Starter Kit](https://github.com/laravel/react-starter-kit).
 
+## Live Demos
+
+| Platform | URL |
+|----------|-----|
+| [Fly.io](https://fly.io) (Frankfurt) | https://rails-inertia-react-personal-crm.fly.dev |
+| [Railway](https://railway.app) | https://rails-inertia-react-personal-crm-production.up.railway.app |
+
+Both deployments are reseeded with fresh demo data every hour via GitHub Actions.
+
 ## Features
 
 - [Inertia Rails](https://inertia-rails.dev) & [Vite Rails](https://vite-ruby.netlify.app) setup

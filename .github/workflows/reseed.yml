@@ -6,7 +6,30 @@ on:
   workflow_dispatch: # Allow manual trigger from GitHub Actions UI
 
 jobs:
-  reseed:
+  reseed-fly:
+    name: Reseed Fly.io database
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up flyctl
+        uses: superfly/flyctl-actions/setup-flyctl@master
+
+      - name: Wake up Fly machine
+        run: |
+          flyctl machine list -a rails-inertia-react-personal-crm --json \
+            | jq -r '.[] | select(.state != "started") | .id' \
+            | xargs -r -I{} flyctl machine start {} -a rails-inertia-react-personal-crm
+          sleep 20
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+
+      - name: Reseed database
+        run: |
+          flyctl ssh console -a rails-inertia-react-personal-crm \
+            -C "/bin/bash -c 'DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bin/rails db:seed:replant'"
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+
+  reseed-railway:
     name: Reseed Railway database
     runs-on: ubuntu-latest
     steps:
@@ -21,4 +44,4 @@ jobs:
             --project 91c2104f-437b-49f1-b0ca-7dbd412d1acd \
             --service rails-inertia-react-personal-crm \
             --environment production \
-            -- bin/rails db:seed
+            -- bin/rails db:seed:replant

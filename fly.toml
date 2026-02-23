@@ -1,0 +1,38 @@
+app = "rails-inertia-react-personal-crm"
+primary_region = "fra"
+
+[build]
+
+[env]
+  RAILS_ENV = "production"
+  RAILS_LOG_TO_STDOUT = "true"
+  # Thruster defaults to port 80; container runs as root so 80 is fine.
+  HTTP_PORT = "80"
+  # 2 Puma workers × 3 threads = 6 concurrent request slots.
+  WEB_CONCURRENCY = "2"
+
+# SQLite databases live on a persistent volume so they survive deploys and restarts.
+[[mounts]]
+  source = "rails_storage"
+  destination = "/rails/storage"
+
+[http_service]
+  internal_port = 80
+  force_https = true
+  # Suspend freezes the process in memory — resumes in ~1s vs ~10s cold start for stop.
+  auto_stop_machines = "suspend"
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]
+
+  [[http_service.checks]]
+    interval = "10s"
+    timeout = "5s"
+    grace_period = "30s"
+    method = "GET"
+    path = "/up"
+
+[[vm]]
+  memory = "512mb"
+  cpu_kind = "shared"
+  cpus = 2
