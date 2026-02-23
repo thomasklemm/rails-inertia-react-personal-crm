@@ -2,6 +2,8 @@
 
 A personal CRM built with Rails 8 and React via Inertia.js. Manage contacts, companies, and activities — all in a fast, modern interface without a separate API layer.
 
+![Personal CRM screenshot](public/screenshots/screenshot.png)
+
 ## Live Demos
 
 Both deployments are reseeded with fresh demo data every hour. Log in with `demo@example.com` / `password123456`.
@@ -58,6 +60,10 @@ bin/rails js:routes:typescript                 # Regenerate js-routes after chan
 ## Deployment
 
 The app deploys to Fly.io and Railway via GitHub Actions on every push to `main`. See [docs/deployment.md](docs/deployment.md) for platform-specific setup and CI workflow details.
+
+## Based On
+
+Built on top of the [Inertia Rails React Starter Kit](https://github.com/inertia-rails/react-starter-kit).
 
 ## License
 
