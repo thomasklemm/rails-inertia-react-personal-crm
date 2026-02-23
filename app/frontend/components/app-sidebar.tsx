@@ -50,7 +50,11 @@ export function AppSidebar() {
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild className="group-data-[collapsible=icon]:justify-center">
+            <SidebarMenuButton
+              size="lg"
+              asChild
+              className="group-data-[collapsible=icon]:justify-center"
+            >
               <Link href={contactsPath()} prefetch>
                 <AppLogo />
               </Link>

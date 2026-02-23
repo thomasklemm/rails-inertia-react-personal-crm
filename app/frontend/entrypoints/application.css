@@ -13,7 +13,7 @@
 :root {
   /* ── Aureate · Light Mode ─────────────────────────────────────────────── */
   /* Warm parchment backgrounds, deep sepia text, rich amber accents        */
-  --background: oklch(0.962 0.010 82);
+  --background: oklch(0.962 0.01 82);
   --foreground: oklch(0.13 0.024 50);
   --card: oklch(0.978 0.007 80);
   --card-foreground: oklch(0.13 0.024 50);
@@ -21,12 +21,12 @@
   --popover-foreground: oklch(0.13 0.024 50);
   --primary: oklch(0.58 0.178 50);
   --primary-foreground: oklch(0.99 0.004 85);
-  --secondary: oklch(0.908 0.020 76);
-  --secondary-foreground: oklch(0.20 0.022 52);
-  --muted: oklch(0.910 0.016 76);
+  --secondary: oklch(0.908 0.02 76);
+  --secondary-foreground: oklch(0.2 0.022 52);
+  --muted: oklch(0.91 0.016 76);
   --muted-foreground: oklch(0.48 0.036 62);
-  --accent: oklch(0.908 0.020 76);
-  --accent-foreground: oklch(0.20 0.022 52);
+  --accent: oklch(0.908 0.02 76);
+  --accent-foreground: oklch(0.2 0.022 52);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.985 0 0);
   --border: oklch(0.845 0.022 74);
@@ -43,8 +43,8 @@
   --sidebar-primary: oklch(0.58 0.178 50);
   --sidebar-primary-foreground: oklch(0.99 0.004 85);
   --sidebar-accent: oklch(0.893 0.024 72);
-  --sidebar-accent-foreground: oklch(0.20 0.022 52);
-  --sidebar-border: oklch(0.840 0.025 72);
+  --sidebar-accent-foreground: oklch(0.2 0.022 52);
+  --sidebar-border: oklch(0.84 0.025 72);
   --sidebar-ring: oklch(0.58 0.178 50);
 }
 
@@ -60,7 +60,7 @@
   --foreground: oklch(0.958 0.006 225);
   --card: oklch(0.172 0.034 258);
   --card-foreground: oklch(0.958 0.006 225);
-  --popover: oklch(0.190 0.034 258);
+  --popover: oklch(0.19 0.034 258);
   --popover-foreground: oklch(0.958 0.006 225);
 
   /* Primary — bold warm gold, dramatic contrast against deep indigo */
@@ -175,7 +175,7 @@
       "calt" 1;
   }
   ::selection {
-    background-color: oklch(0.58 0.178 50 / 0.20);
+    background-color: oklch(0.58 0.178 50 / 0.2);
     color: oklch(0.13 0.024 50);
   }
   .dark ::selection {
