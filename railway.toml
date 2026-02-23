@@ -1,9 +1,0 @@
-[build]
-builder = "dockerfile"
-
-[deploy]
-# PORT=80 tells Railway's proxy to route traffic to port 80 (where Thruster listens)
-healthcheckPath = "/up"
-healthcheckTimeout = 300
-restartPolicyType = "on_failure"
-restartPolicyMaxRetries = 10

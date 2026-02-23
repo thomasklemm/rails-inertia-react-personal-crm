@@ -28,20 +28,3 @@ jobs:
             -C "/bin/bash -c 'DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bin/rails db:seed:replant'"
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-
-  reseed-railway:
-    name: Reseed Railway database
-    runs-on: ubuntu-latest
-    steps:
-      - name: Install Railway CLI
-        run: curl -fsSL https://railway.app/install.sh | sh
-
-      - name: Reseed database
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-        run: |
-          railway ssh \
-            --project ${{ vars.RAILWAY_PROJECT_ID }} \
-            --service rails-inertia-react-personal-crm \
-            --environment production \
-            -- bin/rails db:seed:replant
