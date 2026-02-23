@@ -6,14 +6,11 @@ A personal CRM built with Rails 8 and React via Inertia.js. Manage contacts, com
 |-----------|----------|
 | ![Light mode](public/screenshots/light-mode.png) | ![Dark mode](public/screenshots/dark-mode.png) |
 
-## Live Demos
+## Live Demo
 
-Both deployments are reseeded with fresh demo data every hour. Log in with `demo@example.com` / `password123456`.
+Reseeded with fresh demo data every hour. Log in with `demo@example.com` / `password123456`.
 
-| Platform | URL |
-|----------|-----|
-| [Fly.io](https://fly.io) (Frankfurt) | https://rails-inertia-react-personal-crm.fly.dev |
-| [Railway](https://railway.app) (Netherlands) | https://rails-inertia-react-personal-crm-production.up.railway.app |
+**[https://rails-inertia-react-personal-crm.fly.dev](https://rails-inertia-react-personal-crm.fly.dev)** — hosted on [Fly.io](https://fly.io) (Frankfurt)
 
 ## Features
 
@@ -33,7 +30,7 @@ Both deployments are reseeded with fresh demo data every hour. Log in with `demo
 | UI | [React 19](https://react.dev) · TypeScript · [shadcn/ui](https://ui.shadcn.com) · Tailwind CSS v4 |
 | Routing | [js-routes](https://github.com/railsware/js-routes) (typed path helpers) |
 | Modals | [@inertiaui/modal-react](https://github.com/inertiaui/modal) |
-| Deployment | [Kamal](https://kamal-deploy.org) · [Fly.io](https://fly.io) · [Railway](https://railway.app) |
+| Deployment | [Fly.io](https://fly.io) |
 
 ## Setup
 
@@ -61,7 +58,7 @@ bin/rails js:routes:typescript                 # Regenerate js-routes after chan
 
 ## Deployment
 
-The app deploys to Fly.io and Railway via GitHub Actions on every push to `main`. See [docs/deployment.md](docs/deployment.md) for platform-specific setup and CI workflow details.
+The app deploys to Fly.io via GitHub Actions on every push to `main`. See [docs/deployment.md](docs/deployment.md) for setup and CI workflow details.
 
 ## Based On
 

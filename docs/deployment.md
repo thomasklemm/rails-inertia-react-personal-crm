@@ -1,11 +1,10 @@
 # Deployment
 
-The app is deployed to two platforms simultaneously. Both are reseeded with fresh demo data every hour via GitHub Actions (`reseed.yml`). CI deploys to both after every push to `main` (`deploy.yml`).
+The app is deployed to Fly.io. It is reseeded with fresh demo data every hour via GitHub Actions (`reseed.yml`). CI deploys after every push to `main` (`deploy.yml`).
 
 | Platform | URL | Region |
 |----------|-----|--------|
 | Fly.io | https://rails-inertia-react-personal-crm.fly.dev | Frankfurt (fra) |
-| Railway | https://rails-inertia-react-personal-crm-production.up.railway.app | Europe West 4 (Netherlands) |
 
 ## Fly.io
 
@@ -46,22 +45,16 @@ flyctl logs
 flyctl ssh console
 ```
 
-## Railway
-
-**Config:** `railway.toml`
-
-- Auto-deploys from GitHub on push to `main`
-- SQLite persisted on Railway's volume
-- Single Puma worker (Railway hobby tier default)
-
-**Required GitHub secrets:** `RAILWAY_TOKEN`, `RAILWAY_PROJECT_ID` (as a repo variable)
-
 ## GitHub Actions
 
 | Workflow | Trigger | What it does |
 |----------|---------|--------------|
 | `ci.yml` | Push / PR | Runs tests, linting, security scan |
-| `deploy.yml` | After CI passes on `main` | Deploys to both Fly.io and Railway |
-| `reseed.yml` | Hourly + manual | Reseeds both DBs with `db:seed:replant` |
+| `deploy.yml` | After CI passes on `main` | Deploys to Fly.io |
+| `reseed.yml` | Hourly + manual | Reseeds DB with `db:seed:replant` |
 
-The reseed workflow wakes the Fly.io machine first (it may be suspended) then runs `db:seed:replant` via SSH. Railway is reseeded via `railway ssh`.
+The reseed workflow wakes the Fly.io machine first (it may be suspended), then runs `db:seed:replant` via SSH.
+
+## Removed Platforms
+
+**Railway** was removed in February 2026. The config (`railway.toml`), the `deploy-railway` job in `deploy.yml`, and the `reseed-railway` job in `reseed.yml` were all deleted. The Railway project was torn down manually via the Railway dashboard.
