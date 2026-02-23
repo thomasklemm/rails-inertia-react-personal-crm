@@ -15,7 +15,7 @@ putConfig({
   },
 })
 
-const appName = import.meta.env.VITE_APP_NAME ?? "React Starter Kit"
+const appName = import.meta.env.VITE_APP_NAME ?? "Personal CRM"
 
 void createInertiaApp({
   // Set default page title
@@ -23,15 +23,12 @@ void createInertiaApp({
   //
   title: (title) => (title ? `${title} - ${appName}` : appName),
 
-  resolve: (name) => {
+  resolve: async (name) => {
     const pages = import.meta.glob<{ default: ResolvedComponent }>(
       "../pages/**/*.tsx",
-      {
-        eager: true,
-      },
     )
-    const page = pages[`../pages/${name}.tsx`]
-    if (!page) {
+    const pageImport = pages[`../pages/${name}.tsx`]
+    if (!pageImport) {
       console.error(`Missing Inertia page component: '${name}.tsx'`)
     }
 
@@ -39,6 +36,7 @@ void createInertiaApp({
     // and use the following line.
     // see https://inertia-rails.dev/guide/pages#default-layouts
     //
+    const page = await pageImport()
     page.default.layout ??= [PersistentLayout]
 
     return page
