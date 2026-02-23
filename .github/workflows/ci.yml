@@ -87,7 +87,7 @@ jobs:
 
     steps:
       - name: Install packages
-        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y build-essential git node-gyp pkg-config python-is-python3 google-chrome-stable
+        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y build-essential git node-gyp pkg-config python-is-python3
 
       - name: Checkout code
         uses: actions/checkout@v6
@@ -96,10 +96,31 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: 22
-          cache: 'npm'
+
+      - name: Cache node_modules
+        id: node-cache
+        uses: actions/cache@v5
+        with:
+          path: node_modules
+          key: node-modules-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
 
       - name: Install npm dependencies
+        if: steps.node-cache.outputs.cache-hit != 'true'
         run: npm ci
+
+      - name: Cache Vite test build
+        id: vite-cache
+        uses: actions/cache@v5
+        with:
+          path: public/vite-test
+          key: vite-test-${{ runner.os }}-${{ hashFiles('package-lock.json', 'vite.config.ts', 'app/frontend/**') }}
+
+      - name: Build Vite test assets
+        if: steps.vite-cache.outputs.cache-hit != 'true'
+        env:
+          NODE_ENV: test
+          RAILS_ENV: test
+        run: node_modules/.bin/vite build --mode test
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1

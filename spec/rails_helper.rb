@@ -10,8 +10,10 @@ require "capybara/rspec"
 require "selenium-webdriver"
 require "inertia_rails/rspec"
 
-# Precompile Vite assets once before running the test suite
-ViteRuby.commands.build
+# Precompile Vite assets once before running the test suite.
+# Skip if already built (CI cache hit, or dev server fallback).
+vite_manifest = Rails.public_path.join("vite-test/.vite/manifest.json")
+ViteRuby.commands.build unless vite_manifest.exist?
 
 Rails.root.glob("spec/support/**/*.rb").sort_by(&:to_s).each { |f| require f }
 
