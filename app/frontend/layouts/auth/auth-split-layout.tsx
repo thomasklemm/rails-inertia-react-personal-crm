@@ -22,7 +22,7 @@ export default function AuthSplitLayout({
           href={rootPath()}
           className="relative z-20 flex items-center text-lg font-medium"
         >
-          <AppLogoIcon className="mr-2 size-8 rounded-md" />
+          <AppLogoIcon className="mr-2 size-8" />
           {import.meta.env.VITE_APP_NAME ?? "Personal CRM"}
         </Link>
         <div className="relative z-20 mt-auto">
