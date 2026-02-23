@@ -3,7 +3,7 @@ import AppLogoIcon from "./app-logo-icon"
 export default function AppLogo() {
   return (
     <>
-      <div className="size-10 shrink-0">
+      <div className="size-9 shrink-0">
         <AppLogoIcon className="size-full" />
       </div>
       <div className="ml-1 grid min-w-0 flex-1 text-left text-sm">
