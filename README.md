@@ -1,81 +1,64 @@
-# Inertia Rails React Starter Kit
+# Rails Inertia React Personal CRM
 
-A modern full-stack starter application with Rails backend and React frontend using Inertia.js based on the [Laravel Starter Kit](https://github.com/laravel/react-starter-kit).
+A personal CRM built with Rails 8 and React via Inertia.js. Manage contacts, companies, and activities — all in a fast, modern interface without a separate API layer.
 
 ## Live Demos
+
+Both deployments are reseeded with fresh demo data every hour. Log in with `demo@example.com` / `password123456`.
 
 | Platform | URL |
 |----------|-----|
 | [Fly.io](https://fly.io) (Frankfurt) | https://rails-inertia-react-personal-crm.fly.dev |
-| [Railway](https://railway.app) | https://rails-inertia-react-personal-crm-production.up.railway.app |
-
-Both deployments are reseeded with fresh demo data every hour via GitHub Actions.
+| [Railway](https://railway.app) (Netherlands) | https://rails-inertia-react-personal-crm-production.up.railway.app |
 
 ## Features
 
-- [Inertia Rails](https://inertia-rails.dev) & [Vite Rails](https://vite-ruby.netlify.app) setup
-- [React](https://react.dev) frontend with TypeScript & [shadcn/ui](https://ui.shadcn.com) component library
-- User authentication system (based on [Authentication Zero](https://github.com/lazaronixon/authentication-zero))
-- [Kamal](https://kamal-deploy.org/) for deployment
-- Optional SSR support
+- **Contacts** — track people with notes, tags, and starred favorites
+- **Companies** — manage organizations with linked contacts and activity history
+- **Activities** — log calls, emails, meetings, and notes against contacts and companies
+- **Authentication** — email/password sign-up and sign-in (based on [Authentication Zero](https://github.com/lazaronixon/authentication-zero))
+- **Dark mode** — system-aware with manual toggle
 
-See also:
-- [Svelte Starter Kit](https://github.com/inertia-rails/svelte-starter-kit) for Inertia Rails with Svelte
-- [Vue Starter Kit](https://github.com/inertia-rails/vue-starter-kit) for Inertia Rails with Vue
+## Tech Stack
 
-<a href="https://evilmartians.com/?utm_source=inertia-rails-react-starter-kit&utm_campaign=project_page">
-<img src="https://evilmartians.com/badges/sponsored-by-evil-martians.svg" alt="Built by Evil Martians" width="236" height="54">
-</a>
+| Layer | Technology |
+|-------|------------|
+| Backend | [Rails 8.1](https://rubyonrails.org) · SQLite · Puma |
+| Frontend bridge | [Inertia.js](https://inertiajs.com) (no separate API) |
+| Frontend build | [Vite Rails](https://vite-ruby.netlify.app) |
+| UI | [React 19](https://react.dev) · TypeScript · [shadcn/ui](https://ui.shadcn.com) · Tailwind CSS v4 |
+| Routing | [js-routes](https://github.com/railsware/js-routes) (typed path helpers) |
+| Modals | [@inertiaui/modal-react](https://github.com/inertiaui/modal) |
+| Deployment | [Kamal](https://kamal-deploy.org) · [Fly.io](https://fly.io) · [Railway](https://railway.app) |
 
 ## Setup
 
-1. Clone this repository
-2. Setup dependencies & run the server:
-   ```bash
-   bin/setup
-   ```
-3. Open http://localhost:3000
+```bash
+git clone https://github.com/thomasklemm/rails-inertia-react-personal-crm
+cd rails-inertia-react-personal-crm
+bin/setup
+bin/dev
+```
 
-## Enabling SSR
+Open http://localhost:3000.
 
-This starter kit comes with optional SSR support. To enable it, follow these steps:
+## Development Commands
 
-1. Open `app/frontend/entrypoints/inertia.ts` and uncomment part of the `setup` function:
-   ```ts
-   // Uncomment the following to enable SSR hydration:
-   // if (el.hasChildNodes()) {
-   //   hydrateRoot(el, createElement(App, props))
-   //   return
-   // }
-   ```
-2. Open `config/deploy.yml` and uncomment several lines:
-   ```yml
-   servers:
-     # Uncomment to enable SSR:
-     # vite_ssr:
-     #   hosts:
-     #     - 192.168.0.1
-     #   cmd: bundle exec vite ssr
-     #   options:
-     #     network-alias: vite_ssr
-      
-   # ...
-      
-   env:
-     clear:
-       # Uncomment to enable SSR:
-       # INERTIA_SSR_ENABLED: true
-       # INERTIA_SSR_URL: "http://vite_ssr:13714"
-      
-   # ...
-      
-   builder:
-     # Uncomment to enable SSR:
-     # dockerfile: Dockerfile-ssr
-   ```
-   
-That's it! Now you can deploy your app with SSR support.
+```bash
+bin/dev                                        # Start Rails + Vite dev servers
+bundle exec rspec                              # Run all tests
+bundle exec rspec spec/path/to_spec.rb:42      # Run a single test
+npm run check                                  # TypeScript type check
+npm run lint                                   # ESLint
+npm run lint:fix                               # ESLint with auto-fix
+npm run format:fix                             # Prettier auto-format
+bin/rails js:routes:typescript                 # Regenerate js-routes after changing routes.rb
+```
+
+## Deployment
+
+The app deploys to Fly.io and Railway via GitHub Actions on every push to `main`. See [docs/deployment.md](docs/deployment.md) for platform-specific setup and CI workflow details.
 
 ## License
 
-The project is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+[MIT](LICENSE)
