@@ -41,7 +41,7 @@ jobs:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: |
           railway up \
-            --project 91c2104f-437b-49f1-b0ca-7dbd412d1acd \
+            --project ${{ vars.RAILWAY_PROJECT_ID }} \
             --service rails-inertia-react-personal-crm \
             --environment production \
             --detach
