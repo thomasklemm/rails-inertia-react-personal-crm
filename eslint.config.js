@@ -67,7 +67,7 @@ export default [
     },
   },
   {
-    files: ["**/*.js"],
+    files: ["**/*.js", "vite.config.ts"],
     ...tseslint.configs.disableTypeChecked,
   },
 ]
