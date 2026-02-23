@@ -17,7 +17,7 @@ class Contact < ApplicationRecord
 
   def self.search(q)
     pattern = "%#{q}%"
-    where("first_name LIKE ? OR last_name LIKE ? OR email LIKE ?", pattern, pattern, pattern)
+    where("contacts.first_name LIKE ? OR contacts.last_name LIKE ? OR contacts.email LIKE ?", pattern, pattern, pattern)
   end
 
   def full_name

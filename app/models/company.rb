@@ -15,7 +15,7 @@ class Company < ApplicationRecord
 
   def self.search(q)
     pattern = "%#{q}%"
-    where("name LIKE ? OR email LIKE ? OR phone LIKE ? OR address LIKE ?", pattern, pattern, pattern, pattern)
+    where("companies.name LIKE ? OR companies.email LIKE ? OR companies.phone LIKE ? OR companies.address LIKE ?", pattern, pattern, pattern, pattern)
   end
 
   def to_s
