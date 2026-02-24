@@ -36,6 +36,11 @@ import {
 } from "@/components/ui/popover"
 import { Separator } from "@/components/ui/separator"
 import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+import {
   archiveContactPath,
   companyPath,
   contactPath,
@@ -163,15 +168,19 @@ export function ContactDetail({
             <h1 className="truncate text-lg leading-snug font-semibold">
               {contact.first_name} {contact.last_name}
             </h1>
-            <button
-              onClick={handleStar}
-              title={contact.starred ? "Unstar" : "Star"}
-              className="inline-flex shrink-0 items-center rounded p-0.5 transition-colors hover:bg-amber-50 dark:hover:bg-amber-900/20"
-            >
-              <Star
-                className={`size-4 transition-colors ${contact.starred ? "fill-amber-400 text-amber-400 hover:fill-amber-500 hover:text-amber-500" : "text-muted-foreground/40 hover:text-amber-400"}`}
-              />
-            </button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  onClick={handleStar}
+                  className="inline-flex shrink-0 items-center rounded p-0.5 transition-colors hover:bg-amber-50 dark:hover:bg-amber-900/20"
+                >
+                  <Star
+                    className={`size-4 transition-colors ${contact.starred ? "fill-amber-400 text-amber-400 hover:fill-amber-500 hover:text-amber-500" : "text-muted-foreground/40 hover:text-amber-400"}`}
+                  />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>{contact.starred ? "Unstar" : "Star"}</TooltipContent>
+            </Tooltip>
             {contact.archived && (
               <span className="bg-muted text-muted-foreground shrink-0 rounded px-1.5 py-0.5 text-xs">
                 Archived
@@ -205,27 +214,37 @@ export function ContactDetail({
               Edit
             </ModalLink>
           </Button>
-          <Button
-            size="icon-sm"
-            variant="outline"
-            onClick={() => setArchiveDialogOpen(true)}
-            title={contact.archived ? "Restore" : "Archive"}
-          >
-            {contact.archived ? (
-              <ArchiveRestore className="size-4" />
-            ) : (
-              <Archive className="size-4" />
-            )}
-          </Button>
-          <Button
-            size="icon-sm"
-            variant="ghost"
-            className="hover:bg-destructive/10 hover:text-destructive dark:hover:bg-destructive/20"
-            onClick={() => setDeleteDialogOpen(true)}
-            title="Delete"
-          >
-            <Trash2 className="size-4" />
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                size="icon-sm"
+                variant="outline"
+                onClick={() => setArchiveDialogOpen(true)}
+              >
+                {contact.archived ? (
+                  <ArchiveRestore className="size-4" />
+                ) : (
+                  <Archive className="size-4" />
+                )}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              {contact.archived ? "Restore" : "Archive"}
+            </TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                size="icon-sm"
+                variant="ghost"
+                className="hover:bg-destructive/10 hover:text-destructive dark:hover:bg-destructive/20"
+                onClick={() => setDeleteDialogOpen(true)}
+              >
+                <Trash2 className="size-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Delete</TooltipContent>
+          </Tooltip>
         </div>
       </div>
 
