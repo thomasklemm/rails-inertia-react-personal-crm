@@ -20,7 +20,7 @@ interface Props {
 }
 
 export default function ContactsShow() {
-  const { contact, activities, q, filter, sort, sort_dir } =
+  const { contact, activities, companies, q, filter, sort, sort_dir } =
     usePage<Props>().props
 
   return (
@@ -30,6 +30,7 @@ export default function ContactsShow() {
         <div className="mx-auto w-full max-w-4xl">
           <ContactDetail
             contact={contact}
+            companies={companies}
             q={q}
             filter={filter}
             sort={sort}

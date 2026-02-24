@@ -7,7 +7,9 @@ import {
   CalendarClock,
   Check,
   Edit,
+  ExternalLink,
   Mail,
+  MapPin,
   Pencil,
   Phone,
   Star,
@@ -33,6 +35,13 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
 import { Textarea } from "@/components/ui/textarea"
 import {
@@ -48,13 +57,15 @@ import {
   editContactPath,
   starContactPath,
 } from "@/routes"
-import type { Contact } from "@/types"
+import type { Company, Contact } from "@/types"
 
+import { CompanyAvatar } from "./company-avatar"
 import { ContactAvatar } from "./contact-avatar"
 import { TagBadge } from "./tag-badge"
 
 interface ContactDetailProps {
   contact: Contact
+  companies: Company[]
   q?: string
   filter?: string
   sort?: string
@@ -70,11 +81,13 @@ function dateToIso(date: Date): string {
 
 export function ContactDetail({
   contact,
+  companies,
   q,
   filter,
   sort,
   sort_dir,
 }: ContactDetailProps) {
+  const [associating, setAssociating] = useState(false)
   const [archiveDialogOpen, setArchiveDialogOpen] = useState(false)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [followUpOpen, setFollowUpOpen] = useState(false)
@@ -104,6 +117,25 @@ export function ContactDetail({
 
   function handleStar() {
     router.patch(starContactPath(contact.id), {}, { preserveScroll: true })
+  }
+
+  function handleDisassociate() {
+    router.patch(
+      contactPath(contact.id),
+      { company_id: null },
+      { preserveScroll: true },
+    )
+  }
+
+  function handleAssociate(companyId: string) {
+    router.patch(
+      contactPath(contact.id),
+      { company_id: companyId },
+      {
+        preserveScroll: true,
+        onSuccess: () => setAssociating(false),
+      },
+    )
   }
 
   function confirmArchive() {
@@ -344,6 +376,100 @@ export function ContactDetail({
           </dd>
         </div>
       </dl>
+
+      <Separator />
+
+      {/* Company */}
+      <div>
+        <dt className="text-muted-foreground text-xs font-medium">Company</dt>
+        <dd className="mt-1.5">
+          {contact.company ? (
+            <div className="space-y-2 rounded-lg border p-3">
+              <div className="flex items-center justify-between">
+                <a
+                  href={companyPath(contact.company.id)}
+                  className="flex items-center gap-2 text-sm font-medium hover:underline"
+                >
+                  <CompanyAvatar company={contact.company} size="sm" />
+                  {contact.company.name}
+                </a>
+                <Button
+                  variant="ghost"
+                  size="icon-sm"
+                  onClick={handleDisassociate}
+                  title="Remove company association"
+                >
+                  <X className="text-muted-foreground size-3.5" />
+                </Button>
+              </div>
+              {(contact.company.website ??
+                contact.company.phone ??
+                contact.company.address) && (
+                <div className="text-muted-foreground space-y-1 text-xs">
+                  {contact.company.website && (
+                    <a
+                      href={contact.company.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1.5 hover:underline"
+                    >
+                      <ExternalLink className="size-3 shrink-0" />
+                      {contact.company.website.replace(/^https?:\/\//, "")}
+                    </a>
+                  )}
+                  {contact.company.phone && (
+                    <a
+                      href={`tel:${contact.company.phone}`}
+                      className="flex items-center gap-1.5 hover:underline"
+                    >
+                      <Phone className="size-3 shrink-0" />
+                      {contact.company.phone}
+                    </a>
+                  )}
+                  {contact.company.address && (
+                    <span className="flex items-center gap-1.5">
+                      <MapPin className="size-3 shrink-0" />
+                      {contact.company.address}
+                    </span>
+                  )}
+                </div>
+              )}
+            </div>
+          ) : associating ? (
+            <div className="flex items-center gap-2">
+              <Select onValueChange={handleAssociate}>
+                <SelectTrigger className="h-8 flex-1 text-sm">
+                  <SelectValue placeholder="Pick a company…" />
+                </SelectTrigger>
+                <SelectContent>
+                  {companies.map((c) => (
+                    <SelectItem key={c.id} value={String(c.id)}>
+                      {c.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setAssociating(false)}
+              >
+                Cancel
+              </Button>
+            </div>
+          ) : (
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-8 gap-1.5 text-sm"
+              onClick={() => setAssociating(true)}
+            >
+              <Building2 className="size-3.5" />
+              Associate Company
+            </Button>
+          )}
+        </dd>
+      </div>
 
       <Separator />
 
