@@ -63,6 +63,28 @@ Use `js-routes` helpers from `@/routes` (e.g., `signInPath()`, `dashboardPath()`
 
 - **`/agent-browser`**: Very useful for interacting with the running app — navigate pages, click buttons, fill forms, take screenshots, and verify UI behavior in a real browser session.
 
+### Full-page screenshots with agent-browser
+
+The app uses a fixed-height layout (`h-full`/`h-screen`) with an inner scrolling container (`.scrollbar-subtle.h-full.overflow-y-auto`). Playwright's `--full` flag only captures the document body height, so a plain `screenshot --full` captures only the viewport. To capture the entire page, expand all ancestor containers via JS first:
+
+```bash
+agent-browser open http://localhost:3000
+agent-browser wait --load networkidle
+agent-browser eval --stdin <<'EOF'
+const el = document.querySelector('.scrollbar-subtle.h-full.overflow-y-auto');
+let node = el;
+let count = 0;
+while (node && node !== document.body && count < 10) {
+  node.style.cssText += 'height: auto !important; overflow: visible !important; max-height: none !important; min-height: 0 !important;';
+  node = node.parentElement;
+  count++;
+}
+document.documentElement.style.cssText = 'height: auto !important;';
+document.body.style.cssText = 'height: auto !important; overflow: visible !important;';
+EOF
+agent-browser screenshot --full
+```
+
 ## UI Text Conventions
 
 - **Title Case everywhere**: All button labels, form headings, page titles, and breadcrumbs use Title Case.
