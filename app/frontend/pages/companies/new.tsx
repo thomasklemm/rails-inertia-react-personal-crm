@@ -7,7 +7,11 @@ import {
 } from "@/components/crm/company-form"
 import { companiesPath } from "@/routes"
 
-export default function CompaniesNew() {
+interface Props {
+  return_to?: string
+}
+
+export default function CompaniesNew({ return_to }: Props) {
   const form = useForm<CompanyFormData>({
     name: "",
     website: "",
@@ -20,7 +24,7 @@ export default function CompaniesNew() {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    form.post(companiesPath())
+    form.post(return_to ? companiesPath({ return_to }) : companiesPath())
   }
 
   return (

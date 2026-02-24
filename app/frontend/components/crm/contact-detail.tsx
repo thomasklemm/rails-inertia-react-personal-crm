@@ -458,7 +458,10 @@ export function ContactDetail({
                 className="h-8 shrink-0"
                 asChild
               >
-                <ModalLink navigate href={newCompanyPath()}>
+                <ModalLink
+                  navigate
+                  href={newCompanyPath({ return_to: contactPath(contact.id) })}
+                >
                   New Company
                 </ModalLink>
               </Button>

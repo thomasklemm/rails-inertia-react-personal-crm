@@ -27,15 +27,16 @@ class CompaniesController < InertiaController
   end
 
   def new
-    render inertia_modal: "companies/new", props: {}, base_url: companies_path
+    render inertia_modal: "companies/new", props: {return_to: params[:return_to]}, base_url: companies_path
   end
 
   def create
     @company = Current.user.companies.new(company_params)
     if @company.save
-      redirect_to company_path(@company), notice: "Company created."
+      destination = safe_return_to(params[:return_to]) || company_path(@company)
+      redirect_to destination, notice: "Company created."
     else
-      redirect_to new_company_path, inertia: {errors: @company.errors.as_json}
+      redirect_to new_company_path(return_to: params[:return_to]), inertia: {errors: @company.errors.as_json}
     end
   end
 
@@ -77,6 +78,10 @@ class CompaniesController < InertiaController
 
   def set_company
     @company = Current.user.companies.find(params[:id])
+  end
+
+  def safe_return_to(url)
+    url.presence if url&.start_with?("/") && !url&.start_with?("//")
   end
 
   def company_params
