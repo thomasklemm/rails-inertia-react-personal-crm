@@ -4,10 +4,8 @@
   "type": "module",
   "devDependencies": {
     "babel-plugin-react-compiler": "^1.0.0",
-    "eslint": "^10.0.2",
+    "eslint": "^9.39.3",
     "eslint-config-prettier": "^10.1.2",
-    "eslint-import-resolver-typescript": "^4.4.4",
-    "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-react": "^7.37.4",
     "eslint-plugin-react-hooks": "^7.0.1",
     "globals": "^17.0.0",

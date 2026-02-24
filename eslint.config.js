@@ -1,6 +1,5 @@
 import pluginJs from "@eslint/js"
 import prettierConfig from "eslint-config-prettier/flat"
-import importPlugin from "eslint-plugin-import"
 import pluginReact from "eslint-plugin-react"
 import reactHooks from "eslint-plugin-react-hooks"
 import globals from "globals"
@@ -32,38 +31,9 @@ export default [
   pluginReact.configs.flat["jsx-runtime"],
   prettierConfig,
   {
-    ...importPlugin.flatConfigs.recommended,
-    ...importPlugin.flatConfigs.typescript,
-    ...importPlugin.flatConfigs.react,
-    settings: { "import/resolver": { typescript: {} } },
     rules: {
-      "import/order": [
-        "error",
-        {
-          pathGroups: [
-            {
-              pattern: "@/**",
-              group: "external",
-              position: "after",
-            },
-          ],
-          "newlines-between": "always",
-          named: true,
-          alphabetize: { order: "asc" },
-        },
-      ],
-      "import/first": "error",
-      "import/extensions": [
-        "error",
-        "always",
-        {
-          js: "never",
-          jsx: "never",
-          ts: "never",
-          tsx: "never",
-        },
-      ],
       "@typescript-eslint/consistent-type-imports": "error",
+      "react/prop-types": "off",
     },
   },
   {
