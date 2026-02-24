@@ -117,3 +117,9 @@ export interface Activity {
   created_at: string
   updated_at: string
 }
+
+export interface DashboardStats {
+  contacts_count: number
+  companies_count: number
+  activities_this_week: number
+}

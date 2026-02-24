@@ -1,5 +1,11 @@
 import { Link } from "@inertiajs/react"
-import { ActivitySquare, Building2, Github, Users } from "lucide-react"
+import {
+  ActivitySquare,
+  Building2,
+  Github,
+  LayoutDashboard,
+  Users,
+} from "lucide-react"
 
 import { NavFooter } from "@/components/nav-footer"
 import { NavMain } from "@/components/nav-main"
@@ -13,12 +19,22 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { activitiesPath, companiesPath, contactsPath } from "@/routes"
+import {
+  activitiesPath,
+  companiesPath,
+  contactsPath,
+  dashboardPath,
+} from "@/routes"
 import type { NavItem } from "@/types"
 
 import AppLogo from "./app-logo"
 
 const mainNavItems: NavItem[] = [
+  {
+    title: "Dashboard",
+    href: dashboardPath(),
+    icon: LayoutDashboard,
+  },
   {
     title: "Contacts",
     href: contactsPath(),
@@ -55,7 +71,7 @@ export function AppSidebar() {
               asChild
               className="group-data-[collapsible=icon]:justify-center"
             >
-              <Link href={contactsPath()} prefetch>
+              <Link href={dashboardPath()} prefetch>
                 <AppLogo />
               </Link>
             </SidebarMenuButton>
