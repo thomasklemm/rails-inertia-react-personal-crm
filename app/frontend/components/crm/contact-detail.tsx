@@ -402,10 +402,12 @@ export function ContactDetail({
               <div className="flex items-center justify-between">
                 <a
                   href={companyPath(contact.company.id)}
-                  className="flex items-center gap-2 text-sm font-medium hover:underline"
+                  className="flex items-center gap-2 text-sm font-medium"
                 >
                   <CompanyAvatar company={contact.company} size="sm" />
-                  {contact.company.name}
+                  <span className="hover:underline">
+                    {contact.company.name}
+                  </span>
                 </a>
                 <Button
                   variant="ghost"
