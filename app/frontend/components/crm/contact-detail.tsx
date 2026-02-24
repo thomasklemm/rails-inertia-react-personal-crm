@@ -172,6 +172,7 @@ export function ContactDetail({
               <TooltipTrigger asChild>
                 <button
                   onClick={handleStar}
+                  title={contact.starred ? "Unstar" : "Star"}
                   className="inline-flex shrink-0 items-center rounded p-0.5 transition-colors hover:bg-amber-50 dark:hover:bg-amber-900/20"
                 >
                   <Star
@@ -219,6 +220,7 @@ export function ContactDetail({
               <Button
                 size="icon-sm"
                 variant="outline"
+                title={contact.archived ? "Restore" : "Archive"}
                 onClick={() => setArchiveDialogOpen(true)}
               >
                 {contact.archived ? (
@@ -237,6 +239,7 @@ export function ContactDetail({
               <Button
                 size="icon-sm"
                 variant="ghost"
+                title="Delete"
                 className="hover:bg-destructive/10 hover:text-destructive dark:hover:bg-destructive/20"
                 onClick={() => setDeleteDialogOpen(true)}
               >

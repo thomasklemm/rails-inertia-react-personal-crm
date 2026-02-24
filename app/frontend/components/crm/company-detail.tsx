@@ -170,6 +170,7 @@ export function CompanyDetail({
                 variant="ghost"
                 className="hover:bg-destructive/10 hover:text-destructive dark:hover:bg-destructive/20"
                 onClick={() => setDeleteDialogOpen(true)}
+                title="Delete"
               >
                 <Trash2 className="size-4" />
               </Button>
