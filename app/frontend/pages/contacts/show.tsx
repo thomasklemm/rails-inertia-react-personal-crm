@@ -12,6 +12,7 @@ interface Props {
   contact: Contact
   activities: Activity[]
   companies: Company[]
+  new_company_id?: string
   q?: string
   filter?: string
   sort?: string
@@ -20,8 +21,16 @@ interface Props {
 }
 
 export default function ContactsShow() {
-  const { contact, activities, q, filter, sort, sort_dir } =
-    usePage<Props>().props
+  const {
+    contact,
+    activities,
+    companies,
+    new_company_id,
+    q,
+    filter,
+    sort,
+    sort_dir,
+  } = usePage<Props>().props
 
   return (
     <>
@@ -29,7 +38,10 @@ export default function ContactsShow() {
       <div className="scrollbar-subtle h-full overflow-y-auto">
         <div className="mx-auto w-full max-w-4xl">
           <ContactDetail
+            key={new_company_id ?? ""}
             contact={contact}
+            companies={companies}
+            newCompanyId={new_company_id}
             q={q}
             filter={filter}
             sort={sort}

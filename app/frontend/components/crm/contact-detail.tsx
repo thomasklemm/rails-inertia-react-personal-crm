@@ -7,7 +7,9 @@ import {
   CalendarClock,
   Check,
   Edit,
+  ExternalLink,
   Mail,
+  MapPin,
   Pencil,
   Phone,
   Star,
@@ -33,6 +35,13 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
 import { Textarea } from "@/components/ui/textarea"
 import {
@@ -46,15 +55,19 @@ import {
   contactPath,
   contactsPath,
   editContactPath,
+  newCompanyPath,
   starContactPath,
 } from "@/routes"
-import type { Contact } from "@/types"
+import type { Company, Contact } from "@/types"
 
+import { CompanyAvatar } from "./company-avatar"
 import { ContactAvatar } from "./contact-avatar"
 import { TagBadge } from "./tag-badge"
 
 interface ContactDetailProps {
   contact: Contact
+  companies: Company[]
+  newCompanyId?: string
   q?: string
   filter?: string
   sort?: string
@@ -70,11 +83,16 @@ function dateToIso(date: Date): string {
 
 export function ContactDetail({
   contact,
+  companies,
+  newCompanyId,
   q,
   filter,
   sort,
   sort_dir,
 }: ContactDetailProps) {
+  const [associating, setAssociating] = useState(!!newCompanyId)
+  const [selectedCompanyId, setSelectedCompanyId] = useState(newCompanyId ?? "")
+  const [disassociateDialogOpen, setDisassociateDialogOpen] = useState(false)
   const [archiveDialogOpen, setArchiveDialogOpen] = useState(false)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [followUpOpen, setFollowUpOpen] = useState(false)
@@ -104,6 +122,34 @@ export function ContactDetail({
 
   function handleStar() {
     router.patch(starContactPath(contact.id), {}, { preserveScroll: true })
+  }
+
+  function confirmDisassociate() {
+    router.patch(
+      contactPath(contact.id),
+      { company_id: null },
+      { preserveScroll: true },
+    )
+  }
+
+  function handleAssociate() {
+    if (!selectedCompanyId) return
+    router.patch(
+      contactPath(contact.id),
+      { company_id: selectedCompanyId },
+      {
+        preserveScroll: true,
+        onSuccess: () => {
+          setAssociating(false)
+          setSelectedCompanyId("")
+        },
+      },
+    )
+  }
+
+  function cancelAssociating() {
+    setAssociating(false)
+    setSelectedCompanyId("")
   }
 
   function confirmArchive() {
@@ -347,6 +393,134 @@ export function ContactDetail({
 
       <Separator />
 
+      {/* Company */}
+      <div>
+        <dt className="text-muted-foreground text-xs font-medium">Company</dt>
+        <dd className="mt-1.5">
+          {contact.company ? (
+            <div className="group/company space-y-2 rounded-lg border p-3">
+              <div className="flex items-center justify-between">
+                <a
+                  href={companyPath(contact.company.id)}
+                  className="flex items-center gap-2 text-sm font-medium"
+                >
+                  <CompanyAvatar company={contact.company} size="sm" />
+                  <span className="hover:underline">
+                    {contact.company.name}
+                  </span>
+                </a>
+                <Button
+                  variant="ghost"
+                  size="icon-sm"
+                  onClick={() => setDisassociateDialogOpen(true)}
+                  title="Remove company association"
+                  className="opacity-0 transition-opacity group-hover/company:opacity-100"
+                >
+                  <X className="text-muted-foreground size-3.5" />
+                </Button>
+              </div>
+              {(contact.company.website ??
+                contact.company.phone ??
+                contact.company.address) && (
+                <div className="text-muted-foreground space-y-1 text-xs">
+                  {contact.company.website && (
+                    <a
+                      href={contact.company.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1.5 hover:underline"
+                    >
+                      <ExternalLink className="size-3 shrink-0" />
+                      {contact.company.website.replace(/^https?:\/\//, "")}
+                    </a>
+                  )}
+                  {contact.company.phone && (
+                    <a
+                      href={`tel:${contact.company.phone}`}
+                      className="flex items-center gap-1.5 hover:underline"
+                    >
+                      <Phone className="size-3 shrink-0" />
+                      {contact.company.phone}
+                    </a>
+                  )}
+                  {contact.company.address && (
+                    <span className="flex items-center gap-1.5">
+                      <MapPin className="size-3 shrink-0" />
+                      {contact.company.address}
+                    </span>
+                  )}
+                </div>
+              )}
+            </div>
+          ) : associating ? (
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <Select
+                  value={selectedCompanyId}
+                  onValueChange={setSelectedCompanyId}
+                >
+                  <SelectTrigger className="h-8 flex-1 text-sm">
+                    <SelectValue placeholder="Pick a company…" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {companies.map((c) => (
+                      <SelectItem key={c.id} value={String(c.id)}>
+                        {c.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-8 shrink-0"
+                  asChild
+                >
+                  <ModalLink
+                    navigate
+                    href={newCompanyPath({
+                      return_to: contactPath(contact.id),
+                    })}
+                  >
+                    New Company
+                  </ModalLink>
+                </Button>
+              </div>
+              <div className="flex items-center gap-2">
+                <Button
+                  size="sm"
+                  className="h-8"
+                  onClick={handleAssociate}
+                  disabled={!selectedCompanyId}
+                >
+                  Save
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-8"
+                  onClick={cancelAssociating}
+                >
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-8 gap-1.5 text-sm"
+              onClick={() => setAssociating(true)}
+            >
+              <Building2 className="size-3.5" />
+              Associate Company
+            </Button>
+          )}
+        </dd>
+      </div>
+
+      <Separator />
+
       {/* Notes */}
       <div className="group/notes">
         <div className="mb-1.5 flex items-center gap-1.5">
@@ -414,6 +588,28 @@ export function ContactDetail({
           </p>
         )}
       </div>
+
+      {/* Disassociate company confirmation */}
+      <AlertDialog
+        open={disassociateDialogOpen}
+        onOpenChange={setDisassociateDialogOpen}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Remove Company Association?</AlertDialogTitle>
+            <AlertDialogDescription>
+              {contact.company?.name} will be unlinked from {contact.first_name}{" "}
+              {contact.last_name}. The company will not be deleted.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDisassociate}>
+              Remove
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       {/* Archive / Restore confirmation */}
       <AlertDialog open={archiveDialogOpen} onOpenChange={setArchiveDialogOpen}>

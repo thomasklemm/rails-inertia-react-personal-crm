@@ -1,4 +1,4 @@
-# Plan 3: Contact → Company Relationship Enhancements
+# Plan 3: Contact → Company Relationship Enhancements ✅ Implemented
 
 Make the contact ↔ company link feel first-class: show rich company details on the contact page, and let users associate/disassociate a company inline without navigating to the edit form.
 
