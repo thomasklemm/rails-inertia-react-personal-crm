@@ -16,9 +16,9 @@ RSpec.describe "Sessions", type: :request do
     context "with valid credentials" do
       it "redirects to the root url" do
         post sign_in_url, params: {email: user.email, password: "Secret1*3*5*"}
-        expect(response).to redirect_to(contacts_url)
+        expect(response).to redirect_to(dashboard_url)
 
-        get contacts_url
+        get dashboard_url
         expect(response).to have_http_status(:success)
       end
     end
