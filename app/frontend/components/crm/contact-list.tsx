@@ -6,6 +6,7 @@ import {
   ArrowUp,
   ArrowUpAZ,
   Building2,
+  CalendarClock,
   Search,
   Star,
   UserPlus,
@@ -15,6 +16,11 @@ import { useCallback, useRef } from "react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 import { contactsPath, newContactPath } from "@/routes"
 import type { Contact } from "@/types"
 
@@ -32,6 +38,7 @@ interface ContactListProps {
 const FILTERS = [
   { label: "All", value: undefined, icon: Users },
   { label: "Starred", value: "starred", icon: Star },
+  { label: "Follow-up", value: "follow_up", icon: CalendarClock },
   { label: "Archived", value: "archived", icon: Archive },
 ]
 
@@ -134,18 +141,24 @@ export function ContactList({
         {FILTERS.map((f) => {
           const isActive = (filter ?? undefined) === f.value
           return (
-            <button
-              key={f.label}
-              onClick={() => navigate({ filter: f.value })}
-              className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${
-                isActive
-                  ? "bg-sidebar-accent text-sidebar-accent-foreground"
-                  : "text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground"
-              }`}
-            >
-              <f.icon className="size-3" />
-              {f.label}
-            </button>
+            <Tooltip key={f.label}>
+              <TooltipTrigger asChild>
+                <button
+                  onClick={() => navigate({ filter: f.value })}
+                  className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${
+                    isActive
+                      ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                      : "text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground"
+                  }`}
+                >
+                  <f.icon className="size-3" />
+                  {isActive && f.label}
+                </button>
+              </TooltipTrigger>
+              {!isActive && (
+                <TooltipContent side="bottom">{f.label}</TooltipContent>
+              )}
+            </Tooltip>
           )
         })}
       </div>
@@ -164,27 +177,33 @@ export function ContactList({
             const Icon = effectiveDir === "asc" ? s.iconAsc : s.iconDesc
 
             return (
-              <button
-                key={s.label}
-                onClick={() => {
-                  if (isActive) {
-                    navigate({
-                      sort: s.value,
-                      sort_dir: sort_dir === "asc" ? "desc" : "asc",
-                    })
-                  } else {
-                    navigate({ sort: s.value, sort_dir: s.defaultDir })
-                  }
-                }}
-                className={`flex cursor-pointer items-center gap-1 rounded-md px-2 py-0.5 text-xs transition-colors ${
-                  isActive
-                    ? "text-foreground font-semibold"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                <Icon className="size-3" />
-                {s.label}
-              </button>
+              <Tooltip key={s.label}>
+                <TooltipTrigger asChild>
+                  <button
+                    onClick={() => {
+                      if (isActive) {
+                        navigate({
+                          sort: s.value,
+                          sort_dir: sort_dir === "asc" ? "desc" : "asc",
+                        })
+                      } else {
+                        navigate({ sort: s.value, sort_dir: s.defaultDir })
+                      }
+                    }}
+                    className={`flex cursor-pointer items-center gap-1 rounded-md px-2 py-0.5 text-xs transition-colors ${
+                      isActive
+                        ? "text-foreground font-semibold"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    <Icon className="size-3" />
+                    {isActive && s.label}
+                  </button>
+                </TooltipTrigger>
+                {!isActive && (
+                  <TooltipContent side="bottom">{s.label}</TooltipContent>
+                )}
+              </Tooltip>
             )
           })}
         </div>

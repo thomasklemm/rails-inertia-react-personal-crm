@@ -96,6 +96,7 @@ export interface Contact {
   starred: boolean
   archived: boolean
   tags: Tag[]
+  follow_up_at: string | null
   company: Company | null
   company_id: number | null
   created_at: string

@@ -79,16 +79,17 @@ class ContactsController < InertiaController
   end
 
   def contact_params
-    params.permit(:first_name, :last_name, :email, :phone, :notes, :company_id, tags: [])
+    params.permit(:first_name, :last_name, :email, :phone, :notes, :company_id, :follow_up_at, tags: [])
   end
 
   def filtered_contacts
     scope = Current.user.contacts.includes(:company).order(:last_name, :first_name)
 
     scope = case params[:filter]
-    when "starred"  then scope.where(starred: true)
-    when "archived" then scope.where(archived: true)
-    else                 scope.where(archived: false)
+    when "starred"    then scope.where(starred: true)
+    when "archived"   then scope.where(archived: true)
+    when "follow_up"  then scope.active.due_follow_up.reorder(follow_up_at: :asc)
+    else                   scope.where(archived: false)
     end
 
     if params[:q].present?

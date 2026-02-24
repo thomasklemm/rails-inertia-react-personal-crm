@@ -44,6 +44,35 @@ RSpec.describe Contact, type: :model do
       expect(Contact.archived).to include(archived)
       expect(Contact.archived).not_to include(active, starred)
     end
+
+    describe ".due_follow_up" do
+      let!(:overdue)   { create(:contact, follow_up_at: Date.current - 1) }
+      let!(:today)     { create(:contact, follow_up_at: Date.current) }
+      let!(:upcoming)  { create(:contact, follow_up_at: Date.current + 7) }
+      let!(:no_follow) { create(:contact, follow_up_at: nil) }
+
+      it "includes contacts with follow_up_at on or before today" do
+        expect(Contact.due_follow_up).to include(overdue, today)
+      end
+
+      it "excludes upcoming and nil follow-ups" do
+        expect(Contact.due_follow_up).not_to include(upcoming, no_follow)
+      end
+    end
+
+    describe ".upcoming_follow_up" do
+      let!(:overdue)  { create(:contact, follow_up_at: Date.current - 1) }
+      let!(:upcoming) { create(:contact, follow_up_at: Date.current + 7) }
+      let!(:no_follow) { create(:contact, follow_up_at: nil) }
+
+      it "includes contacts with follow_up_at after today" do
+        expect(Contact.upcoming_follow_up).to include(upcoming)
+      end
+
+      it "excludes overdue and nil follow-ups" do
+        expect(Contact.upcoming_follow_up).not_to include(overdue, no_follow)
+      end
+    end
   end
 
   describe ".search" do

@@ -4,6 +4,7 @@ import {
   Archive,
   ArchiveRestore,
   Building2,
+  CalendarClock,
   Edit,
   Mail,
   Phone,
@@ -23,6 +24,12 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
+import { Calendar } from "@/components/ui/calendar"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 import { Separator } from "@/components/ui/separator"
 import {
   archiveContactPath,
@@ -45,6 +52,13 @@ interface ContactDetailProps {
   sort_dir?: string
 }
 
+function dateToIso(date: Date): string {
+  const y = date.getFullYear()
+  const m = String(date.getMonth() + 1).padStart(2, "0")
+  const d = String(date.getDate()).padStart(2, "0")
+  return `${y}-${m}-${d}`
+}
+
 export function ContactDetail({
   contact,
   q,
@@ -54,6 +68,20 @@ export function ContactDetail({
 }: ContactDetailProps) {
   const [archiveDialogOpen, setArchiveDialogOpen] = useState(false)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [followUpOpen, setFollowUpOpen] = useState(false)
+
+  const today = new Date().toISOString().split("T")[0]
+  const isFollowUpOverdue =
+    contact.follow_up_at != null && contact.follow_up_at <= today
+  const formattedFollowUpDate = contact.follow_up_at
+    ? new Date(contact.follow_up_at + "T00:00:00").toLocaleDateString(
+        undefined,
+        { month: "short", day: "numeric", year: "numeric" },
+      )
+    : null
+  const selectedDate = contact.follow_up_at
+    ? new Date(contact.follow_up_at + "T00:00:00")
+    : undefined
 
   const listParams = Object.fromEntries(
     Object.entries({ q, filter, sort, sort_dir }).filter(
@@ -73,6 +101,15 @@ export function ContactDetail({
     router.delete(contactPath(contact.id), {
       onSuccess: () => router.visit(contactsPath(listParams)),
     })
+  }
+
+  function handleFollowUpSelect(date: Date | undefined) {
+    setFollowUpOpen(false)
+    router.patch(
+      contactPath(contact.id),
+      { follow_up_at: date ? dateToIso(date) : "" },
+      { preserveScroll: true },
+    )
   }
 
   return (
@@ -186,6 +223,60 @@ export function ContactDetail({
               month: "short",
               day: "numeric",
             })}
+          </dd>
+        </div>
+
+        {/* Follow-up date — always shown, click to set/change */}
+        <div>
+          <dt className="text-muted-foreground text-xs font-medium">
+            Follow-up
+          </dt>
+          <dd className="mt-0.5">
+            <Popover open={followUpOpen} onOpenChange={setFollowUpOpen}>
+              <PopoverTrigger asChild>
+                <button className="group flex items-center gap-1.5 text-sm">
+                  <CalendarClock
+                    className={`size-3.5 shrink-0 ${isFollowUpOverdue ? "text-amber-500" : "text-muted-foreground"}`}
+                  />
+                  {contact.follow_up_at ? (
+                    <>
+                      <span
+                        className={`group-hover:underline ${isFollowUpOverdue ? "text-amber-600 dark:text-amber-400" : ""}`}
+                      >
+                        {formattedFollowUpDate}
+                      </span>
+                      {isFollowUpOverdue && (
+                        <span className="rounded bg-amber-100 px-1.5 py-0.5 text-xs font-medium text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">
+                          Overdue
+                        </span>
+                      )}
+                    </>
+                  ) : (
+                    <span className="text-muted-foreground group-hover:underline">
+                      Set date
+                    </span>
+                  )}
+                </button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  mode="single"
+                  selected={selectedDate}
+                  onSelect={handleFollowUpSelect}
+                  initialFocus
+                />
+                {contact.follow_up_at && (
+                  <div className="border-t px-3 py-2">
+                    <button
+                      onClick={() => handleFollowUpSelect(undefined)}
+                      className="text-muted-foreground hover:text-foreground text-xs"
+                    >
+                      Clear follow-up date
+                    </button>
+                  </div>
+                )}
+              </PopoverContent>
+            </Popover>
           </dd>
         </div>
       </dl>

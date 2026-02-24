@@ -11,9 +11,11 @@ class Contact < ApplicationRecord
   validates :last_name,  presence: true
   validate  :tags_must_be_valid
 
-  scope :starred,  -> { where(starred: true) }
-  scope :archived, -> { where(archived: true) }
-  scope :active,   -> { where(archived: false) }
+  scope :starred,          -> { where(starred: true) }
+  scope :archived,         -> { where(archived: true) }
+  scope :active,           -> { where(archived: false) }
+  scope :due_follow_up,    -> { where("follow_up_at IS NOT NULL AND follow_up_at <= ?", Date.current) }
+  scope :upcoming_follow_up, -> { where("follow_up_at IS NOT NULL AND follow_up_at > ?", Date.current) }
 
   def self.search(q)
     pattern = "%#{q}%"

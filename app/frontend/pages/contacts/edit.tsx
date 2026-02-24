@@ -21,6 +21,7 @@ export default function ContactsEdit({ contact, companies }: Props) {
     phone: contact.phone ?? "",
     notes: contact.notes ?? "",
     company_id: contact.company_id ? String(contact.company_id) : "",
+    follow_up_at: contact.follow_up_at ?? "",
     tags: contact.tags,
   })
 

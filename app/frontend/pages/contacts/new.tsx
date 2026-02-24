@@ -21,6 +21,7 @@ export default function ContactsNew({ companies, company_id }: Props) {
     phone: "",
     notes: "",
     company_id: company_id ?? "",
+    follow_up_at: "",
     tags: [],
   })
 

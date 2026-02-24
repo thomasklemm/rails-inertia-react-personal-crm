@@ -33,6 +33,7 @@ export interface ContactFormData {
   phone: string
   notes: string
   company_id: string
+  follow_up_at: string
   tags: Tag[]
 }
 
@@ -179,6 +180,29 @@ export function ContactForm({
           }
           rows={4}
           className="resize-none"
+        />
+      </div>
+
+      {/* Follow-up Date */}
+      <div className="space-y-1.5">
+        <div className="flex items-center justify-between">
+          <Label htmlFor="follow_up_at">Follow-up Date</Label>
+          {data.follow_up_at && (
+            <button
+              type="button"
+              onClick={() => setData("follow_up_at", "")}
+              className="text-muted-foreground hover:text-foreground text-xs"
+            >
+              Clear
+            </button>
+          )}
+        </div>
+        <Input
+          id="follow_up_at"
+          name="follow_up_at"
+          type="date"
+          value={data.follow_up_at}
+          onChange={(e) => setData("follow_up_at", e.target.value)}
         />
       </div>
 

@@ -10,8 +10,9 @@ FactoryBot.define do
     notes    { nil }
     starred  { false }
     archived { false }
-    tags     { [] }
-    company  { nil }
+    tags         { [] }
+    follow_up_at { nil }
+    company      { nil }
 
     trait :starred do
       starred { true }
