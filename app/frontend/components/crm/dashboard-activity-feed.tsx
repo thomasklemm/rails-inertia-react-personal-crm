@@ -2,6 +2,7 @@ import { Link } from "@inertiajs/react"
 import { ArrowRight } from "lucide-react"
 
 import { ActivityItem } from "@/components/crm/activity-item"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { activitiesPath } from "@/routes"
 import type { Activity } from "@/types"
 
@@ -51,49 +52,53 @@ export function DashboardActivityFeed({
   const groups = groupByDate(activities)
 
   return (
-    <div>
-      <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-lg font-semibold">Recent Activity</h2>
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+        <CardTitle className="text-base font-semibold">
+          Recent Activity
+        </CardTitle>
         <Link
           href={activitiesPath()}
-          className="text-primary flex items-center gap-1 text-sm font-medium hover:underline"
+          className="text-muted-foreground hover:text-foreground flex items-center gap-1 text-xs transition-colors"
         >
           View All
-          <ArrowRight className="size-3.5" />
+          <ArrowRight className="size-3" />
         </Link>
-      </div>
+      </CardHeader>
 
-      {groups.length === 0 ? (
-        <p className="text-muted-foreground py-8 text-center text-sm">
-          No activities yet.
-        </p>
-      ) : (
-        <div className="space-y-6">
-          {groups.map((group) => (
-            <div key={group.key}>
-              <div className="mb-2 flex items-baseline justify-between">
-                <span className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
-                  {group.label}
-                </span>
-                <span className="text-muted-foreground text-xs">
-                  {group.items.length}{" "}
-                  {group.items.length === 1 ? "activity" : "activities"}
-                </span>
+      <CardContent className="p-0">
+        {groups.length === 0 ? (
+          <p className="text-muted-foreground px-6 py-8 text-center text-sm">
+            No activities yet.
+          </p>
+        ) : (
+          <div className="divide-y">
+            {groups.map((group) => (
+              <div key={group.key}>
+                <div className="bg-muted/40 flex items-baseline justify-between px-4 py-2">
+                  <span className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
+                    {group.label}
+                  </span>
+                  <span className="text-muted-foreground text-xs">
+                    {group.items.length}{" "}
+                    {group.items.length === 1 ? "activity" : "activities"}
+                  </span>
+                </div>
+                <div>
+                  {group.items.map((activity, i) => (
+                    <ActivityItem
+                      key={activity.id}
+                      activity={activity}
+                      showSubject={true}
+                      isLast={i === group.items.length - 1}
+                    />
+                  ))}
+                </div>
               </div>
-              <div>
-                {group.items.map((activity, i) => (
-                  <ActivityItem
-                    key={activity.id}
-                    activity={activity}
-                    showSubject={true}
-                    isLast={i === group.items.length - 1}
-                  />
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
+            ))}
+          </div>
+        )}
+      </CardContent>
+    </Card>
   )
 }

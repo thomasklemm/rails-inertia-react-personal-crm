@@ -2,6 +2,7 @@ import { Link } from "@inertiajs/react"
 import { ArrowRight, Star } from "lucide-react"
 
 import { ContactAvatar } from "@/components/crm/contact-avatar"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { contactPath, contactsPath } from "@/routes"
 import type { Contact } from "@/types"
 
@@ -13,52 +14,57 @@ export function DashboardStarredContacts({
   contacts,
 }: DashboardStarredContactsProps) {
   return (
-    <div>
-      <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-lg font-semibold">Starred Contacts</h2>
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+        <CardTitle className="text-base font-semibold">
+          Starred Contacts
+        </CardTitle>
         <Link
-          href={contactsPath({ starred: true })}
-          className="text-primary flex items-center gap-1 text-sm font-medium hover:underline"
+          href={contactsPath({ filter: "starred" })}
+          className="text-muted-foreground hover:text-foreground flex items-center gap-1 text-xs transition-colors"
         >
-          View All Starred
-          <ArrowRight className="size-3.5" />
+          View All
+          <ArrowRight className="size-3" />
         </Link>
-      </div>
+      </CardHeader>
 
-      {contacts.length === 0 ? (
-        <div className="text-muted-foreground flex flex-col items-center gap-2 py-8 text-center text-sm">
-          <Star className="text-muted-foreground/50 size-8" />
-          <p>No Starred Contacts</p>
-          <Link
-            href={contactsPath()}
-            className="text-primary text-sm hover:underline"
-          >
-            View All Contacts
-          </Link>
-        </div>
-      ) : (
-        <div className="space-y-1">
-          {contacts.map((contact) => (
+      <CardContent className="p-0">
+        {contacts.length === 0 ? (
+          <div className="text-muted-foreground flex flex-col items-center gap-2 px-6 py-8 text-center text-sm">
+            <Star className="text-muted-foreground/40 size-7" />
+            <p className="text-sm">No starred contacts yet.</p>
             <Link
-              key={contact.id}
-              href={contactPath(contact.id)}
-              className="hover:bg-muted flex items-center gap-3 rounded-lg px-2 py-2 transition-colors"
+              href={contactsPath()}
+              className="text-primary text-xs hover:underline"
             >
-              <ContactAvatar contact={contact} size="sm" />
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-medium">
-                  {contact.first_name} {contact.last_name}
-                </p>
-                {contact.company && (
-                  <p className="text-muted-foreground truncate text-xs">
-                    {contact.company.name}
-                  </p>
-                )}
-              </div>
+              Browse Contacts
             </Link>
-          ))}
-        </div>
-      )}
-    </div>
+          </div>
+        ) : (
+          <div className="divide-y">
+            {contacts.map((contact) => (
+              <Link
+                key={contact.id}
+                href={contactPath(contact.id)}
+                className="hover:bg-muted/40 flex items-center gap-3 px-4 py-3 transition-colors first:rounded-t-lg last:rounded-b-lg"
+              >
+                <ContactAvatar contact={contact} size="sm" />
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-medium">
+                    {contact.first_name} {contact.last_name}
+                  </p>
+                  {contact.company && (
+                    <p className="text-muted-foreground truncate text-xs">
+                      {contact.company.name}
+                    </p>
+                  )}
+                </div>
+                <ArrowRight className="text-muted-foreground/40 size-3.5 shrink-0" />
+              </Link>
+            ))}
+          </div>
+        )}
+      </CardContent>
+    </Card>
   )
 }
