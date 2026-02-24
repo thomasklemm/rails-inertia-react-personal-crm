@@ -1,4 +1,4 @@
-# Plan 2: Global Activity Feed / Dashboard
+# Plan 2: Global Activity Feed / Dashboard ✅ DONE
 
 Replace the bare root with a real home page: key stats, recent activity across all records, and starred contacts.
 
