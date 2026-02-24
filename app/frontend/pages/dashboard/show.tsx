@@ -1,5 +1,5 @@
 import { Head, Link, usePage } from "@inertiajs/react"
-import { CalendarClock } from "lucide-react"
+import { ArrowRight, CalendarClock } from "lucide-react"
 import type { ReactNode } from "react"
 
 import { ContactAvatar } from "@/components/crm/contact-avatar"
@@ -114,11 +114,14 @@ export default function DashboardShow() {
                             </p>
                           )}
                         </div>
-                        <span
-                          className={`shrink-0 rounded-full px-2.5 py-0.5 text-xs font-medium ${classes}`}
-                        >
-                          {label}
-                        </span>
+                        <div className="flex shrink-0 items-center gap-2">
+                          <span
+                            className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${classes}`}
+                          >
+                            {label}
+                          </span>
+                          <ArrowRight className="text-muted-foreground/40 size-3.5" />
+                        </div>
                       </Link>
                     )
                   })}
