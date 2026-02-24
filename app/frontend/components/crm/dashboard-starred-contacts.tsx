@@ -42,7 +42,7 @@ export function DashboardStarredContacts({
             </Link>
           </div>
         ) : (
-          <div className="scrollbar-subtle max-h-72 divide-y overflow-y-auto">
+          <div className="scrollbar-subtle max-h-72 divide-y overflow-y-auto overscroll-contain">
             {contacts.map((contact) => (
               <Link
                 key={contact.id}
