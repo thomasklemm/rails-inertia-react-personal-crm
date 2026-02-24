@@ -1,4 +1,4 @@
-# Plan 1: Follow-up Reminders
+# Plan 1: Follow-up Reminders ✅ Implemented (2026-02-24)
 
 Add a `follow_up_at` date to contacts so users can track who needs attention next.
 
