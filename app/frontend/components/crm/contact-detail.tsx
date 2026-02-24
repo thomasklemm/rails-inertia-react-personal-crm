@@ -55,6 +55,7 @@ import {
   contactPath,
   contactsPath,
   editContactPath,
+  newCompanyPath,
   starContactPath,
 } from "@/routes"
 import type { Company, Contact } from "@/types"
@@ -451,6 +452,16 @@ export function ContactDetail({
                   ))}
                 </SelectContent>
               </Select>
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-8 shrink-0"
+                asChild
+              >
+                <ModalLink navigate href={newCompanyPath()}>
+                  New Company
+                </ModalLink>
+              </Button>
               <Button
                 variant="ghost"
                 size="sm"
