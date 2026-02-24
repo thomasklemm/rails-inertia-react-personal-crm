@@ -88,6 +88,7 @@ export function ContactDetail({
   sort_dir,
 }: ContactDetailProps) {
   const [associating, setAssociating] = useState(false)
+  const [disassociateDialogOpen, setDisassociateDialogOpen] = useState(false)
   const [archiveDialogOpen, setArchiveDialogOpen] = useState(false)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [followUpOpen, setFollowUpOpen] = useState(false)
@@ -119,7 +120,7 @@ export function ContactDetail({
     router.patch(starContactPath(contact.id), {}, { preserveScroll: true })
   }
 
-  function handleDisassociate() {
+  function confirmDisassociate() {
     router.patch(
       contactPath(contact.id),
       { company_id: null },
@@ -384,7 +385,7 @@ export function ContactDetail({
         <dt className="text-muted-foreground text-xs font-medium">Company</dt>
         <dd className="mt-1.5">
           {contact.company ? (
-            <div className="space-y-2 rounded-lg border p-3">
+            <div className="group/company space-y-2 rounded-lg border p-3">
               <div className="flex items-center justify-between">
                 <a
                   href={companyPath(contact.company.id)}
@@ -396,8 +397,9 @@ export function ContactDetail({
                 <Button
                   variant="ghost"
                   size="icon-sm"
-                  onClick={handleDisassociate}
+                  onClick={() => setDisassociateDialogOpen(true)}
                   title="Remove company association"
+                  className="opacity-0 transition-opacity group-hover/company:opacity-100"
                 >
                   <X className="text-muted-foreground size-3.5" />
                 </Button>
@@ -540,6 +542,28 @@ export function ContactDetail({
           </p>
         )}
       </div>
+
+      {/* Disassociate company confirmation */}
+      <AlertDialog
+        open={disassociateDialogOpen}
+        onOpenChange={setDisassociateDialogOpen}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Remove Company Association?</AlertDialogTitle>
+            <AlertDialogDescription>
+              {contact.company?.name} will be unlinked from {contact.first_name}{" "}
+              {contact.last_name}. The company will not be deleted.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDisassociate}>
+              Remove
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       {/* Archive / Restore confirmation */}
       <AlertDialog open={archiveDialogOpen} onOpenChange={setArchiveDialogOpen}>
