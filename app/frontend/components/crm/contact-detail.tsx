@@ -5,13 +5,16 @@ import {
   ArchiveRestore,
   Building2,
   CalendarClock,
+  Check,
   Edit,
   Mail,
+  Pencil,
   Phone,
   Star,
   Trash2,
+  X,
 } from "lucide-react"
-import { useState } from "react"
+import { useRef, useState } from "react"
 
 import {
   AlertDialog,
@@ -25,6 +28,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
+import { Textarea } from "@/components/ui/textarea"
 import {
   Popover,
   PopoverContent,
@@ -69,6 +73,10 @@ export function ContactDetail({
   const [archiveDialogOpen, setArchiveDialogOpen] = useState(false)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [followUpOpen, setFollowUpOpen] = useState(false)
+  const [editingNotes, setEditingNotes] = useState(false)
+  const [notesValue, setNotesValue] = useState(contact.notes ?? "")
+  const [savingNotes, setSavingNotes] = useState(false)
+  const notesRef = useRef<HTMLTextAreaElement>(null)
 
   const today = new Date().toISOString().split("T")[0]
   const isFollowUpOverdue =
@@ -101,6 +109,38 @@ export function ContactDetail({
     router.delete(contactPath(contact.id), {
       onSuccess: () => router.visit(contactsPath(listParams)),
     })
+  }
+
+  function startEditNotes() {
+    setNotesValue(contact.notes ?? "")
+    setEditingNotes(true)
+    setTimeout(() => {
+      const el = notesRef.current
+      if (!el) return
+      el.focus()
+      el.setSelectionRange(el.value.length, el.value.length)
+    }, 0)
+  }
+
+  function cancelEditNotes() {
+    setEditingNotes(false)
+    setNotesValue(contact.notes ?? "")
+  }
+
+  function saveNotes() {
+    setSavingNotes(true)
+    router.patch(
+      contactPath(contact.id),
+      { notes: notesValue },
+      {
+        preserveScroll: true,
+        onSuccess: () => {
+          setEditingNotes(false)
+          setSavingNotes(false)
+        },
+        onError: () => setSavingNotes(false),
+      },
+    )
   }
 
   function handleFollowUpSelect(date: Date | undefined) {
@@ -281,17 +321,75 @@ export function ContactDetail({
         </div>
       </dl>
 
-      {contact.notes && (
-        <>
-          <Separator />
-          <div>
-            <h3 className="text-muted-foreground mb-1.5 text-xs font-medium">
-              Notes
-            </h3>
-            <p className="text-sm whitespace-pre-wrap">{contact.notes}</p>
+      <Separator />
+
+      {/* Notes */}
+      <div className="group/notes">
+        <div className="mb-1.5 flex items-center gap-1.5">
+          <h3 className="text-muted-foreground text-xs font-medium">Notes</h3>
+          {!editingNotes && (
+            <button
+              onClick={startEditNotes}
+              className="hover:bg-muted rounded p-0.5 opacity-0 transition-opacity group-hover/notes:opacity-100"
+              title="Edit notes"
+            >
+              <Pencil className="text-muted-foreground size-3" />
+            </button>
+          )}
+        </div>
+        {editingNotes ? (
+          <div className="space-y-2">
+            <Textarea
+              ref={notesRef}
+              value={notesValue}
+              onChange={(e) => setNotesValue(e.target.value)}
+              placeholder="Add notes…"
+              rows={5}
+              className="resize-none text-sm"
+              onKeyDown={(e) => {
+                if (e.key === "Escape") cancelEditNotes()
+                if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) saveNotes()
+              }}
+            />
+            <div className="flex gap-1.5">
+              <Button
+                size="sm"
+                className="h-7 gap-1 px-2.5 text-xs"
+                onClick={saveNotes}
+                disabled={savingNotes}
+              >
+                <Check className="size-3" />
+                Save
+              </Button>
+              <Button
+                size="sm"
+                variant="ghost"
+                className="h-7 gap-1 px-2.5 text-xs"
+                onClick={cancelEditNotes}
+                disabled={savingNotes}
+              >
+                <X className="size-3" />
+                Cancel
+              </Button>
+            </div>
           </div>
-        </>
-      )}
+        ) : contact.notes ? (
+          <p
+            className="cursor-text text-sm whitespace-pre-wrap"
+            onDoubleClick={startEditNotes}
+            title="Double-click to edit"
+          >
+            {contact.notes}
+          </p>
+        ) : (
+          <p
+            className="text-muted-foreground cursor-text text-sm"
+            onClick={startEditNotes}
+          >
+            Add notes…
+          </p>
+        )}
+      </div>
 
       {/* Archive / Restore confirmation */}
       <AlertDialog open={archiveDialogOpen} onOpenChange={setArchiveDialogOpen}>

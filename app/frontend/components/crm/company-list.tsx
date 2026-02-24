@@ -46,7 +46,7 @@ const SORTS = [
     iconDesc: ArrowDownAZ,
   },
   {
-    label: "Newest",
+    label: "Added",
     value: "added",
     defaultDir: "desc",
     iconAsc: ArrowUp,
@@ -142,7 +142,7 @@ export function CompanyList({
                   onClick={() => navigate({ filter: f.value })}
                   className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${
                     isActive
-                      ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                      ? "bg-sidebar-accent text-sidebar-accent-foreground font-semibold"
                       : "text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground"
                   }`}
                 >
