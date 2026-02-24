@@ -144,6 +144,7 @@ export function ContactList({
             <Tooltip key={f.label}>
               <TooltipTrigger asChild>
                 <button
+                  aria-label={f.label}
                   onClick={() => navigate({ filter: f.value })}
                   className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${
                     isActive
