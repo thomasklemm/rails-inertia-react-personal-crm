@@ -85,7 +85,7 @@ export function DashboardActivityFeed({
                     {group.items.length === 1 ? "activity" : "activities"}
                   </span>
                 </div>
-                <div className="px-4 pb-3 pt-3">
+                <div className="px-4 pt-3 pb-3">
                   {group.items.map((activity, i) => (
                     <ActivityItem
                       key={activity.id}

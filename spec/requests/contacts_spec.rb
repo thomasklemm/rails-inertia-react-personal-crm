@@ -39,13 +39,13 @@ RSpec.describe "Contacts", type: :request do
     let(:contact) { create(:contact, user:) }
 
     it "persists follow_up_at" do
-      patch contact_path(contact), params: { follow_up_at: "2026-03-15" }
+      patch contact_path(contact), params: {follow_up_at: "2026-03-15"}
       expect(contact.reload.follow_up_at).to eq(Date.new(2026, 3, 15))
     end
 
     it "clears follow_up_at when sent as empty string" do
       contact.update!(follow_up_at: Date.current + 7)
-      patch contact_path(contact), params: { follow_up_at: "" }
+      patch contact_path(contact), params: {follow_up_at: ""}
       expect(contact.reload.follow_up_at).to be_nil
     end
   end

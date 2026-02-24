@@ -58,17 +58,21 @@ export function ContactRow({
           {contact.archived && (
             <Archive className="text-muted-foreground size-3 shrink-0" />
           )}
-          {contact.follow_up_at && (() => {
-            const today = new Date().toISOString().split("T")[0]
-            const isOverdue = contact.follow_up_at <= today
-            return isOverdue ? (
-              <CalendarClock className="size-3 shrink-0 text-amber-500" />
-            ) : (
-              <span title={contact.follow_up_at ?? undefined} className="shrink-0">
-                <Calendar className="text-muted-foreground size-3" />
-              </span>
-            )
-          })()}
+          {contact.follow_up_at &&
+            (() => {
+              const today = new Date().toISOString().split("T")[0]
+              const isOverdue = contact.follow_up_at <= today
+              return isOverdue ? (
+                <CalendarClock className="size-3 shrink-0 text-amber-500" />
+              ) : (
+                <span
+                  title={contact.follow_up_at ?? undefined}
+                  className="shrink-0"
+                >
+                  <Calendar className="text-muted-foreground size-3" />
+                </span>
+              )
+            })()}
         </div>
         {(contact.company != null || contact.tags.length > 0) && (
           <div className="mt-0.5 flex items-center gap-2 overflow-hidden">

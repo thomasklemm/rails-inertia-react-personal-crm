@@ -28,7 +28,7 @@ RSpec.describe "Contacts", type: :system do
       contact.update!(starred: true)
       create(:contact, first_name: "Bob", last_name: "Plain", starred: false, user: user)
       visit contacts_path
-      click_button "Starred"
+      find("button[aria-label='Starred']").click
       expect(page).to have_text("Zara Ahmed")
       expect(page).not_to have_text("Bob Plain")
     end
@@ -141,7 +141,7 @@ RSpec.describe "Contacts", type: :system do
       # Archive redirects back to the contact page — navigate to the list to verify
       visit contacts_path
       expect(page).not_to have_text("Zara Ahmed")
-      click_button "Archived"
+      find("button[aria-label='Archived']").click
       expect(page).to have_text("Zara Ahmed")
     end
   end

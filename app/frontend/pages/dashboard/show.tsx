@@ -63,7 +63,10 @@ function followUpMeta(dateString: string): { label: string; classes: string } {
       classes: "bg-muted text-muted-foreground",
     }
   return {
-    label: date.toLocaleDateString(undefined, { month: "short", day: "numeric" }),
+    label: date.toLocaleDateString(undefined, {
+      month: "short",
+      day: "numeric",
+    }),
     classes: "bg-muted text-muted-foreground",
   }
 }

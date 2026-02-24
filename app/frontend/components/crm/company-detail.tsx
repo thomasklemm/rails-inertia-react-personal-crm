@@ -138,7 +138,9 @@ export function CompanyDetail({
                   />
                 </button>
               </TooltipTrigger>
-              <TooltipContent>{company.starred ? "Unstar" : "Star"}</TooltipContent>
+              <TooltipContent>
+                {company.starred ? "Unstar" : "Star"}
+              </TooltipContent>
             </Tooltip>
           </div>
           <div className="mt-2 flex flex-wrap gap-1">

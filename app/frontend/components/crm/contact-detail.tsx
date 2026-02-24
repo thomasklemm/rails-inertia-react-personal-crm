@@ -180,7 +180,9 @@ export function ContactDetail({
                   />
                 </button>
               </TooltipTrigger>
-              <TooltipContent>{contact.starred ? "Unstar" : "Star"}</TooltipContent>
+              <TooltipContent>
+                {contact.starred ? "Unstar" : "Star"}
+              </TooltipContent>
             </Tooltip>
             {contact.archived && (
               <span className="bg-muted text-muted-foreground shrink-0 rounded px-1.5 py-0.5 text-xs">

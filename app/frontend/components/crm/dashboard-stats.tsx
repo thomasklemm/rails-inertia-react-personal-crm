@@ -38,16 +38,16 @@ export function DashboardStatsRow({ stats }: DashboardStatsRowProps) {
           <Link
             key={card.key}
             href={card.href}
-            className="group relative overflow-hidden rounded-xl border bg-card px-5 py-4 transition-shadow hover:shadow-md"
+            className="group bg-card relative overflow-hidden rounded-xl border px-5 py-4 transition-shadow hover:shadow-md"
           >
-            <div className="absolute inset-y-0 left-0 w-1 rounded-l-xl bg-primary/70 transition-all group-hover:bg-primary" />
+            <div className="bg-primary/70 group-hover:bg-primary absolute inset-y-0 left-0 w-1 rounded-l-xl transition-all" />
             <div className="flex items-start justify-between">
               <p className="text-muted-foreground text-xs font-semibold tracking-widest uppercase">
                 {card.label}
               </p>
-              <Icon className="text-muted-foreground/40 size-4 group-hover:text-muted-foreground/70 transition-colors" />
+              <Icon className="text-muted-foreground/40 group-hover:text-muted-foreground/70 size-4 transition-colors" />
             </div>
-            <p className="mt-2 font-mono text-4xl font-black tabular-nums leading-none tracking-tight">
+            <p className="mt-2 font-mono text-4xl leading-none font-black tracking-tight tabular-nums">
               {stats[card.key]}
             </p>
           </Link>
