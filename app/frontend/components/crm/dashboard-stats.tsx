@@ -1,7 +1,6 @@
 import { Link } from "@inertiajs/react"
 import { Activity, Building2, Users } from "lucide-react"
 
-import { Card, CardContent } from "@/components/ui/card"
 import { activitiesPath, companiesPath, contactsPath } from "@/routes"
 import type { DashboardStats } from "@/types"
 
@@ -36,18 +35,21 @@ export function DashboardStatsRow({ stats }: DashboardStatsRowProps) {
       {STAT_CARDS.map((card) => {
         const Icon = card.icon
         return (
-          <Link key={card.key} href={card.href} className="group">
-            <Card className="transition-shadow group-hover:shadow-md">
-              <CardContent className="flex items-center gap-4">
-                <div className="bg-primary/10 text-primary flex size-10 shrink-0 items-center justify-center rounded-lg">
-                  <Icon className="size-5" />
-                </div>
-                <div>
-                  <p className="text-2xl font-bold">{stats[card.key]}</p>
-                  <p className="text-muted-foreground text-sm">{card.label}</p>
-                </div>
-              </CardContent>
-            </Card>
+          <Link
+            key={card.key}
+            href={card.href}
+            className="group relative overflow-hidden rounded-xl border bg-card px-5 py-4 transition-shadow hover:shadow-md"
+          >
+            <div className="absolute inset-y-0 left-0 w-1 rounded-l-xl bg-primary/70 transition-all group-hover:bg-primary" />
+            <div className="flex items-start justify-between">
+              <p className="text-muted-foreground text-xs font-semibold tracking-widest uppercase">
+                {card.label}
+              </p>
+              <Icon className="text-muted-foreground/40 size-4 group-hover:text-muted-foreground/70 transition-colors" />
+            </div>
+            <p className="mt-2 font-mono text-4xl font-black tabular-nums leading-none tracking-tight">
+              {stats[card.key]}
+            </p>
           </Link>
         )
       })}

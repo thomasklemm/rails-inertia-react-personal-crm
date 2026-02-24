@@ -52,8 +52,8 @@ export function DashboardActivityFeed({
   const groups = groupByDate(activities)
 
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+    <Card className="gap-0 overflow-hidden py-0">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 px-4 py-3">
         <CardTitle className="text-base font-semibold">
           Recent Activity
         </CardTitle>
@@ -66,6 +66,7 @@ export function DashboardActivityFeed({
         </Link>
       </CardHeader>
 
+      <div className="border-b" />
       <CardContent className="p-0">
         {groups.length === 0 ? (
           <p className="text-muted-foreground px-6 py-8 text-center text-sm">

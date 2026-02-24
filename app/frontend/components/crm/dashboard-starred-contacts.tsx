@@ -14,8 +14,8 @@ export function DashboardStarredContacts({
   contacts,
 }: DashboardStarredContactsProps) {
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+    <Card className="gap-0 overflow-hidden py-0">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 px-4 py-3">
         <CardTitle className="text-base font-semibold">
           Starred Contacts
         </CardTitle>
@@ -28,6 +28,7 @@ export function DashboardStarredContacts({
         </Link>
       </CardHeader>
 
+      <div className="border-b" />
       <CardContent className="p-0">
         {contacts.length === 0 ? (
           <div className="text-muted-foreground flex flex-col items-center gap-2 px-6 py-8 text-center text-sm">
@@ -46,7 +47,7 @@ export function DashboardStarredContacts({
               <Link
                 key={contact.id}
                 href={contactPath(contact.id)}
-                className="hover:bg-muted/40 flex items-center gap-3 px-4 py-3 transition-colors first:rounded-t-lg last:rounded-b-lg"
+                className="hover:bg-muted/40 flex items-center gap-3 px-4 py-3 transition-colors"
               >
                 <ContactAvatar contact={contact} size="sm" />
                 <div className="min-w-0 flex-1">
