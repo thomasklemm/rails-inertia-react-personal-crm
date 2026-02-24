@@ -33,7 +33,8 @@ class CompaniesController < InertiaController
   def create
     @company = Current.user.companies.new(company_params)
     if @company.save
-      destination = safe_return_to(params[:return_to]) || company_path(@company)
+      base = safe_return_to(params[:return_to])
+      destination = base ? "#{base}?new_company_id=#{@company.id}" : company_path(@company)
       redirect_to destination, notice: "Company created."
     else
       redirect_to new_company_path(return_to: params[:return_to]), inertia: {errors: @company.errors.as_json}

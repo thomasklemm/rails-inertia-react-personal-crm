@@ -67,6 +67,7 @@ import { TagBadge } from "./tag-badge"
 interface ContactDetailProps {
   contact: Contact
   companies: Company[]
+  newCompanyId?: string
   q?: string
   filter?: string
   sort?: string
@@ -83,12 +84,14 @@ function dateToIso(date: Date): string {
 export function ContactDetail({
   contact,
   companies,
+  newCompanyId,
   q,
   filter,
   sort,
   sort_dir,
 }: ContactDetailProps) {
-  const [associating, setAssociating] = useState(false)
+  const [associating, setAssociating] = useState(!!newCompanyId)
+  const [selectedCompanyId, setSelectedCompanyId] = useState(newCompanyId ?? "")
   const [disassociateDialogOpen, setDisassociateDialogOpen] = useState(false)
   const [archiveDialogOpen, setArchiveDialogOpen] = useState(false)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
@@ -129,15 +132,24 @@ export function ContactDetail({
     )
   }
 
-  function handleAssociate(companyId: string) {
+  function handleAssociate() {
+    if (!selectedCompanyId) return
     router.patch(
       contactPath(contact.id),
-      { company_id: companyId },
+      { company_id: selectedCompanyId },
       {
         preserveScroll: true,
-        onSuccess: () => setAssociating(false),
+        onSuccess: () => {
+          setAssociating(false)
+          setSelectedCompanyId("")
+        },
       },
     )
+  }
+
+  function cancelAssociating() {
+    setAssociating(false)
+    setSelectedCompanyId("")
   }
 
   function confirmArchive() {
@@ -439,39 +451,57 @@ export function ContactDetail({
               )}
             </div>
           ) : associating ? (
-            <div className="flex items-center gap-2">
-              <Select onValueChange={handleAssociate}>
-                <SelectTrigger className="h-8 flex-1 text-sm">
-                  <SelectValue placeholder="Pick a company…" />
-                </SelectTrigger>
-                <SelectContent>
-                  {companies.map((c) => (
-                    <SelectItem key={c.id} value={String(c.id)}>
-                      {c.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <Button
-                variant="outline"
-                size="sm"
-                className="h-8 shrink-0"
-                asChild
-              >
-                <ModalLink
-                  navigate
-                  href={newCompanyPath({ return_to: contactPath(contact.id) })}
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <Select
+                  value={selectedCompanyId}
+                  onValueChange={setSelectedCompanyId}
                 >
-                  New Company
-                </ModalLink>
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setAssociating(false)}
-              >
-                Cancel
-              </Button>
+                  <SelectTrigger className="h-8 flex-1 text-sm">
+                    <SelectValue placeholder="Pick a company…" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {companies.map((c) => (
+                      <SelectItem key={c.id} value={String(c.id)}>
+                        {c.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-8 shrink-0"
+                  asChild
+                >
+                  <ModalLink
+                    navigate
+                    href={newCompanyPath({
+                      return_to: contactPath(contact.id),
+                    })}
+                  >
+                    New Company
+                  </ModalLink>
+                </Button>
+              </div>
+              <div className="flex items-center gap-2">
+                <Button
+                  size="sm"
+                  className="h-8"
+                  onClick={handleAssociate}
+                  disabled={!selectedCompanyId}
+                >
+                  Save
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-8"
+                  onClick={cancelAssociating}
+                >
+                  Cancel
+                </Button>
+              </div>
             </div>
           ) : (
             <Button
