@@ -204,7 +204,7 @@ function DroppableColumn({
     <div
       ref={setNodeRef}
       data-testid={`column-${stage}`}
-      className="w-full min-w-[220px] max-w-[280px] shrink-0"
+      className="min-w-[220px] flex-1"
     >
       <ColumnContent stage={stage} deals={deals} isDragOver={isDragOver} />
     </div>
