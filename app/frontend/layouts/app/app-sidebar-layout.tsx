@@ -4,6 +4,7 @@ import { AppContent } from "@/components/app-content"
 import { AppShell } from "@/components/app-shell"
 import { AppSidebar } from "@/components/app-sidebar"
 import { AppSidebarHeader } from "@/components/app-sidebar-header"
+import { CommandPalette } from "@/components/command-palette"
 import { Toaster } from "@/components/ui/sonner"
 import { useFlash } from "@/hooks/use-flash"
 import type { BreadcrumbItem } from "@/types"
@@ -24,6 +25,7 @@ export default function AppSidebarLayout({
         {children}
       </AppContent>
       <Toaster richColors />
+      <CommandPalette />
     </AppShell>
   )
 }

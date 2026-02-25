@@ -187,6 +187,13 @@
   }
 }
 
+/* Command palette input: suppress @tailwindcss/forms focus ring */
+[data-slot="command-input"]:focus {
+  outline: none;
+  box-shadow: none;
+  border-color: transparent;
+}
+
 @layer utilities {
   .scrollbar-subtle {
     scrollbar-width: thin;

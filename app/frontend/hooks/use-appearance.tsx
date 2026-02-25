@@ -54,13 +54,24 @@ export function useAppearance() {
       localStorage.setItem("appearance", mode)
     }
     applyTheme(mode)
+    document.dispatchEvent(
+      new CustomEvent("appearance-changed", { detail: mode }),
+    )
   }, [])
 
   useEffect(() => {
     applyTheme(appearance)
 
-    return () =>
+    function onAppearanceChanged(e: Event) {
+      setAppearance((e as CustomEvent<Appearance>).detail)
+    }
+
+    document.addEventListener("appearance-changed", onAppearanceChanged)
+
+    return () => {
       mediaQuery()?.removeEventListener("change", handleSystemThemeChange)
+      document.removeEventListener("appearance-changed", onAppearanceChanged)
+    }
   }, [appearance])
 
   return { appearance, updateAppearance } as const

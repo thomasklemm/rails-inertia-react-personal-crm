@@ -3,9 +3,12 @@ import {
   ActivitySquare,
   Building2,
   LayoutDashboard,
+  Search,
   TrendingUp,
   Users,
 } from "lucide-react"
+
+import { openCommandPalette } from "@/components/command-palette"
 
 import { NavMain } from "@/components/nav-main"
 import { NavTheme } from "@/components/nav-theme"
@@ -72,6 +75,18 @@ export function AppSidebar() {
               <Link href={dashboardPath()} prefetch>
                 <AppLogo />
               </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              onClick={openCommandPalette}
+              className="text-muted-foreground"
+            >
+              <Search />
+              <span>Search</span>
+              <kbd className="ml-auto text-xs opacity-60 group-data-[collapsible=icon]:hidden">
+                ⌘K
+              </kbd>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
