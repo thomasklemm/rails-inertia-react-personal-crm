@@ -50,7 +50,6 @@ export interface DealFormData {
   title: string
   stage: DealStage
   value: string // dollars as string for the input
-  closed_at: string
   notes: string
   contact_id: string
   company_id: string
@@ -85,9 +84,6 @@ export function DealForm({
   submitLabel,
 }: DealFormProps) {
   const { data, setData, errors, processing } = form
-
-  const showClosedAt =
-    data.stage === "closed_won" || data.stage === "closed_lost"
 
   return (
     <div className="space-y-5">
@@ -188,20 +184,6 @@ export function DealForm({
           </Select>
         </div>
       </div>
-
-      {/* Closed Date — only show when stage is closed */}
-      {showClosedAt && (
-        <div className="space-y-1.5">
-          <Label htmlFor="closed_at">Closed Date</Label>
-          <Input
-            id="closed_at"
-            name="closed_at"
-            type="date"
-            value={data.closed_at}
-            onChange={(e) => setData("closed_at", e.target.value)}
-          />
-        </div>
-      )}
 
       {/* Notes */}
       <div className="space-y-1.5">

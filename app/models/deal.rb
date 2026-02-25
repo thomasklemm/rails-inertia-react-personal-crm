@@ -16,6 +16,8 @@ class Deal < ApplicationRecord
   validates :stage, presence: true, inclusion: { in: STAGES }
   validates :value_cents, numericality: { greater_than_or_equal_to: 0 }
 
+  before_save :manage_closed_at
+
   scope :open_deals, -> { where(stage: OPEN_STAGES) }
   scope :won,        -> { where(stage: "closed_won") }
   scope :lost,       -> { where(stage: "closed_lost") }
@@ -33,6 +35,18 @@ class Deal < ApplicationRecord
     idx = STAGES.index(stage)
     STAGES[idx + 1] if idx && idx < STAGES.length - 1
   end
+
+  private
+
+  def manage_closed_at
+    if open?
+      self.closed_at = nil
+    elsif closed_at.nil?
+      self.closed_at = Time.current
+    end
+  end
+
+  public
 
   def as_deal_json
     as_json(except: %w[user_id]).merge(

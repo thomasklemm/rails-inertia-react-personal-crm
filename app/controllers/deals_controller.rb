@@ -3,6 +3,10 @@
 class DealsController < InertiaController
   before_action :set_deal, only: [:show, :edit, :update, :destroy, :advance, :move]
 
+  rescue_from ActiveRecord::RecordNotFound do
+    redirect_to deals_path, notice: "Deal not found."
+  end
+
   def index
     deals_by_stage = Deal::STAGES.index_with do |stage|
       Current.user.deals.where(stage: stage)
@@ -97,7 +101,7 @@ class DealsController < InertiaController
   end
 
   def deal_params
-    p = params.permit(:title, :stage, :value, :closed_at, :notes, :contact_id, :company_id)
+    p = params.permit(:title, :stage, :value, :notes, :contact_id, :company_id)
     p[:value_cents] = (p.delete(:value).to_f * 100).round if p.key?(:value)
     p
   end

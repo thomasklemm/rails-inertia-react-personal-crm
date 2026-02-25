@@ -68,10 +68,10 @@ RSpec.describe "Deals", type: :request do
       expect(inertia.props[:activities].length).to eq(1)
     end
 
-    it "returns 404 for another user's deal" do
+    it "redirects to deals index for another user's deal" do
       other_deal = create(:deal, user: create(:user))
       get deal_path(other_deal)
-      expect(response.status).to eq(404)
+      expect(response).to redirect_to(deals_path)
     end
   end
 

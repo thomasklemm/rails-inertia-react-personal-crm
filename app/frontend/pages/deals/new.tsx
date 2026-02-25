@@ -23,7 +23,6 @@ export default function DealsNew({
     title: "",
     stage: "lead",
     value: "",
-    closed_at: "",
     notes: "",
     contact_id: contact_id ? String(contact_id) : "",
     company_id: company_id ? String(company_id) : "",

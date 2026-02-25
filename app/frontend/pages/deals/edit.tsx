@@ -22,7 +22,6 @@ export default function DealsEdit({
     title: deal.title,
     stage: deal.stage,
     value: deal.value > 0 ? String(deal.value) : "",
-    closed_at: deal.closed_at ?? "",
     notes: deal.notes ?? "",
     contact_id: deal.contact ? String(deal.contact.id) : "",
     company_id: deal.company ? String(deal.company.id) : "",
