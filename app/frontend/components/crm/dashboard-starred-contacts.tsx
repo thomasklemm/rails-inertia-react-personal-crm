@@ -42,12 +42,12 @@ export function DashboardStarredContacts({
             </Link>
           </div>
         ) : (
-          <div className="scrollbar-subtle max-h-72 divide-y overflow-y-auto overscroll-contain">
+          <div className="scrollbar-card max-h-72 divide-y overflow-y-scroll overscroll-contain">
             {contacts.map((contact) => (
               <Link
                 key={contact.id}
                 href={contactPath(contact.id)}
-                className="hover:bg-muted/40 flex items-center gap-3 px-4 py-3 transition-colors"
+                className="hover:bg-muted/40 flex items-center gap-3 px-4 py-2 transition-colors"
               >
                 <ContactAvatar contact={contact} size="sm" />
                 <div className="min-w-0 flex-1">

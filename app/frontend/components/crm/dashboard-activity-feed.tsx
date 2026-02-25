@@ -73,7 +73,7 @@ export function DashboardActivityFeed({
             No activities yet.
           </p>
         ) : (
-          <div className="scrollbar-subtle max-h-[480px] divide-y overflow-y-auto overscroll-contain">
+          <div className="scrollbar-card max-h-[480px] divide-y overflow-y-scroll overscroll-contain">
             {groups.map((group) => (
               <div key={group.key}>
                 <div className="bg-muted/40 flex items-baseline justify-between px-4 py-2">

@@ -65,7 +65,7 @@ export function DashboardDealsWidget({
             No open deals.
           </p>
         ) : (
-          <div className="scrollbar-subtle max-h-72 divide-y overflow-y-auto overscroll-contain">
+          <div className="scrollbar-card max-h-72 divide-y overflow-y-scroll overscroll-contain">
             {visibleDeals.map((deal) => {
               const valueStr = formatDealValue(deal.value_cents)
               const badgeClass = STAGE_BADGE[deal.stage]

@@ -110,7 +110,7 @@ export default function DashboardShow() {
                 </CardHeader>
                 <div className="border-b" />
                 <CardContent className="p-0">
-                  <div className="scrollbar-subtle max-h-72 divide-y overflow-y-auto overscroll-contain">
+                  <div className="scrollbar-card max-h-72 divide-y overflow-y-scroll overscroll-contain">
                     {due_follow_ups.map((followUp) => {
                       const { label, classes } = followUpMeta(
                         followUp.follow_up_at,
@@ -119,7 +119,7 @@ export default function DashboardShow() {
                         <Link
                           key={followUp.id}
                           href={contactPath(followUp.id)}
-                          className="hover:bg-muted/40 flex items-center gap-3 px-4 py-3 transition-colors"
+                          className="hover:bg-muted/40 flex items-center gap-3 px-4 py-2 transition-colors"
                         >
                           <ContactAvatar contact={followUp} size="sm" />
                           <div className="min-w-0 flex-1">
