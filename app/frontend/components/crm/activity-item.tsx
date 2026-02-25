@@ -13,6 +13,10 @@ import {
 } from "lucide-react"
 import { useRef, useState } from "react"
 
+import { timeAgo, toDateString, todayDateString } from "@/lib/dates"
+
+import { ActivityDatePicker } from "@/components/crm/activity-date-picker"
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -47,18 +51,6 @@ const KINDS: { value: ActivityKind; label: string; icon: React.ElementType }[] =
     { value: "email", label: "Email", icon: Mail },
   ]
 
-export function timeAgo(dateString: string) {
-  const ms = Date.now() - new Date(dateString).getTime()
-  const mins = Math.floor(ms / 60_000)
-  const hours = Math.floor(mins / 60)
-  const days = Math.floor(hours / 24)
-  if (mins < 1) return "just now"
-  if (mins < 60) return `${mins}m ago`
-  if (hours < 24) return `${hours}h ago`
-  if (days === 1) return "1 day ago"
-  return `${days} days ago`
-}
-
 interface ActivityItemProps {
   activity: Activity
   showSubject?: boolean
@@ -76,11 +68,21 @@ export function ActivityItem({
   const [editKind, setEditKind] = useState<ActivityKind>(activity.kind)
   const [editBody, setEditBody] = useState(activity.body)
   const [saving, setSaving] = useState(false)
+  const [editOccurredAt, setEditOccurredAt] = useState(
+    activity.occurred_at
+      ? toDateString(new Date(activity.occurred_at))
+      : todayDateString(),
+  )
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   function startEdit() {
     setEditKind(activity.kind)
     setEditBody(activity.body)
+    setEditOccurredAt(
+      activity.occurred_at
+        ? toDateString(new Date(activity.occurred_at))
+        : todayDateString(),
+    )
     setEditing(true)
     setTimeout(() => {
       textareaRef.current?.focus()
@@ -92,6 +94,11 @@ export function ActivityItem({
     setEditing(false)
     setEditKind(activity.kind)
     setEditBody(activity.body)
+    setEditOccurredAt(
+      activity.occurred_at
+        ? toDateString(new Date(activity.occurred_at))
+        : todayDateString(),
+    )
   }
 
   function saveEdit() {
@@ -99,7 +106,7 @@ export function ActivityItem({
     setSaving(true)
     router.patch(
       activityPath(activity.id),
-      { kind: editKind, body: editBody },
+      { kind: editKind, body: editBody, occurred_at: editOccurredAt },
       {
         preserveScroll: true,
         onSuccess: () => {
@@ -155,6 +162,11 @@ export function ActivityItem({
                   </button>
                 ))}
               </div>
+              {/* Date picker */}
+              <ActivityDatePicker
+                value={editOccurredAt}
+                onChange={setEditOccurredAt}
+              />
               {/* Body textarea */}
               <Textarea
                 ref={textareaRef}
@@ -199,7 +211,7 @@ export function ActivityItem({
                     {activity.kind}
                   </span>
                   <span className="text-muted-foreground text-xs">
-                    {timeAgo(activity.created_at)}
+                    {timeAgo(activity.occurred_at)}
                   </span>
                   {showSubject && (
                     <a
@@ -297,6 +309,7 @@ export function ActivityNewItem({
     subject_id: subjectId,
     kind: "note" as ActivityKind,
     body: "",
+    occurred_at: todayDateString(),
   })
 
   const KindIcon = KIND_ICONS[data.kind]
@@ -344,6 +357,12 @@ export function ActivityNewItem({
               </button>
             ))}
           </div>
+
+          {/* Date picker */}
+          <ActivityDatePicker
+            value={data.occurred_at}
+            onChange={(d) => setData("occurred_at", d)}
+          />
 
           {/* Textarea */}
           <Textarea

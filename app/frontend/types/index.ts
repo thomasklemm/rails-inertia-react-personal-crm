@@ -114,6 +114,7 @@ export interface Activity {
   kind: ActivityKind
   body: string
   subject: ActivitySubject
+  occurred_at: string
   created_at: string
   updated_at: string
 }

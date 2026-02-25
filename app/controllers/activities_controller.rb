@@ -5,7 +5,7 @@ class ActivitiesController < InertiaController
   before_action :authorize_subject, only: [:create]
 
   def index
-    scope = Current.user.activities.includes(:subject).order(created_at: :desc)
+    scope = Current.user.activities.includes(:subject).order(occurred_at: :desc)
 
     if params[:q].present?
       scope = scope
@@ -106,10 +106,10 @@ class ActivitiesController < InertiaController
   end
 
   def activity_params
-    params.permit(:kind, :body, :subject_type, :subject_id)
+    params.permit(:kind, :body, :subject_type, :subject_id, :occurred_at)
   end
 
   def activity_update_params
-    params.permit(:kind, :body)
+    params.permit(:kind, :body, :occurred_at)
   end
 end

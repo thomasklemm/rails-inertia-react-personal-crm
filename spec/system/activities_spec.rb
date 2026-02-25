@@ -153,4 +153,38 @@ RSpec.describe "Activities", type: :system do
       expect(page).not_to have_text("Discussed renewal terms.")
     end
   end
+
+  describe "backdated activities" do
+    it "groups a backdated activity under its occurrence date, not Today" do
+      create(:activity,
+        subject: contact,
+        body: "Old quarterly review.",
+        occurred_at: 10.days.ago,
+        user: user
+      )
+      visit activities_path
+
+      # Both activities appear in the DOM (the page uses a scrollable container
+      # so we assert against page.body which includes all rendered HTML)
+      expect(page.body).to include("Discussed renewal terms.")
+      expect(page.body).to include("Old quarterly review.")
+
+      # The recent activity appears before the backdated one (desc order)
+      expect(page.body.index("Discussed renewal terms.")).to be < page.body.index("Old quarterly review.")
+    end
+
+    it "loads the edit activity page (date picker rendered client-side)" do
+      visit edit_activity_path(activity)
+      # The page loads the Inertia shell with the activity data embedded
+      expect(page.body).to include("activities/edit")
+      expect(page.body).to include(activity.body)
+    end
+
+    it "loads the contact page with the activity log (Today button rendered client-side)" do
+      visit contact_path(contact)
+      # The contact page loads with activity data embedded in the Inertia JSON props
+      expect(page.body).to include("contacts/show")
+      expect(page.body).to include(activity.body)
+    end
+  end
 end

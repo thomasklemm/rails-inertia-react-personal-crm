@@ -155,6 +155,17 @@ RSpec.describe "Activities", type: :request do
         post activities_path, params: {subject_type: "Company", subject_id: other_company.id, kind: "note", body: "Unauthorized."}
       }.not_to change(Activity, :count)
     end
+
+    it "saves a custom occurred_at when provided" do
+      past = 3.days.ago.change(usec: 0)
+      post activities_path, params: {
+        subject_type: "Contact", subject_id: contact.id,
+        kind: "note", body: "Backdated note.",
+        occurred_at: past.iso8601
+      }
+      activity = Activity.last
+      expect(activity.occurred_at).to be_within(1.second).of(past)
+    end
   end
 
   describe "PATCH /activities/:id" do
@@ -164,6 +175,12 @@ RSpec.describe "Activities", type: :request do
       patch activity_path(activity), params: {kind: "email", body: "Updated body.", subject_type: "Contact", subject_id: contact.id}
       expect(activity.reload.body).to eq("Updated body.")
       expect(activity.reload.kind).to eq("email")
+    end
+
+    it "updates occurred_at when provided" do
+      new_time = 5.days.ago.change(usec: 0)
+      patch activity_path(activity), params: {kind: "note", body: "Updated.", occurred_at: new_time.iso8601}
+      expect(activity.reload.occurred_at).to be_within(1.second).of(new_time)
     end
   end
 

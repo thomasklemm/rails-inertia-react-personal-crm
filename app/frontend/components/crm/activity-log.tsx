@@ -1,5 +1,7 @@
 import { Mail, MessageSquare, PenLine, Phone } from "lucide-react"
-import { Fragment, useMemo, useState } from "react"
+import { Fragment, useState } from "react"
+
+import { todayDateString, yesterdayDateString } from "@/lib/dates"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -24,23 +26,21 @@ const FILTERS: {
 
 function groupByDate(activities: Activity[]) {
   const groups: { label: string; key: string; items: Activity[] }[] = []
-  const now = new Date()
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
-  const yesterday = new Date(today)
-  yesterday.setDate(yesterday.getDate() - 1)
+  const todayKey = todayDateString()
+  const yesterdayKey = yesterdayDateString()
 
   for (const activity of activities) {
-    const d = new Date(activity.created_at)
-    const day = new Date(d.getFullYear(), d.getMonth(), d.getDate())
-    const key = day.toISOString()
+    const key = activity.occurred_at.slice(0, 10) // "YYYY-MM-DD"
 
     let label: string
-    if (day.getTime() === today.getTime()) {
+    if (key === todayKey) {
       label = "Today"
-    } else if (day.getTime() === yesterday.getTime()) {
+    } else if (key === yesterdayKey) {
       label = "Yesterday"
     } else {
-      label = day.toLocaleDateString(undefined, {
+      const [yr, mo, dy] = key.split("-").map(Number)
+      const d = new Date(yr, mo - 1, dy) // local midnight — for formatting only
+      label = d.toLocaleDateString("en", {
         weekday: "long",
         month: "long",
         day: "numeric",
@@ -87,14 +87,7 @@ export function ActivityLog({
     : activities
   const groups = groupByDate(filtered)
 
-  const todayKey = useMemo(() => {
-    const now = new Date()
-    return new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate(),
-    ).toISOString()
-  }, [])
+  const todayKey = todayDateString()
   const hasTodayGroup = groups.length > 0 && groups[0].key === todayKey
 
   return (

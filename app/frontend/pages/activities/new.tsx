@@ -3,8 +3,10 @@ import { Modal } from "@inertiaui/modal-react"
 import { Mail, MessageSquare, Phone } from "lucide-react"
 import { useRef } from "react"
 
+import { ActivityDatePicker } from "@/components/crm/activity-date-picker"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
+import { todayDateString } from "@/lib/dates"
 import { activitiesPath } from "@/routes"
 import type { ActivityKind } from "@/types"
 
@@ -26,6 +28,7 @@ export default function ActivitiesNew({ subject_type, subject_id }: Props) {
   const { data, setData, post, processing, errors } = useForm({
     kind: "note" as ActivityKind,
     body: "",
+    occurred_at: todayDateString(),
     ...(subject_type ? { subject_type } : {}),
     ...(subject_id ? { subject_id } : {}),
   })
@@ -77,6 +80,12 @@ export default function ActivitiesNew({ subject_type, subject_id }: Props) {
                     </button>
                   ))}
                 </div>
+
+                {/* Date picker */}
+                <ActivityDatePicker
+                  value={data.occurred_at}
+                  onChange={(d) => setData("occurred_at", d)}
+                />
 
                 {/* Body */}
                 <div>
