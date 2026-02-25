@@ -4,6 +4,7 @@ import {
   Building2,
   Github,
   LayoutDashboard,
+  TrendingUp,
   Users,
 } from "lucide-react"
 
@@ -24,6 +25,7 @@ import {
   companiesPath,
   contactsPath,
   dashboardPath,
+  dealsPath,
 } from "@/routes"
 import type { NavItem } from "@/types"
 
@@ -44,6 +46,11 @@ const mainNavItems: NavItem[] = [
     title: "Companies",
     href: companiesPath(),
     icon: Building2,
+  },
+  {
+    title: "Deals",
+    href: dealsPath(),
+    icon: TrendingUp,
   },
   {
     title: "Activity Log",

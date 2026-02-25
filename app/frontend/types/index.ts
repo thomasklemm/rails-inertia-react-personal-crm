@@ -105,7 +105,7 @@ export interface Contact {
 
 export interface ActivitySubject {
   id: number
-  type: "Contact" | "Company"
+  type: "Contact" | "Company" | "Deal"
   name: string
 }
 
@@ -122,4 +122,22 @@ export interface DashboardStats {
   contacts_count: number
   companies_count: number
   activities_this_week: number
+  deals_count: number
+  pipeline_value: number
+}
+
+export type DealStage = "lead" | "qualified" | "proposal" | "closed_won" | "closed_lost"
+
+export interface Deal {
+  id: number
+  title: string
+  stage: DealStage
+  value: number         // dollars (float, converted from value_cents server-side)
+  value_cents: number
+  closed_at: string | null
+  notes: string | null
+  contact: { id: number; first_name: string; last_name: string } | null
+  company: { id: number; name: string } | null
+  created_at: string
+  updated_at: string
 }

@@ -29,6 +29,13 @@ Rails.application.routes.draw do
 
   resources :activities
 
+  resources :deals do
+    member do
+      patch :advance
+      patch :move
+    end
+  end
+
   get "dashboard", to: "dashboard#show", as: :dashboard
 
   namespace :settings do
