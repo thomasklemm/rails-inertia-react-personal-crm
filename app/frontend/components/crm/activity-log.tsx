@@ -1,4 +1,4 @@
-import { Mail, MessageSquare, Phone, Plus } from "lucide-react"
+import { Mail, MessageSquare, PenLine, Phone } from "lucide-react"
 import { useMemo, useState } from "react"
 
 import { Button } from "@/components/ui/button"
@@ -104,8 +104,8 @@ export function ActivityLog({
               className="h-7 gap-1 px-2 text-xs font-medium"
               onClick={() => setIsLogging(true)}
             >
-              <Plus className="size-3" />
-              Log Activity
+              <PenLine className="size-3" />
+              Log
             </Button>
           )}
           <div className="bg-muted ml-auto inline-flex rounded-lg border p-0.5">
