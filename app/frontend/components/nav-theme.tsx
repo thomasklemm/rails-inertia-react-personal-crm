@@ -28,7 +28,7 @@ const repoUrl =
 
 export function NavTheme() {
   const { appearance, updateAppearance } = useAppearance()
-  const { state } = useSidebar()
+  const { state, isMobile } = useSidebar()
   const [tooltipOpen, setTooltipOpen] = useState(false)
 
   const { Icon } = appearanceConfig[appearance]
@@ -38,7 +38,7 @@ export function NavTheme() {
     updateAppearance(modes[(idx + 1) % modes.length])
   }
 
-  if (state === "collapsed") {
+  if (state === "collapsed" && !isMobile) {
     return (
       <>
         <SidebarMenuItem>

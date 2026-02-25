@@ -5,11 +5,13 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar"
 import type { NavItem } from "@/types"
 
 export function NavMain({ items = [] }: { items: NavItem[] }) {
   const page = usePage()
+  const { isMobile, setOpenMobile } = useSidebar()
   return (
     <SidebarGroup className="px-2 py-0">
       <SidebarMenu>
@@ -20,7 +22,11 @@ export function NavMain({ items = [] }: { items: NavItem[] }) {
               isActive={page.url.startsWith(item.href)}
               tooltip={{ children: item.title }}
             >
-              <Link href={item.href} prefetch>
+              <Link
+                href={item.href}
+                prefetch
+                onClick={() => isMobile && setOpenMobile(false)}
+              >
                 {item.icon && <item.icon />}
                 <span>{item.title}</span>
               </Link>
