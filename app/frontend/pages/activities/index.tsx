@@ -24,8 +24,9 @@ const KIND_FILTERS: {
   label: string
   value: ActivityKind | undefined
   icon?: React.ElementType
+  title?: string
 }[] = [
-  { label: "All", value: undefined },
+  { label: "All", value: undefined, title: "All Types" },
   { label: "Notes", value: "note", icon: MessageSquare },
   { label: "Calls", value: "call", icon: Phone },
   { label: "Emails", value: "email", icon: Mail },
@@ -35,8 +36,9 @@ const SUBJECT_FILTERS: {
   label: string
   value: string | undefined
   icon?: React.ElementType
+  title?: string
 }[] = [
-  { label: "All", value: undefined },
+  { label: "All", value: undefined, title: "All Subjects" },
   { label: "Contacts", value: "contact", icon: User },
   { label: "Companies", value: "company", icon: Building2 },
   { label: "Deals", value: "deal", icon: TrendingUp },
@@ -130,6 +132,7 @@ export default function ActivitiesIndex() {
                     <button
                       key={f.label}
                       onClick={() => navigate({ kind: f.value })}
+                      title={f.title}
                       className={`flex items-center gap-1.5 rounded-md px-3 py-1 text-xs font-medium transition-all ${
                         isActive
                           ? "bg-background text-foreground shadow-sm"
@@ -152,6 +155,7 @@ export default function ActivitiesIndex() {
                     <button
                       key={f.label}
                       onClick={() => navigate({ subject: f.value })}
+                      title={f.title}
                       className={`flex items-center gap-1.5 rounded-md px-3 py-1 text-xs font-medium transition-all ${
                         isActive
                           ? "bg-background text-foreground shadow-sm"
