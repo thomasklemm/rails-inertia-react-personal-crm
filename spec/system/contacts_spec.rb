@@ -42,9 +42,9 @@ RSpec.describe "Contacts", type: :system do
       expect(page).to have_text("Acme Corp")
     end
 
-    it "shows the Log Activity button and kind filters" do
+    it "shows the Log button and kind filters" do
       visit contact_path(contact)
-      expect(page).to have_button("Log Activity")
+      expect(page).to have_button("Log")
       expect(page).to have_button("Notes")
       expect(page).to have_button("Calls")
       expect(page).to have_button("Emails")
@@ -52,9 +52,9 @@ RSpec.describe "Contacts", type: :system do
   end
 
   describe "logging an activity inline" do
-    it "clicking Log Activity reveals the inline kind picker and textarea" do
+    it "clicking Log reveals the inline kind picker and textarea" do
       visit contact_path(contact)
-      click_button "Log Activity"
+      click_button "Log"
       expect(page).to have_button("Note")
       expect(page).to have_button("Call")
       expect(page).to have_button("Email")
@@ -63,7 +63,7 @@ RSpec.describe "Contacts", type: :system do
 
     it "logs a note and shows it in the activity log" do
       visit contact_path(contact)
-      click_button "Log Activity"
+      click_button "Log"
       fill_in "Add a note…", with: "Met at the trade show."
       click_button "Log Note"
       expect(page).to have_text("Met at the trade show.")
@@ -71,18 +71,18 @@ RSpec.describe "Contacts", type: :system do
 
     it "logs a call by switching the kind" do
       visit contact_path(contact)
-      click_button "Log Activity"
+      click_button "Log"
       within("form") { find("button", text: "Call", exact_text: true).click }
       fill_in "What was discussed?", with: "Discussed the renewal."
       click_button "Log Call"
       expect(page).to have_text("Discussed the renewal.")
     end
 
-    it "cancels logging and restores the Log Activity button" do
+    it "cancels logging and restores the Log button" do
       visit contact_path(contact)
-      click_button "Log Activity"
+      click_button "Log"
       click_button "Cancel"
-      expect(page).to have_button("Log Activity")
+      expect(page).to have_button("Log")
       expect(page).not_to have_css("textarea")
     end
   end

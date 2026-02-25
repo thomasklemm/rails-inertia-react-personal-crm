@@ -190,20 +190,24 @@
 @layer utilities {
   .scrollbar-subtle {
     scrollbar-width: thin;
-    scrollbar-color: oklch(0.83 0.012 75 / 0.5) transparent;
+    scrollbar-color: oklch(0.83 0.012 75 / 0.5) oklch(0.96 0.004 75);
   }
   .scrollbar-subtle::-webkit-scrollbar {
     width: 3px;
+    height: 6px;
   }
   .scrollbar-subtle::-webkit-scrollbar-track {
-    background: transparent;
+    background: oklch(0.96 0.004 75);
   }
   .scrollbar-subtle::-webkit-scrollbar-thumb {
     background-color: oklch(0.83 0.012 75 / 0.5);
     border-radius: 9999px;
   }
   .dark .scrollbar-subtle {
-    scrollbar-color: oklch(0.31 0.028 260 / 0.6) transparent;
+    scrollbar-color: oklch(0.31 0.028 260 / 0.6) oklch(0.21 0.012 260);
+  }
+  .dark .scrollbar-subtle::-webkit-scrollbar-track {
+    background: oklch(0.21 0.012 260);
   }
   .dark .scrollbar-subtle::-webkit-scrollbar-thumb {
     background-color: oklch(0.31 0.028 260 / 0.6);

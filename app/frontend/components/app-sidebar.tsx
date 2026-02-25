@@ -4,11 +4,13 @@ import {
   Building2,
   Github,
   LayoutDashboard,
+  TrendingUp,
   Users,
 } from "lucide-react"
 
 import { NavFooter } from "@/components/nav-footer"
 import { NavMain } from "@/components/nav-main"
+import { NavTheme } from "@/components/nav-theme"
 import { NavUser } from "@/components/nav-user"
 import {
   Sidebar,
@@ -24,6 +26,7 @@ import {
   companiesPath,
   contactsPath,
   dashboardPath,
+  dealsPath,
 } from "@/routes"
 import type { NavItem } from "@/types"
 
@@ -44,6 +47,11 @@ const mainNavItems: NavItem[] = [
     title: "Companies",
     href: companiesPath(),
     icon: Building2,
+  },
+  {
+    title: "Deals",
+    href: dealsPath(),
+    icon: TrendingUp,
   },
   {
     title: "Activity Log",
@@ -83,8 +91,10 @@ export function AppSidebar() {
         <NavMain items={mainNavItems} />
       </SidebarContent>
 
-      <SidebarFooter>
-        <NavFooter items={footerNavItems} className="mt-auto" />
+      <SidebarFooter className="pb-4">
+        <NavFooter items={footerNavItems} className="mt-auto">
+          <NavTheme />
+        </NavFooter>
         <NavUser />
       </SidebarFooter>
     </Sidebar>

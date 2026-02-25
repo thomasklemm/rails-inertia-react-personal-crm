@@ -4,12 +4,19 @@ import type { ReactNode } from "react"
 
 import { ContactAvatar } from "@/components/crm/contact-avatar"
 import { DashboardActivityFeed } from "@/components/crm/dashboard-activity-feed"
+import { DashboardDealsWidget } from "@/components/crm/dashboard-deals"
 import { DashboardStarredContacts } from "@/components/crm/dashboard-starred-contacts"
 import { DashboardStatsRow } from "@/components/crm/dashboard-stats"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import AppLayout from "@/layouts/app-layout"
 import { contactPath, dashboardPath } from "@/routes"
-import type { Activity, BreadcrumbItem, Contact, DashboardStats } from "@/types"
+import type {
+  Activity,
+  BreadcrumbItem,
+  Contact,
+  DashboardStats,
+  Deal,
+} from "@/types"
 
 interface DueFollowUp {
   id: number
@@ -21,6 +28,7 @@ interface DueFollowUp {
 
 interface Props {
   stats: DashboardStats
+  open_deals: Deal[]
   recent_activities: Activity[]
   starred_contacts: Contact[]
   due_follow_ups: DueFollowUp[]
@@ -72,8 +80,13 @@ function followUpMeta(dateString: string): { label: string; classes: string } {
 }
 
 export default function DashboardShow() {
-  const { stats, recent_activities, starred_contacts, due_follow_ups } =
-    usePage<Props>().props
+  const {
+    stats,
+    open_deals,
+    recent_activities,
+    starred_contacts,
+    due_follow_ups,
+  } = usePage<Props>().props
 
   return (
     <>
@@ -97,7 +110,7 @@ export default function DashboardShow() {
                 </CardHeader>
                 <div className="border-b" />
                 <CardContent className="p-0">
-                  <div className="scrollbar-subtle max-h-72 divide-y overflow-y-auto overscroll-contain">
+                  <div className="scrollbar-subtle max-h-72 divide-y overflow-y-scroll overscroll-contain">
                     {due_follow_ups.map((followUp) => {
                       const { label, classes } = followUpMeta(
                         followUp.follow_up_at,
@@ -106,7 +119,7 @@ export default function DashboardShow() {
                         <Link
                           key={followUp.id}
                           href={contactPath(followUp.id)}
-                          className="hover:bg-muted/40 flex items-center gap-3 px-4 py-3 transition-colors"
+                          className="hover:bg-muted/40 flex items-center gap-3 px-4 py-2 transition-colors"
                         >
                           <ContactAvatar contact={followUp} size="sm" />
                           <div className="min-w-0 flex-1">
@@ -140,8 +153,14 @@ export default function DashboardShow() {
             <DashboardStarredContacts contacts={starred_contacts} />
           )}
 
-          {/* Recent Activity — full width */}
-          <DashboardActivityFeed activities={recent_activities} />
+          {/* Pipeline + Recent Activity — side by side on large screens */}
+          <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[2fr_3fr]">
+            <DashboardDealsWidget
+              deals={open_deals}
+              pipeline_value={stats.pipeline_value}
+            />
+            <DashboardActivityFeed activities={recent_activities} />
+          </div>
         </div>
       </div>
     </>

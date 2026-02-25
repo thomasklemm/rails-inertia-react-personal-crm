@@ -18,6 +18,7 @@ class CompaniesController < InertiaController
       companies: filtered_companies.as_json,
       company: @company.as_json,
       contacts: @company.contacts.includes(:company).order(:last_name, :first_name).as_json(include: :company),
+      deals: @company.deals.includes(:contact).order(:stage, :created_at).map(&:as_deal_json),
       q: params[:q],
       sort: params[:sort],
       sort_dir: params[:sort_dir],

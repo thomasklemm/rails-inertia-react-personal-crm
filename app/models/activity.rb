@@ -9,7 +9,7 @@ class Activity < ApplicationRecord
   enum :kind, note: "note", call: "call", email: "email"
 
   validates :kind, presence: true, inclusion: {in: KINDS}
-  validates :subject_type, inclusion: {in: %w[Contact Company]}
+  validates :subject_type, inclusion: {in: %w[Contact Company Deal]}
   validates :body, presence: true
 
   default_scope { order(created_at: :desc) }
@@ -26,6 +26,8 @@ class Activity < ApplicationRecord
       {id: subject_id, type: "Contact", name: subject.full_name}
     when "Company"
       {id: subject_id, type: "Company", name: subject.name}
+    when "Deal"
+      {id: subject_id, type: "Deal", name: subject.title}
     else
       raise ArgumentError, "Unsupported subject_type: #{subject_type.inspect} for Activity##{id}"
     end

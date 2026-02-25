@@ -85,17 +85,17 @@ RSpec.describe "Companies", type: :system do
 
     it "logs an activity inline" do
       visit company_path(company)
-      click_button "Log Activity"
+      click_button "Log"
       fill_in "Add a note…", with: "Quarterly check-in completed."
       click_button "Log Note"
       expect(page).to have_text("Quarterly check-in completed.")
     end
 
-    it "cancels logging and restores the Log Activity button" do
+    it "cancels logging and restores the Log button" do
       visit company_path(company)
-      click_button "Log Activity"
+      click_button "Log"
       click_button "Cancel"
-      expect(page).to have_button("Log Activity")
+      expect(page).to have_button("Log")
       expect(page).not_to have_css("textarea")
     end
   end

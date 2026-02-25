@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_24_000001) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_25_000001) do
   create_table "activities", force: :cascade do |t|
     t.text "body", null: false
     t.datetime "created_at", null: false
@@ -56,6 +56,23 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_24_000001) do
     t.index ["user_id"], name: "index_contacts_on_user_id"
   end
 
+  create_table "deals", force: :cascade do |t|
+    t.date "closed_at"
+    t.integer "company_id"
+    t.integer "contact_id"
+    t.datetime "created_at", null: false
+    t.text "notes"
+    t.string "stage", default: "lead", null: false
+    t.string "title", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.integer "value_cents", default: 0, null: false
+    t.index ["company_id"], name: "index_deals_on_company_id"
+    t.index ["contact_id"], name: "index_deals_on_contact_id"
+    t.index ["stage"], name: "index_deals_on_stage"
+    t.index ["user_id"], name: "index_deals_on_user_id"
+  end
+
   create_table "sessions", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "ip_address"
@@ -79,5 +96,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_24_000001) do
   add_foreign_key "companies", "users"
   add_foreign_key "contacts", "companies"
   add_foreign_key "contacts", "users"
+  add_foreign_key "deals", "companies"
+  add_foreign_key "deals", "contacts"
+  add_foreign_key "deals", "users"
   add_foreign_key "sessions", "users"
 end

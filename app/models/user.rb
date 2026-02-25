@@ -16,6 +16,7 @@ class User < ApplicationRecord
   has_many :contacts, dependent: :destroy
   has_many :companies, dependent: :destroy
   has_many :activities, dependent: :destroy
+  has_many :deals, dependent: :destroy
 
   validates :name, presence: true
   validates :email, presence: true, uniqueness: true, format: {with: URI::MailTo::EMAIL_REGEXP}

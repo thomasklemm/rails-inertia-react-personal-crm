@@ -220,6 +220,21 @@ function DropdownMenuSubTrigger({
   )
 }
 
+function DropdownMenuArrow({
+  className,
+  style,
+  ...props
+}: React.ComponentProps<typeof DropdownMenuPrimitive.Arrow>) {
+  return (
+    <DropdownMenuPrimitive.Arrow
+      data-slot="dropdown-menu-arrow"
+      className={cn("fill-popover", className)}
+      style={{ stroke: "var(--border)", strokeWidth: 1, ...style }}
+      {...props}
+    />
+  )
+}
+
 function DropdownMenuSubContent({
   className,
   ...props
@@ -238,6 +253,7 @@ function DropdownMenuSubContent({
 
 export {
   DropdownMenu,
+  DropdownMenuArrow,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuGroup,

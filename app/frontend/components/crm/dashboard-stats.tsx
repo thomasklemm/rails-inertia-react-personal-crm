@@ -1,7 +1,12 @@
 import { Link } from "@inertiajs/react"
-import { Activity, Building2, Users } from "lucide-react"
+import { Activity, Building2, TrendingUp, Users } from "lucide-react"
 
-import { activitiesPath, companiesPath, contactsPath } from "@/routes"
+import {
+  activitiesPath,
+  companiesPath,
+  contactsPath,
+  dealsPath,
+} from "@/routes"
 import type { DashboardStats } from "@/types"
 
 interface DashboardStatsRowProps {
@@ -22,6 +27,12 @@ const STAT_CARDS = [
     href: companiesPath(),
   },
   {
+    label: "Open Deals",
+    key: "deals_count" as const,
+    icon: TrendingUp,
+    href: dealsPath(),
+  },
+  {
     label: "Activities This Week",
     key: "activities_this_week" as const,
     icon: Activity,
@@ -31,7 +42,7 @@ const STAT_CARDS = [
 
 export function DashboardStatsRow({ stats }: DashboardStatsRowProps) {
   return (
-    <div className="grid grid-cols-3 gap-4">
+    <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
       {STAT_CARDS.map((card) => {
         const Icon = card.icon
         return (

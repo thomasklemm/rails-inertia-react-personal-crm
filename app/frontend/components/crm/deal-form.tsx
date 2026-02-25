@@ -1,0 +1,213 @@
+import type { InertiaFormProps } from "@inertiajs/react"
+
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { Textarea } from "@/components/ui/textarea"
+import type { DealStage } from "@/types"
+
+const STAGE_COLORS: Record<DealStage, { active: string; idle: string }> = {
+  lead: {
+    active: "bg-slate-200 text-slate-800 dark:bg-slate-700 dark:text-slate-100",
+    idle: "text-muted-foreground hover:bg-muted hover:text-foreground",
+  },
+  qualified: {
+    active: "bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-200",
+    idle: "text-muted-foreground hover:bg-muted hover:text-foreground",
+  },
+  proposal: {
+    active:
+      "bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-200",
+    idle: "text-muted-foreground hover:bg-muted hover:text-foreground",
+  },
+  closed_won: {
+    active:
+      "bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-200",
+    idle: "text-muted-foreground hover:bg-muted hover:text-foreground",
+  },
+  closed_lost: {
+    active: "bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-200",
+    idle: "text-muted-foreground hover:bg-muted hover:text-foreground",
+  },
+}
+
+export const STAGE_LABELS: Record<DealStage, string> = {
+  lead: "Lead",
+  qualified: "Qualified",
+  proposal: "Proposal",
+  closed_won: "Closed Won",
+  closed_lost: "Closed Lost",
+}
+
+export interface DealFormData {
+  title: string
+  stage: DealStage
+  value: string // dollars as string for the input
+  notes: string
+  contact_id: string
+  company_id: string
+}
+
+interface Contact {
+  id: number
+  first_name: string
+  last_name: string
+}
+
+interface Company {
+  id: number
+  name: string
+}
+
+interface DealFormProps {
+  form: InertiaFormProps<DealFormData>
+  stages: string[]
+  contacts: Contact[]
+  companies: Company[]
+  cancelHref: string
+  submitLabel: string
+}
+
+export function DealForm({
+  form,
+  stages,
+  contacts,
+  companies,
+  cancelHref,
+  submitLabel,
+}: DealFormProps) {
+  const { data, setData, errors, processing } = form
+
+  return (
+    <div className="space-y-5">
+      {/* Title */}
+      <div className="space-y-1.5">
+        <Label htmlFor="title">Deal Title</Label>
+        <Input
+          id="title"
+          name="title"
+          value={data.title}
+          onChange={(e) => setData("title", e.target.value)}
+          placeholder="e.g. Acme Corp — Enterprise Plan"
+          autoFocus
+        />
+        {errors.title && (
+          <p className="text-destructive text-xs">{errors.title}</p>
+        )}
+      </div>
+
+      {/* Stage */}
+      <div className="space-y-1.5">
+        <Label>Stage</Label>
+        <div className="flex flex-wrap gap-1.5">
+          {stages.map((s) => {
+            const stage = s as DealStage
+            const colors = STAGE_COLORS[stage]
+            const isActive = data.stage === stage
+            return (
+              <button
+                key={stage}
+                type="button"
+                onClick={() => setData("stage", stage)}
+                className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${isActive ? colors.active : colors.idle}`}
+              >
+                {STAGE_LABELS[stage] ?? stage}
+              </button>
+            )
+          })}
+        </div>
+      </div>
+
+      {/* Value */}
+      <div className="space-y-1.5">
+        <Label htmlFor="value">Value ($)</Label>
+        <Input
+          id="value"
+          name="value"
+          type="number"
+          min="0"
+          step="0.01"
+          value={data.value}
+          onChange={(e) => setData("value", e.target.value)}
+          placeholder="0.00"
+        />
+        {errors.value && (
+          <p className="text-destructive text-xs">{errors.value}</p>
+        )}
+      </div>
+
+      {/* Contact + Company */}
+      <div className="grid grid-cols-2 gap-3">
+        <div className="space-y-1.5">
+          <Label htmlFor="contact_id">Contact</Label>
+          <Select
+            value={data.contact_id || "none"}
+            onValueChange={(v) => setData("contact_id", v === "none" ? "" : v)}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="No contact" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="none">No contact</SelectItem>
+              {contacts.map((c) => (
+                <SelectItem key={c.id} value={String(c.id)}>
+                  {c.first_name} {c.last_name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="company_id">Company</Label>
+          <Select
+            value={data.company_id || "none"}
+            onValueChange={(v) => setData("company_id", v === "none" ? "" : v)}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="No company" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="none">No company</SelectItem>
+              {companies.map((c) => (
+                <SelectItem key={c.id} value={String(c.id)}>
+                  {c.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+
+      {/* Notes */}
+      <div className="space-y-1.5">
+        <Label htmlFor="notes">Notes</Label>
+        <Textarea
+          id="notes"
+          name="notes"
+          value={data.notes}
+          onChange={(e) => setData("notes", e.target.value)}
+          rows={3}
+          className="resize-none"
+          placeholder="Deal notes, context, next steps…"
+        />
+      </div>
+
+      {/* Actions */}
+      <div className="flex gap-3">
+        <Button type="submit" disabled={processing}>
+          {submitLabel}
+        </Button>
+        <Button variant="outline" asChild>
+          <a href={cancelHref}>Cancel</a>
+        </Button>
+      </div>
+    </div>
+  )
+}

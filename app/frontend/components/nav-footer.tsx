@@ -1,4 +1,4 @@
-import type { ComponentPropsWithoutRef } from "react"
+import type { ComponentPropsWithoutRef, ReactNode } from "react"
 
 import { Icon } from "@/components/icon"
 import {
@@ -12,10 +12,12 @@ import type { NavItem } from "@/types"
 
 export function NavFooter({
   items,
+  children,
   className,
   ...props
 }: ComponentPropsWithoutRef<typeof SidebarGroup> & {
   items: NavItem[]
+  children?: ReactNode
 }) {
   return (
     <SidebarGroup
@@ -24,10 +26,12 @@ export function NavFooter({
     >
       <SidebarGroupContent>
         <SidebarMenu>
+          {children}
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton
                 asChild
+                tooltip={item.title}
                 className="text-neutral-600 hover:text-neutral-800 dark:text-neutral-300 dark:hover:text-neutral-100"
               >
                 <a href={item.href} target="_blank" rel="noopener noreferrer">
