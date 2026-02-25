@@ -320,7 +320,7 @@ export default function DealsIndex() {
           </div>
 
           {/* Desktop kanban — hidden on small screens */}
-          <div className="hidden overflow-x-auto md:block">
+          <div className="scrollbar-subtle hidden overflow-x-auto md:block">
             <DndContext
               sensors={sensors}
               collisionDetection={closestCorners}
