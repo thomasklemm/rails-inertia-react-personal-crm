@@ -722,115 +722,115 @@ deal_activities = []
 
 # Lead: Frontier Labs — SaaS Platform Pilot
 deal_activities += [
-  { subject: deals_by_title["Frontier Labs — SaaS Platform Pilot"], kind: "call",  body: "Intro call with Ahmed Nguyen — confirmed Frontier Labs is evaluating tools post-Q2 planning. Budget conversation tabled for now.", created_at: 4.weeks.ago },
-  { subject: deals_by_title["Frontier Labs — SaaS Platform Pilot"], kind: "email", body: "Sent a relevant case study on similar SaaS platform pilots to build credibility while budget is unconfirmed.", created_at: 3.weeks.ago },
-  { subject: deals_by_title["Frontier Labs — SaaS Platform Pilot"], kind: "note",  body: "Ahmed mentioned Q2 planning session wraps mid-month. Circle back then to re-qualify budget and timeline.", created_at: 2.weeks.ago },
+  {subject: deals_by_title["Frontier Labs — SaaS Platform Pilot"], kind: "call",  body: "Intro call with Ahmed Nguyen — confirmed Frontier Labs is evaluating tools post-Q2 planning. Budget conversation tabled for now.", created_at: 4.weeks.ago},
+  {subject: deals_by_title["Frontier Labs — SaaS Platform Pilot"], kind: "email", body: "Sent a relevant case study on similar SaaS platform pilots to build credibility while budget is unconfirmed.", created_at: 3.weeks.ago},
+  {subject: deals_by_title["Frontier Labs — SaaS Platform Pilot"], kind: "note",  body: "Ahmed mentioned Q2 planning session wraps mid-month. Circle back then to re-qualify budget and timeline.", created_at: 2.weeks.ago}
 ]
 
 # Lead: Gravity Works — Manufacturing Analytics
 deal_activities += [
-  { subject: deals_by_title["Gravity Works — Manufacturing Analytics"], kind: "call",  body: "Exploratory call with Clara Okonkwo — she confirmed interest in the analytics module for operations reporting.", created_at: 5.weeks.ago },
-  { subject: deals_by_title["Gravity Works — Manufacturing Analytics"], kind: "email", body: "Sent manufacturing analytics one-pager and a pricing estimate for the add-on module.", created_at: 4.weeks.ago },
-  { subject: deals_by_title["Gravity Works — Manufacturing Analytics"], kind: "note",  body: "Clara is a strong internal champion but needs sign-off from the operations director. Following up next week.", created_at: 3.weeks.ago },
+  {subject: deals_by_title["Gravity Works — Manufacturing Analytics"], kind: "call",  body: "Exploratory call with Clara Okonkwo — she confirmed interest in the analytics module for operations reporting.", created_at: 5.weeks.ago},
+  {subject: deals_by_title["Gravity Works — Manufacturing Analytics"], kind: "email", body: "Sent manufacturing analytics one-pager and a pricing estimate for the add-on module.", created_at: 4.weeks.ago},
+  {subject: deals_by_title["Gravity Works — Manufacturing Analytics"], kind: "note",  body: "Clara is a strong internal champion but needs sign-off from the operations director. Following up next week.", created_at: 3.weeks.ago}
 ]
 
 # Lead: Echo Systems — Team Plan Upgrade
 deal_activities += [
-  { subject: deals_by_title["Echo Systems — Team Plan Upgrade"], kind: "email", body: "Sent Nadia Weber the team vs. individual plan comparison highlighting per-seat savings at 15+ seats.", created_at: 3.weeks.ago },
-  { subject: deals_by_title["Echo Systems — Team Plan Upgrade"], kind: "call",  body: "Spoke with Nadia — she's keen but wants to confirm headcount before committing. Team is currently 15, may grow to 20.", created_at: 2.weeks.ago },
-  { subject: deals_by_title["Echo Systems — Team Plan Upgrade"], kind: "note",  body: "Good upgrade candidate. Nadia said she'd bring it to her manager this week. Check back Thursday.", created_at: 1.week.ago },
+  {subject: deals_by_title["Echo Systems — Team Plan Upgrade"], kind: "email", body: "Sent Nadia Weber the team vs. individual plan comparison highlighting per-seat savings at 15+ seats.", created_at: 3.weeks.ago},
+  {subject: deals_by_title["Echo Systems — Team Plan Upgrade"], kind: "call",  body: "Spoke with Nadia — she's keen but wants to confirm headcount before committing. Team is currently 15, may grow to 20.", created_at: 2.weeks.ago},
+  {subject: deals_by_title["Echo Systems — Team Plan Upgrade"], kind: "note",  body: "Good upgrade candidate. Nadia said she'd bring it to her manager this week. Check back Thursday.", created_at: 1.week.ago}
 ]
 
 # Qualified: Cascade Partners — Mid-Market Platform
 deal_activities += [
-  { subject: deals_by_title["Cascade Partners — Mid-Market Platform"], kind: "call",  body: "Discovery call with Owen Barnes — confirmed budget approved and timeline for decision by end of quarter.", created_at: 6.weeks.ago },
-  { subject: deals_by_title["Cascade Partners — Mid-Market Platform"], kind: "email", body: "Sent full proposal including 30-day free pilot offer and tailored onboarding plan.", created_at: 5.weeks.ago },
-  { subject: deals_by_title["Cascade Partners — Mid-Market Platform"], kind: "call",  body: "Follow-up call — Owen says we're on the shortlist of 3. Analytics demo particularly well received.", created_at: 3.weeks.ago },
-  { subject: deals_by_title["Cascade Partners — Mid-Market Platform"], kind: "note",  body: "Owen's final evaluation expected this week. Julia Ueda (Head of Partnerships) is also reviewing the integration terms.", created_at: 1.week.ago },
+  {subject: deals_by_title["Cascade Partners — Mid-Market Platform"], kind: "call",  body: "Discovery call with Owen Barnes — confirmed budget approved and timeline for decision by end of quarter.", created_at: 6.weeks.ago},
+  {subject: deals_by_title["Cascade Partners — Mid-Market Platform"], kind: "email", body: "Sent full proposal including 30-day free pilot offer and tailored onboarding plan.", created_at: 5.weeks.ago},
+  {subject: deals_by_title["Cascade Partners — Mid-Market Platform"], kind: "call",  body: "Follow-up call — Owen says we're on the shortlist of 3. Analytics demo particularly well received.", created_at: 3.weeks.ago},
+  {subject: deals_by_title["Cascade Partners — Mid-Market Platform"], kind: "note",  body: "Owen's final evaluation expected this week. Julia Ueda (Head of Partnerships) is also reviewing the integration terms.", created_at: 1.week.ago}
 ]
 
 # Qualified: Bright Ideas — Co-Sell Partnership
 deal_activities += [
-  { subject: deals_by_title["Bright Ideas — Co-Sell Partnership"], kind: "email", body: "Sent revenue-share partner agreement draft to Sofia Andersson for initial review.", created_at: 5.weeks.ago },
-  { subject: deals_by_title["Bright Ideas — Co-Sell Partnership"], kind: "call",  body: "Call with Sofia to walk through the redlines — two minor clauses on exclusivity and reporting cadence to resolve.", created_at: 3.weeks.ago },
-  { subject: deals_by_title["Bright Ideas — Co-Sell Partnership"], kind: "note",  body: "Revised agreement sent with redlines addressed. Sofia said legal should countersign within the week.", created_at: 1.week.ago },
+  {subject: deals_by_title["Bright Ideas — Co-Sell Partnership"], kind: "email", body: "Sent revenue-share partner agreement draft to Sofia Andersson for initial review.", created_at: 5.weeks.ago},
+  {subject: deals_by_title["Bright Ideas — Co-Sell Partnership"], kind: "call",  body: "Call with Sofia to walk through the redlines — two minor clauses on exclusivity and reporting cadence to resolve.", created_at: 3.weeks.ago},
+  {subject: deals_by_title["Bright Ideas — Co-Sell Partnership"], kind: "note",  body: "Revised agreement sent with redlines addressed. Sofia said legal should countersign within the week.", created_at: 1.week.ago}
 ]
 
 # Qualified: Luminary Digital — Content Syndication Deal
 deal_activities += [
-  { subject: deals_by_title["Luminary Digital — Content Syndication Deal"], kind: "call",  body: "Discovery call with Eli Darnell — confirmed interest in both content syndication and newsletter distribution.", created_at: 4.weeks.ago },
-  { subject: deals_by_title["Luminary Digital — Content Syndication Deal"], kind: "email", body: "Updated proposal sent including podcast distribution channel — Eli was excited about the reach potential.", created_at: 3.weeks.ago },
-  { subject: deals_by_title["Luminary Digital — Content Syndication Deal"], kind: "note",  body: "Eli circulated the updated proposal to his director. Decision expected after their monthly editorial planning meeting.", created_at: 2.weeks.ago },
+  {subject: deals_by_title["Luminary Digital — Content Syndication Deal"], kind: "call",  body: "Discovery call with Eli Darnell — confirmed interest in both content syndication and newsletter distribution.", created_at: 4.weeks.ago},
+  {subject: deals_by_title["Luminary Digital — Content Syndication Deal"], kind: "email", body: "Updated proposal sent including podcast distribution channel — Eli was excited about the reach potential.", created_at: 3.weeks.ago},
+  {subject: deals_by_title["Luminary Digital — Content Syndication Deal"], kind: "note",  body: "Eli circulated the updated proposal to his director. Decision expected after their monthly editorial planning meeting.", created_at: 2.weeks.ago}
 ]
 
 # Qualified: Jasper Growth — Marketing Team Seat Expansion
 deal_activities += [
-  { subject: deals_by_title["Jasper Growth — Marketing Team Seat Expansion"], kind: "email", body: "Sent Hana Goto a detailed feature comparison and ROI calculator tailored to a 30-seat marketing team.", created_at: 5.weeks.ago },
-  { subject: deals_by_title["Jasper Growth — Marketing Team Seat Expansion"], kind: "call",  body: "Spoke with Hana — she's leaning our way but has a final pricing discussion with her VP before committing.", created_at: 3.weeks.ago },
-  { subject: deals_by_title["Jasper Growth — Marketing Team Seat Expansion"], kind: "note",  body: "Hana confirmed team is growing from 25 to 30 seats. VP meeting scheduled for Thursday — expect a verbal yes or final objections then.", created_at: 2.weeks.ago },
+  {subject: deals_by_title["Jasper Growth — Marketing Team Seat Expansion"], kind: "email", body: "Sent Hana Goto a detailed feature comparison and ROI calculator tailored to a 30-seat marketing team.", created_at: 5.weeks.ago},
+  {subject: deals_by_title["Jasper Growth — Marketing Team Seat Expansion"], kind: "call",  body: "Spoke with Hana — she's leaning our way but has a final pricing discussion with her VP before committing.", created_at: 3.weeks.ago},
+  {subject: deals_by_title["Jasper Growth — Marketing Team Seat Expansion"], kind: "note",  body: "Hana confirmed team is growing from 25 to 30 seats. VP meeting scheduled for Thursday — expect a verbal yes or final objections then.", created_at: 2.weeks.ago}
 ]
 
 # Proposal: Acme Corp — Enterprise Renewal + Expansion
 deal_activities += [
-  { subject: deals_by_title["Acme Corp — Enterprise Renewal + Expansion"], kind: "call",  body: "Discovery call with Zara Ahmed — confirmed 20% seat expansion intent and that Diego Rodriguez is the executive sponsor.", created_at: 3.weeks.ago },
-  { subject: deals_by_title["Acme Corp — Enterprise Renewal + Expansion"], kind: "email", body: "Sent updated enterprise pricing with volume discount applied for the expanded seat count.", created_at: 2.weeks.ago },
-  { subject: deals_by_title["Acme Corp — Enterprise Renewal + Expansion"], kind: "note",  body: "Diego Rodriguez reviewing the custom SLA addendum with Acme legal. Zara expects countersign by month-end.", created_at: 1.week.ago },
+  {subject: deals_by_title["Acme Corp — Enterprise Renewal + Expansion"], kind: "call",  body: "Discovery call with Zara Ahmed — confirmed 20% seat expansion intent and that Diego Rodriguez is the executive sponsor.", created_at: 3.weeks.ago},
+  {subject: deals_by_title["Acme Corp — Enterprise Renewal + Expansion"], kind: "email", body: "Sent updated enterprise pricing with volume discount applied for the expanded seat count.", created_at: 2.weeks.ago},
+  {subject: deals_by_title["Acme Corp — Enterprise Renewal + Expansion"], kind: "note",  body: "Diego Rodriguez reviewing the custom SLA addendum with Acme legal. Zara expects countersign by month-end.", created_at: 1.week.ago}
 ]
 
 # Proposal: Indigo Solutions — 3-Product Line Expansion
 deal_activities += [
-  { subject: deals_by_title["Indigo Solutions — 3-Product Line Expansion"], kind: "call",  body: "Executive QBR with Isabelle Adeyemi — exceptional outcome. Verbally agreed to expand to 3 additional product lines.", created_at: 4.weeks.ago },
-  { subject: deals_by_title["Indigo Solutions — 3-Product Line Expansion"], kind: "email", body: "Sent formal expansion addendum to Indigo legal following Isabelle's verbal agreement.", created_at: 3.weeks.ago },
-  { subject: deals_by_title["Indigo Solutions — 3-Product Line Expansion"], kind: "note",  body: "Indigo legal requested one clarification on data processing terms — sent response same day. Addendum expected back within the week.", created_at: 1.week.ago },
+  {subject: deals_by_title["Indigo Solutions — 3-Product Line Expansion"], kind: "call",  body: "Executive QBR with Isabelle Adeyemi — exceptional outcome. Verbally agreed to expand to 3 additional product lines.", created_at: 4.weeks.ago},
+  {subject: deals_by_title["Indigo Solutions — 3-Product Line Expansion"], kind: "email", body: "Sent formal expansion addendum to Indigo legal following Isabelle's verbal agreement.", created_at: 3.weeks.ago},
+  {subject: deals_by_title["Indigo Solutions — 3-Product Line Expansion"], kind: "note",  body: "Indigo legal requested one clarification on data processing terms — sent response same day. Addendum expected back within the week.", created_at: 1.week.ago}
 ]
 
 # Proposal: Amara Santos — Reporting Features Deal
 deal_activities += [
-  { subject: deals_by_title["Amara Santos — Reporting Features Deal"], kind: "call",  body: "Inbound demo request — Amara Santos was particularly impressed by the reporting and dashboard features.", created_at: 4.weeks.ago },
-  { subject: deals_by_title["Amara Santos — Reporting Features Deal"], kind: "email", body: "Sent €12k/year proposal tailored to her team's reporting use case with a 14-day trial offer.", created_at: 3.weeks.ago },
-  { subject: deals_by_title["Amara Santos — Reporting Features Deal"], kind: "note",  body: "Amara said she's very keen — waiting on budget confirmation from her manager. Strong fit; follow up by end of week.", created_at: 2.weeks.ago },
+  {subject: deals_by_title["Amara Santos — Reporting Features Deal"], kind: "call",  body: "Inbound demo request — Amara Santos was particularly impressed by the reporting and dashboard features.", created_at: 4.weeks.ago},
+  {subject: deals_by_title["Amara Santos — Reporting Features Deal"], kind: "email", body: "Sent €12k/year proposal tailored to her team's reporting use case with a 14-day trial offer.", created_at: 3.weeks.ago},
+  {subject: deals_by_title["Amara Santos — Reporting Features Deal"], kind: "note",  body: "Amara said she's very keen — waiting on budget confirmation from her manager. Strong fit; follow up by end of week.", created_at: 2.weeks.ago}
 ]
 
 # Closed Won: Harbor Capital — Seed Investor Partnership
 deal_activities += [
-  { subject: deals_by_title["Harbor Capital — Seed Investor Partnership"], kind: "call",  body: "Partnership intro call with Aisha Garcia — confirmed seed-stage structure and monthly investor update cadence.", created_at: 8.weeks.ago },
-  { subject: deals_by_title["Harbor Capital — Seed Investor Partnership"], kind: "email", body: "Sent SAFE agreement and cap table to Aisha and Felix Park for review.", created_at: 7.weeks.ago },
-  { subject: deals_by_title["Harbor Capital — Seed Investor Partnership"], kind: "note",  body: "SAFE signed and countersigned. Cap table updated. Aisha added to monthly investor update list.", created_at: 30.days.ago },
+  {subject: deals_by_title["Harbor Capital — Seed Investor Partnership"], kind: "call",  body: "Partnership intro call with Aisha Garcia — confirmed seed-stage structure and monthly investor update cadence.", created_at: 8.weeks.ago},
+  {subject: deals_by_title["Harbor Capital — Seed Investor Partnership"], kind: "email", body: "Sent SAFE agreement and cap table to Aisha and Felix Park for review.", created_at: 7.weeks.ago},
+  {subject: deals_by_title["Harbor Capital — Seed Investor Partnership"], kind: "note",  body: "SAFE signed and countersigned. Cap table updated. Aisha added to monthly investor update list.", created_at: 30.days.ago}
 ]
 
 # Closed Won: Luminary Digital — Integration Partnership
 deal_activities += [
-  { subject: deals_by_title["Luminary Digital — Integration Partnership"], kind: "call",  body: "Kick-off call with Jess Iweala — scoped the data export integration and aligned on a 6-week beta launch target.", created_at: 10.weeks.ago },
-  { subject: deals_by_title["Luminary Digital — Integration Partnership"], kind: "email", body: "Sent signed partnership agreement and engineering spec to Jess to share with her technical team.", created_at: 8.weeks.ago },
-  { subject: deals_by_title["Luminary Digital — Integration Partnership"], kind: "note",  body: "Integration live. Content syndication agreement signed. First joint article scheduled for next month.", created_at: 14.days.ago },
+  {subject: deals_by_title["Luminary Digital — Integration Partnership"], kind: "call",  body: "Kick-off call with Jess Iweala — scoped the data export integration and aligned on a 6-week beta launch target.", created_at: 10.weeks.ago},
+  {subject: deals_by_title["Luminary Digital — Integration Partnership"], kind: "email", body: "Sent signed partnership agreement and engineering spec to Jess to share with her technical team.", created_at: 8.weeks.ago},
+  {subject: deals_by_title["Luminary Digital — Integration Partnership"], kind: "note",  body: "Integration live. Content syndication agreement signed. First joint article scheduled for next month.", created_at: 14.days.ago}
 ]
 
 # Closed Won: Gus Fontaine — Angel Investment
 deal_activities += [
-  { subject: deals_by_title["Gus Fontaine — Angel Investment"], kind: "call",  body: "Caught up with Gus over lunch — pitched the angel round and he committed $25k on the spot.", created_at: 8.weeks.ago },
-  { subject: deals_by_title["Gus Fontaine — Angel Investment"], kind: "email", body: "Sent SAFE document to Gus for review and signature.", created_at: 7.weeks.ago },
-  { subject: deals_by_title["Gus Fontaine — Angel Investment"], kind: "note",  body: "SAFE signed and countersigned. Cap table updated. Great to have Gus in the round.", created_at: 21.days.ago },
+  {subject: deals_by_title["Gus Fontaine — Angel Investment"], kind: "call",  body: "Caught up with Gus over lunch — pitched the angel round and he committed $25k on the spot.", created_at: 8.weeks.ago},
+  {subject: deals_by_title["Gus Fontaine — Angel Investment"], kind: "email", body: "Sent SAFE document to Gus for review and signature.", created_at: 7.weeks.ago},
+  {subject: deals_by_title["Gus Fontaine — Angel Investment"], kind: "note",  body: "SAFE signed and countersigned. Cap table updated. Great to have Gus in the round.", created_at: 21.days.ago}
 ]
 
 # Closed Won: Gravity Works — Annual Vendor Contract Renewal
 deal_activities += [
-  { subject: deals_by_title["Gravity Works — Annual Vendor Contract Renewal"], kind: "call",  body: "Annual review call with Theo Fischer — discussed SLA performance and confirmed intent to renew.", created_at: 12.weeks.ago },
-  { subject: deals_by_title["Gravity Works — Annual Vendor Contract Renewal"], kind: "email", body: "Sent renewed vendor contract to Theo with updated pricing terms for the full year.", created_at: 11.weeks.ago },
-  { subject: deals_by_title["Gravity Works — Annual Vendor Contract Renewal"], kind: "note",  body: "Contract signed. Theo confirmed renewed through year-end. Reliable vendor — consistently meets SLA.", created_at: 60.days.ago },
+  {subject: deals_by_title["Gravity Works — Annual Vendor Contract Renewal"], kind: "call",  body: "Annual review call with Theo Fischer — discussed SLA performance and confirmed intent to renew.", created_at: 12.weeks.ago},
+  {subject: deals_by_title["Gravity Works — Annual Vendor Contract Renewal"], kind: "email", body: "Sent renewed vendor contract to Theo with updated pricing terms for the full year.", created_at: 11.weeks.ago},
+  {subject: deals_by_title["Gravity Works — Annual Vendor Contract Renewal"], kind: "note",  body: "Contract signed. Theo confirmed renewed through year-end. Reliable vendor — consistently meets SLA.", created_at: 60.days.ago}
 ]
 
 # Closed Lost: Kwame Vance — Dune Ventures Investment
 deal_activities += [
-  { subject: deals_by_title["Kwame Vance — Dune Ventures Investment"], kind: "call",  body: "Intro call with Kwame Vance at Dune Ventures — interest in the deal but flagged the fintech portfolio fit concern.", created_at: 12.weeks.ago },
-  { subject: deals_by_title["Kwame Vance — Dune Ventures Investment"], kind: "email", body: "Sent updated pitch deck with stronger fintech angle — tried to address the portfolio fit concern.", created_at: 10.weeks.ago },
-  { subject: deals_by_title["Kwame Vance — Dune Ventures Investment"], kind: "note",  body: "Kwame passed — not a fit for Dune's fintech portfolio at this stage. Mark as lost and reconnect when we have stronger fintech use cases.", created_at: 45.days.ago },
+  {subject: deals_by_title["Kwame Vance — Dune Ventures Investment"], kind: "call",  body: "Intro call with Kwame Vance at Dune Ventures — interest in the deal but flagged the fintech portfolio fit concern.", created_at: 12.weeks.ago},
+  {subject: deals_by_title["Kwame Vance — Dune Ventures Investment"], kind: "email", body: "Sent updated pitch deck with stronger fintech angle — tried to address the portfolio fit concern.", created_at: 10.weeks.ago},
+  {subject: deals_by_title["Kwame Vance — Dune Ventures Investment"], kind: "note",  body: "Kwame passed — not a fit for Dune's fintech portfolio at this stage. Mark as lost and reconnect when we have stronger fintech use cases.", created_at: 45.days.ago}
 ]
 
 # Closed Lost: Tom Thompson — Customer Account
 deal_activities += [
-  { subject: deals_by_title["Tom Thompson — Customer Account"], kind: "call",  body: "Account review call flagged repeated ToS violations. Warned that continued issues would result in account closure.", created_at: 16.weeks.ago },
-  { subject: deals_by_title["Tom Thompson — Customer Account"], kind: "email", body: "Formal notice sent regarding billing disputes and ToS violations — final warning before closure.", created_at: 14.weeks.ago },
-  { subject: deals_by_title["Tom Thompson — Customer Account"], kind: "note",  body: "Account closed after no resolution. Marked lost. Do not re-engage.", created_at: 90.days.ago },
+  {subject: deals_by_title["Tom Thompson — Customer Account"], kind: "call",  body: "Account review call flagged repeated ToS violations. Warned that continued issues would result in account closure.", created_at: 16.weeks.ago},
+  {subject: deals_by_title["Tom Thompson — Customer Account"], kind: "email", body: "Formal notice sent regarding billing disputes and ToS violations — final warning before closure.", created_at: 14.weeks.ago},
+  {subject: deals_by_title["Tom Thompson — Customer Account"], kind: "note",  body: "Account closed after no resolution. Marked lost. Do not re-engage.", created_at: 90.days.ago}
 ]
 
 Activity.create!(deal_activities.map { |h| h.merge(user: demo_user) })

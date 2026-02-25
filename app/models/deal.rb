@@ -13,8 +13,8 @@ class Deal < ApplicationRecord
                closed_won: "closed_won", closed_lost: "closed_lost"
 
   validates :title, presence: true
-  validates :stage, presence: true, inclusion: { in: STAGES }
-  validates :value_cents, numericality: { greater_than_or_equal_to: 0 }
+  validates :stage, presence: true, inclusion: {in: STAGES}
+  validates :value_cents, numericality: {greater_than_or_equal_to: 0}
 
   before_save :manage_closed_at
 
