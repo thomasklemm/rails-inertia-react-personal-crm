@@ -1,17 +1,34 @@
-import { Mail, MessageSquare, PenLine, Phone } from "lucide-react"
-import { Fragment, useState } from "react"
+import { useForm } from "@inertiajs/react"
+import { Check, Mail, MessageSquare, PenLine, Phone, X } from "lucide-react"
+import { Fragment, useRef, useState } from "react"
 
 import { todayDateString, yesterdayDateString } from "@/lib/dates"
 
+import { ActivityDatePicker } from "@/components/crm/activity-date-picker"
 import { Button } from "@/components/ui/button"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import { Textarea } from "@/components/ui/textarea"
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { activitiesPath } from "@/routes"
 import type { Activity, ActivityKind } from "@/types"
 
-import { ActivityItem, ActivityNewItem } from "./activity-item"
+
+import { ActivityItem } from "./activity-item"
+
+const KINDS: { value: ActivityKind; label: string; icon: React.ElementType }[] =
+  [
+    { value: "note", label: "Note", icon: MessageSquare },
+    { value: "call", label: "Call", icon: Phone },
+    { value: "email", label: "Email", icon: Mail },
+  ]
 
 const FILTERS: {
   label: string
@@ -58,6 +75,124 @@ function groupByDate(activities: Activity[]) {
   return groups
 }
 
+interface ActivityLogFormProps {
+  subjectType: string
+  subjectId: number
+  onDone: () => void
+}
+
+function ActivityLogForm({
+  subjectType,
+  subjectId,
+  onDone,
+}: ActivityLogFormProps) {
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const { data, setData, post, processing, errors } = useForm({
+    subject_type: subjectType,
+    subject_id: subjectId,
+    kind: "note" as ActivityKind,
+    body: "",
+    occurred_at: todayDateString(),
+  })
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    if (!data.body.trim()) return
+    post(activitiesPath(), {
+      preserveScroll: true,
+      onSuccess: () => onDone(),
+    })
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-3">
+      {/* Kind picker */}
+      <div className="space-y-1.5">
+        <p className="text-muted-foreground text-xs font-medium">What?</p>
+        <div className="flex gap-1">
+          {KINDS.map(({ value, label, icon: KIcon }) => (
+            <button
+              key={value}
+              type="button"
+              onClick={() => {
+                setData("kind", value)
+                textareaRef.current?.focus()
+              }}
+              className={`flex items-center gap-1 rounded px-2 py-1 text-xs font-medium transition-colors ${
+                data.kind === value
+                  ? "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
+              }`}
+            >
+              <KIcon className="size-3" />
+              {label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Date picker */}
+      <div className="space-y-1.5">
+        <p className="text-muted-foreground text-xs font-medium">When?</p>
+        <ActivityDatePicker
+          value={data.occurred_at}
+          onChange={(d) => setData("occurred_at", d)}
+        />
+      </div>
+
+      {/* Textarea */}
+      <Textarea
+        ref={textareaRef}
+        value={data.body}
+        onChange={(e) => setData("body", e.target.value)}
+        autoFocus
+        placeholder={
+          data.kind === "note"
+            ? "Add a note…"
+            : data.kind === "call"
+              ? "What was discussed?"
+              : "Email summary…"
+        }
+        rows={3}
+        className="resize-none text-sm"
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
+            if (data.body.trim()) handleSubmit(e as unknown as React.FormEvent)
+          }
+          if (e.key === "Escape") onDone()
+        }}
+      />
+      {errors.body && (
+        <p className="text-destructive mt-1 text-xs">{errors.body}</p>
+      )}
+
+      {/* Actions */}
+      <div className="flex gap-1.5">
+        <Button
+          type="submit"
+          size="sm"
+          className="h-7 gap-1 px-2.5 text-xs"
+          disabled={processing || !data.body.trim()}
+        >
+          <Check className="size-3" />
+          Log {KINDS.find((k) => k.value === data.kind)?.label}
+        </Button>
+        <Button
+          type="button"
+          size="sm"
+          variant="ghost"
+          className="h-7 gap-1 px-2.5 text-xs"
+          onClick={onDone}
+          disabled={processing}
+        >
+          <X className="size-3" />
+          Cancel
+        </Button>
+      </div>
+    </form>
+  )
+}
+
 interface ActivityLogProps {
   activities: Activity[]
   title?: string
@@ -78,7 +213,7 @@ export function ActivityLog({
   const [kindFilter, setKindFilter] = useState<ActivityKind | undefined>(
     undefined,
   )
-  const [isLogging, setIsLogging] = useState(false)
+  const [popoverOpen, setPopoverOpen] = useState(false)
 
   const canLog = subjectType != null && subjectId != null
 
@@ -87,30 +222,45 @@ export function ActivityLog({
     : activities
   const groups = groupByDate(filtered)
 
-  const todayKey = todayDateString()
-  const hasTodayGroup = groups.length > 0 && groups[0].key === todayKey
-
   return (
     <div>
       <div className="mb-4">
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <h3 className="text-base font-semibold tracking-tight">{title}</h3>
-            {canLog && !isLogging && (
-              <Tooltip>
-                <TooltipTrigger asChild>
+            {canLog && (
+              <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
+                <PopoverTrigger asChild>
                   <Button
                     size="sm"
                     variant="outline"
                     className="h-7 gap-1 px-2 text-xs font-medium"
-                    onClick={() => setIsLogging(true)}
                   >
                     <PenLine className="size-3" />
                     Log
                   </Button>
-                </TooltipTrigger>
-                <TooltipContent>Log Activity</TooltipContent>
-              </Tooltip>
+                </PopoverTrigger>
+                <PopoverContent className="w-96 p-0" align="start">
+                  <div className="flex items-center justify-between border-b px-4 py-3">
+                    <span className="text-sm font-semibold">Log Activity</span>
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      className="size-6"
+                      onClick={() => setPopoverOpen(false)}
+                    >
+                      <X className="size-3.5" />
+                    </Button>
+                  </div>
+                  <div className="p-4">
+                    <ActivityLogForm
+                      subjectType={subjectType}
+                      subjectId={subjectId}
+                      onDone={() => setPopoverOpen(false)}
+                    />
+                  </div>
+                </PopoverContent>
+              </Popover>
             )}
           </div>
           <div className="bg-muted inline-flex shrink-0 rounded-lg border p-0.5">
@@ -146,31 +296,12 @@ export function ActivityLog({
         )}
       </div>
 
-      {groups.length === 0 && !isLogging ? (
+      {groups.length === 0 ? (
         <p className="text-muted-foreground py-8 text-center text-sm">
           No activities yet.
         </p>
       ) : (
         <div className="space-y-6">
-          {/* Prepend standalone Today group when logging but no today activities exist */}
-          {isLogging && !hasTodayGroup && subjectType && subjectId != null && (
-            <div>
-              <div className="mb-2">
-                <span className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
-                  Today
-                </span>
-              </div>
-              <div>
-                <ActivityNewItem
-                  subjectType={subjectType}
-                  subjectId={subjectId}
-                  onCancel={() => setIsLogging(false)}
-                  isLast={true}
-                />
-              </div>
-            </div>
-          )}
-
           {groups.map((group) => (
             <div key={group.key}>
               <div className="mb-2 flex items-baseline justify-between">
@@ -183,18 +314,6 @@ export function ActivityLog({
                 </span>
               </div>
               <div>
-                {/* Inject new item at top of existing Today group */}
-                {isLogging &&
-                  group.key === todayKey &&
-                  subjectType &&
-                  subjectId != null && (
-                    <ActivityNewItem
-                      subjectType={subjectType}
-                      subjectId={subjectId}
-                      onCancel={() => setIsLogging(false)}
-                      isLast={false}
-                    />
-                  )}
                 {group.items.map((activity, i) => (
                   <ActivityItem
                     key={activity.id}

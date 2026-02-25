@@ -51,8 +51,8 @@ RSpec.describe "Contacts", type: :system do
     end
   end
 
-  describe "logging an activity inline" do
-    it "clicking Log reveals the inline kind picker and textarea" do
+  describe "logging an activity" do
+    it "clicking Log opens a popover with kind picker and textarea" do
       visit contact_path(contact)
       click_button "Log"
       expect(page).to have_button("Note")
