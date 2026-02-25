@@ -11,10 +11,11 @@ class ActivitiesController < InertiaController
       scope = scope
         .joins("LEFT JOIN contacts ON activities.subject_type = 'Contact' AND activities.subject_id = contacts.id")
         .joins("LEFT JOIN companies ON activities.subject_type = 'Company' AND activities.subject_id = companies.id")
+        .joins("LEFT JOIN deals ON activities.subject_type = 'Deal' AND activities.subject_id = deals.id")
       params[:q].split.each do |word|
         w = "%#{word}%"
         scope = scope.where(
-          "activities.body LIKE :w OR (contacts.first_name || ' ' || contacts.last_name) LIKE :w OR companies.name LIKE :w",
+          "activities.body LIKE :w OR (contacts.first_name || ' ' || contacts.last_name) LIKE :w OR companies.name LIKE :w OR deals.title LIKE :w",
           w: w
         )
       end
@@ -24,10 +25,22 @@ class ActivitiesController < InertiaController
       scope = scope.where(kind: params[:kind])
     end
 
+    if params[:subject].present?
+      case params[:subject]
+      when "contact"
+        scope = scope.where(subject_type: "Contact")
+      when "company"
+        scope = scope.where(subject_type: "Company")
+      when "deal"
+        scope = scope.where(subject_type: "Deal")
+      end
+    end
+
     render inertia: "activities/index", props: {
       activities: scope.map(&:as_activity_json),
       q: params[:q],
-      kind: params[:kind]
+      kind: params[:kind],
+      subject: params[:subject]
     }
   end
 
@@ -85,6 +98,8 @@ class ActivitiesController < InertiaController
       Current.user.contacts.find(params[:subject_id])
     when "Company"
       Current.user.companies.find(params[:subject_id])
+    when "Deal"
+      Current.user.deals.find(params[:subject_id])
     else
       raise ActiveRecord::RecordNotFound
     end

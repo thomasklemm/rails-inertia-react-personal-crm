@@ -7,6 +7,7 @@ import {
   Pencil,
   Phone,
   Trash2,
+  TrendingUp,
   User,
   X,
 } from "lucide-react"
@@ -29,6 +30,7 @@ import {
   activityPath,
   companyPath,
   contactPath,
+  dealPath,
 } from "@/routes"
 import type { Activity, ActivityKind } from "@/types"
 
@@ -204,12 +206,16 @@ export function ActivityItem({
                       href={
                         activity.subject.type === "Contact"
                           ? contactPath(activity.subject.id)
-                          : companyPath(activity.subject.id)
+                          : activity.subject.type === "Deal"
+                            ? dealPath(activity.subject.id)
+                            : companyPath(activity.subject.id)
                       }
                       className="text-primary inline-flex items-center gap-1 text-xs font-medium hover:underline"
                     >
                       {activity.subject.type === "Contact" ? (
                         <User className="size-3 shrink-0" />
+                      ) : activity.subject.type === "Deal" ? (
+                        <TrendingUp className="size-3 shrink-0" />
                       ) : (
                         <Building2 className="size-3 shrink-0" />
                       )}

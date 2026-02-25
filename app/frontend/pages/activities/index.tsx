@@ -12,6 +12,7 @@ interface Props {
   activities: Activity[]
   q?: string
   kind?: string
+  subject?: string
   [key: string]: unknown
 }
 
@@ -28,6 +29,13 @@ const KIND_FILTERS: {
   { label: "Notes", value: "note", icon: MessageSquare },
   { label: "Calls", value: "call", icon: Phone },
   { label: "Emails", value: "email", icon: Mail },
+]
+
+const SUBJECT_FILTERS: { label: string; value: string | undefined }[] = [
+  { label: "All", value: undefined },
+  { label: "Contacts", value: "contact" },
+  { label: "Companies", value: "company" },
+  { label: "Deals", value: "deal" },
 ]
 
 function groupByDate(activities: Activity[]) {
@@ -67,10 +75,10 @@ function groupByDate(activities: Activity[]) {
 }
 
 export default function ActivitiesIndex() {
-  const { activities, q, kind } = usePage<Props>().props
+  const { activities, q, kind, subject } = usePage<Props>().props
 
-  function navigate(params: { q?: string; kind?: string }) {
-    const merged = { q: q ?? "", kind: kind ?? "", ...params }
+  function navigate(params: { q?: string; kind?: string; subject?: string }) {
+    const merged = { q: q ?? "", kind: kind ?? "", subject: subject ?? "", ...params }
     const clean = Object.fromEntries(
       Object.entries(merged).filter(([, v]) => v !== "" && v !== undefined),
     )
@@ -92,40 +100,63 @@ export default function ActivitiesIndex() {
           <div className="mb-6">
             <h1 className="text-2xl font-bold">Activity Log</h1>
             <p className="text-muted-foreground mt-0.5 text-sm">
-              All activities across contacts and companies
+              All activities across contacts, companies, and deals
             </p>
           </div>
 
-          {/* Search + filter */}
-          <div className="flex flex-wrap items-center gap-3">
-            <div className="relative min-w-0 flex-1">
-              <Search className="text-muted-foreground absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2" />
-              <Input
-                className="h-9 pl-8"
-                placeholder="Search activities or contacts…"
-                defaultValue={q ?? ""}
-                onChange={(e) => navigate({ q: e.target.value || undefined })}
-              />
+          {/* Search + filters */}
+          <div className="space-y-2">
+            <div className="flex flex-wrap items-center gap-3">
+              <div className="relative min-w-0 flex-1">
+                <Search className="text-muted-foreground absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2" />
+                <Input
+                  className="h-9 pl-8"
+                  placeholder="Search activities or contacts…"
+                  defaultValue={q ?? ""}
+                  onChange={(e) => navigate({ q: e.target.value || undefined })}
+                />
+              </div>
+
+              <div className="bg-muted inline-flex rounded-lg border p-0.5">
+                {KIND_FILTERS.map((f) => {
+                  const isActive = (kind ?? undefined) === f.value
+                  return (
+                    <button
+                      key={f.label}
+                      onClick={() => navigate({ kind: f.value })}
+                      className={`flex items-center gap-1.5 rounded-md px-3 py-1 text-xs font-medium transition-all ${
+                        isActive
+                          ? "bg-background text-foreground shadow-sm"
+                          : "text-muted-foreground hover:bg-background/70 hover:text-foreground"
+                      }`}
+                    >
+                      {f.icon && <f.icon className="size-3.5" />}
+                      {f.label}
+                    </button>
+                  )
+                })}
+              </div>
             </div>
 
-            <div className="bg-muted inline-flex rounded-lg border p-0.5">
-              {KIND_FILTERS.map((f) => {
-                const isActive = (kind ?? undefined) === f.value
-                return (
-                  <button
-                    key={f.label}
-                    onClick={() => navigate({ kind: f.value })}
-                    className={`flex items-center gap-1.5 rounded-md px-3 py-1 text-xs font-medium transition-all ${
-                      isActive
-                        ? "bg-background text-foreground shadow-sm"
-                        : "text-muted-foreground hover:bg-background/70 hover:text-foreground"
-                    }`}
-                  >
-                    {f.icon && <f.icon className="size-3.5" />}
-                    {f.label}
-                  </button>
-                )
-              })}
+            <div className="flex items-center gap-3">
+              <div className="bg-muted inline-flex rounded-lg border p-0.5">
+                {SUBJECT_FILTERS.map((f) => {
+                  const isActive = (subject ?? undefined) === f.value
+                  return (
+                    <button
+                      key={f.label}
+                      onClick={() => navigate({ subject: f.value })}
+                      className={`flex items-center gap-1.5 rounded-md px-3 py-1 text-xs font-medium transition-all ${
+                        isActive
+                          ? "bg-background text-foreground shadow-sm"
+                          : "text-muted-foreground hover:bg-background/70 hover:text-foreground"
+                      }`}
+                    >
+                      {f.label}
+                    </button>
+                  )
+                })}
+              </div>
             </div>
           </div>
         </div>
