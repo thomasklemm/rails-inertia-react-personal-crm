@@ -1,6 +1,31 @@
 #!/usr/bin/env sh
 
-export PORT="${PORT:-3000}"
+# Find the lowest free TCP port starting from $1
+free_port() {
+  port=${1:-3000}
+  while lsof -Pi ":$port" -sTCP:LISTEN -t >/dev/null 2>&1; do
+    port=$((port + 1))
+  done
+  echo "$port"
+}
+
+# Rails port — honour explicit PORT, otherwise auto-detect from 3000
+if [ -z "$PORT" ]; then
+  PORT=$(free_port 3000)
+fi
+
+# Vite port — honour explicit VITE_RUBY_PORT, otherwise auto-detect from 3036
+if [ -z "$VITE_RUBY_PORT" ]; then
+  VITE_RUBY_PORT=$(free_port 3036)
+fi
+
+export PORT
+export VITE_RUBY_PORT
+
+echo ""
+echo "  App  →  http://localhost:$PORT"
+echo "  Vite →  http://localhost:$VITE_RUBY_PORT"
+echo ""
 
 if command -v overmind 1> /dev/null 2>&1
 then
@@ -10,7 +35,6 @@ fi
 
 if command -v hivemind 1> /dev/null 2>&1
 then
-  echo "Hivemind is installed. Running the application with Hivemind..."
   exec hivemind Procfile.dev "$@"
   exit $?
 fi
