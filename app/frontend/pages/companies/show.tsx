@@ -3,15 +3,17 @@ import type { ReactNode } from "react"
 
 import { ActivityLog } from "@/components/crm/activity-log"
 import { CompanyDetail } from "@/components/crm/company-detail"
+import { DealsList } from "@/components/crm/deals-list"
 import AppLayout from "@/layouts/app-layout"
 import { CompaniesLayout } from "@/layouts/companies-layout"
 import { companiesPath } from "@/routes"
-import type { Activity, BreadcrumbItem, Company, Contact } from "@/types"
+import type { Activity, BreadcrumbItem, Company, Contact, Deal } from "@/types"
 
 interface Props {
   company: Company
   contacts: Contact[]
   activities: Activity[]
+  deals?: Deal[]
   q?: string
   filter?: string
   sort?: string
@@ -20,7 +22,7 @@ interface Props {
 }
 
 export default function CompaniesShow() {
-  const { company, contacts, activities, q, filter, sort, sort_dir } =
+  const { company, contacts, activities, deals, q, filter, sort, sort_dir } =
     usePage<Props>().props
 
   return (
@@ -36,6 +38,9 @@ export default function CompaniesShow() {
             sort={sort}
             sort_dir={sort_dir}
           />
+          <div className="border-t px-6 py-5">
+            <DealsList deals={deals ?? []} companyId={company.id} />
+          </div>
           <div className="border-t px-6 py-5">
             <ActivityLog
               activities={activities}

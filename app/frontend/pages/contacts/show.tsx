@@ -3,15 +3,17 @@ import type { ReactNode } from "react"
 
 import { ActivityLog } from "@/components/crm/activity-log"
 import { ContactDetail } from "@/components/crm/contact-detail"
+import { DealsList } from "@/components/crm/deals-list"
 import AppLayout from "@/layouts/app-layout"
 import { CrmLayout } from "@/layouts/crm-layout"
 import { contactsPath } from "@/routes"
-import type { Activity, BreadcrumbItem, Company, Contact } from "@/types"
+import type { Activity, BreadcrumbItem, Company, Contact, Deal } from "@/types"
 
 interface Props {
   contact: Contact
   activities: Activity[]
   companies: Company[]
+  deals?: Deal[]
   new_company_id?: string
   q?: string
   filter?: string
@@ -25,6 +27,7 @@ export default function ContactsShow() {
     contact,
     activities,
     companies,
+    deals,
     new_company_id,
     q,
     filter,
@@ -47,6 +50,9 @@ export default function ContactsShow() {
             sort={sort}
             sort_dir={sort_dir}
           />
+          <div className="border-t px-6 py-5">
+            <DealsList deals={deals ?? []} contactId={contact.id} />
+          </div>
           <div className="border-t px-6 py-5">
             <ActivityLog
               activities={activities}

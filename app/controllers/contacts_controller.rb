@@ -19,6 +19,7 @@ class ContactsController < InertiaController
       contact: @contact.as_json(include: :company),
       activities: @contact.activities.includes(:subject).map(&:as_activity_json),
       companies: Current.user.companies.order(:name).as_json,
+      deals: @contact.deals.includes(:company).order(:stage, :created_at).map(&:as_deal_json),
       new_company_id: params[:new_company_id],
       q: params[:q],
       filter: params[:filter],
