@@ -366,7 +366,7 @@ export function CommandPalette() {
           ))}
 
         {query.length >= 2 && !loading && (
-          <CommandEmpty className="px-3 text-left">
+          <CommandEmpty className="px-3 py-6 text-left">
             No results found.
           </CommandEmpty>
         )}
