@@ -132,7 +132,7 @@ export default function ActivitiesIndex() {
           <div className="space-y-2">
             {/* Search */}
             <div className="relative">
-              <Search className="text-muted-foreground absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2" />
+              <Search className="text-muted-foreground absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2" aria-hidden="true" />
               <Input
                 className="h-9 pl-8"
                 placeholder="Search activities, contacts, companies, or deals…"
@@ -141,8 +141,8 @@ export default function ActivitiesIndex() {
               />
             </div>
 
-            {/* Filter pills — kind + subject on one row */}
-            <div className="flex flex-wrap items-center gap-2">
+            {/* Filter pills — kind on first line, subject on second (stacked on mobile) */}
+            <div className="flex flex-col items-start gap-2 sm:flex-row sm:flex-wrap sm:items-center">
               <div className="bg-muted inline-flex rounded-lg border p-0.5">
                 {KIND_FILTERS.map((f) => {
                   const isActive = (kind ?? undefined) === f.value
@@ -160,7 +160,7 @@ export default function ActivitiesIndex() {
                       {(!f.icon || isActive) && f.label}
                     </button>
                   )
-                  return f.icon && !isActive ? (
+                  return (f.icon && !isActive) || (!f.icon && !!f.title) ? (
                     <Tooltip key={f.label}>
                       <TooltipTrigger asChild>{btn}</TooltipTrigger>
                       <TooltipContent>{f.title ?? f.label}</TooltipContent>
@@ -190,7 +190,7 @@ export default function ActivitiesIndex() {
                       {(!f.icon || isActive) && f.label}
                     </button>
                   )
-                  return f.icon && !isActive ? (
+                  return (f.icon && !isActive) || (!f.icon && !!f.title) ? (
                     <Tooltip key={f.label}>
                       <TooltipTrigger asChild>{btn}</TooltipTrigger>
                       <TooltipContent>{f.title ?? f.label}</TooltipContent>
