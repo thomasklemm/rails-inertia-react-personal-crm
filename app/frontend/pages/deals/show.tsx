@@ -259,67 +259,135 @@ export default function DealsShow() {
             </div>
           </div>
 
-          {/* Stage progression */}
+          {/* Stage progression — redesigned */}
           <div className="rounded-xl border p-4">
-            <div className="flex flex-wrap items-center gap-1">
-              {/* Open stages with arrows */}
-              {OPEN_STAGES.map((stage, i) => (
-                <div key={stage} className="flex items-center gap-1">
+            {/* Pipeline stepper */}
+            <div className="relative flex items-start justify-between">
+              {/* Base connector line */}
+              <div className="bg-border absolute top-4 right-4 left-4 h-0.5" />
+              {/* Progress fill */}
+              <div
+                className="bg-primary/40 absolute top-4 left-4 h-0.5 transition-all duration-300"
+                style={{
+                  width: `calc((100% - 2rem) * ${
+                    (isOpen ? OPEN_STAGES.indexOf(deal.stage) : OPEN_STAGES.length - 1) /
+                    (OPEN_STAGES.length - 1)
+                  })`,
+                }}
+              />
+              {OPEN_STAGES.map((stage, i) => {
+                const stageOpenIdx = i
+                const currentOpenIdx = isOpen
+                  ? OPEN_STAGES.indexOf(deal.stage)
+                  : OPEN_STAGES.length - 1
+                const isPast = currentOpenIdx > stageOpenIdx
+                const isCurrent = deal.stage === stage
+                return (
                   <button
+                    key={stage}
                     onClick={() => deal.stage !== stage && handleMove(stage)}
-                    className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
-                      deal.stage === stage
-                        ? STAGE_COLORS[stage]
-                        : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                    }`}
+                    className="group/stage relative z-10 flex flex-col items-center gap-1.5"
                   >
-                    {STAGE_LABELS[stage as keyof typeof STAGE_LABELS]}
+                    <div
+                      className={`flex size-8 items-center justify-center rounded-full border-2 bg-background transition-all ${
+                        isCurrent
+                          ? "border-primary bg-primary text-primary-foreground shadow-sm ring-4 ring-primary/15"
+                          : isPast
+                            ? "border-primary/40 text-primary"
+                            : "border-border text-muted-foreground group-hover/stage:border-primary/40 group-hover/stage:text-foreground"
+                      }`}
+                    >
+                      {isPast ? (
+                        <Check className="size-3.5" />
+                      ) : (
+                        <span className="text-xs font-bold">{i + 1}</span>
+                      )}
+                    </div>
+                    <span
+                      className={`text-xs font-medium ${
+                        isCurrent
+                          ? "text-foreground"
+                          : "text-muted-foreground group-hover/stage:text-foreground"
+                      }`}
+                    >
+                      {STAGE_LABELS[stage as keyof typeof STAGE_LABELS]}
+                    </span>
                   </button>
-                  {i < OPEN_STAGES.length - 1 && (
-                    <ArrowRight className="text-muted-foreground/40 size-3 shrink-0" />
-                  )}
-                </div>
-              ))}
-
-              {/* Separator */}
-              <span className="text-border mx-1 select-none text-sm font-light">|</span>
-
-              {/* Won */}
-              <button
-                onClick={() => deal.stage !== "closed_won" && handleMove("closed_won")}
-                className={`flex items-center gap-1 rounded-full px-3 py-1 text-xs font-medium transition-colors ${
-                  deal.stage === "closed_won"
-                    ? STAGE_COLORS.closed_won
-                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                }`}
-              >
-                <CheckCircle2 className="size-3" />
-                Won
-              </button>
-
-              {/* Lost */}
-              <button
-                onClick={() => deal.stage !== "closed_lost" && handleMove("closed_lost")}
-                className={`flex items-center gap-1 rounded-full px-3 py-1 text-xs font-medium transition-colors ${
-                  deal.stage === "closed_lost"
-                    ? STAGE_COLORS.closed_lost
-                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                }`}
-              >
-                <XCircle className="size-3" />
-                Lost
-              </button>
+                )
+              })}
             </div>
 
-            {/* Advance CTA — only for open deals with a next stage */}
-            {isOpen && nextStage && (
-              <div className="mt-3 border-t pt-3">
-                <Button size="sm" variant="outline" onClick={handleAdvance} className="gap-1.5">
-                  <ArrowRight className="size-3.5" />
-                  Advance to {STAGE_LABELS[nextStage as keyof typeof STAGE_LABELS]}
-                </Button>
-              </div>
-            )}
+            {/* Action row */}
+            <div className="mt-4 flex items-center gap-2 border-t pt-3">
+              {isOpen ? (
+                <>
+                  {/* Advance button — only when next stage is another open stage */}
+                  {nextStage && OPEN_STAGES.includes(nextStage) && (
+                    <Button size="sm" onClick={handleAdvance} className="gap-1.5">
+                      <ArrowRight className="size-3.5" />
+                      Advance to {STAGE_LABELS[nextStage as keyof typeof STAGE_LABELS]}
+                    </Button>
+                  )}
+                  {/* Outcome buttons */}
+                  <div
+                    className={`flex gap-2 ${
+                      nextStage && OPEN_STAGES.includes(nextStage) ? "ml-auto" : ""
+                    }`}
+                  >
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => handleMove("closed_won")}
+                      className="gap-1.5 border-green-200 text-green-700 hover:border-green-300 hover:bg-green-50 dark:border-green-800 dark:text-green-400 dark:hover:bg-green-950/40"
+                    >
+                      <CheckCircle2 className="size-3.5" />
+                      Won
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => handleMove("closed_lost")}
+                      className="gap-1.5 border-red-200 text-red-700 hover:border-red-300 hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-950/40"
+                    >
+                      <XCircle className="size-3.5" />
+                      Lost
+                    </Button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  {/* Closed outcome badge */}
+                  <div
+                    className={`flex items-center gap-1.5 rounded-full px-3 py-1 text-sm font-medium ${
+                      deal.stage === "closed_won"
+                        ? "bg-green-50 text-green-700 dark:bg-green-950/40 dark:text-green-400"
+                        : "bg-red-50 text-red-700 dark:bg-red-950/40 dark:text-red-400"
+                    }`}
+                  >
+                    {deal.stage === "closed_won" ? (
+                      <>
+                        <CheckCircle2 className="size-4" />
+                        Won
+                      </>
+                    ) : (
+                      <>
+                        <XCircle className="size-4" />
+                        Lost
+                      </>
+                    )}
+                  </div>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="ml-auto gap-1.5 text-muted-foreground"
+                    onClick={() => handleMove("lead")}
+                  >
+                    <ArrowRight className="size-3.5 rotate-180" />
+                    Reopen as Lead
+                  </Button>
+                </>
+              )}
+            </div>
           </div>
 
           {/* Deal info */}
