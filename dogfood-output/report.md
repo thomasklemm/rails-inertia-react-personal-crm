@@ -13,19 +13,19 @@
 |----------|-------|
 | Critical | 0 |
 | High | 0 |
-| Medium | 1 |
-| Low | 1 |
-| **Total** | **2** |
+| Medium | 0 |
+| Low | 0 |
+| **Total** | **0** |
 
 ## Issues
 
 <!-- Copy this block for each issue found. Interactive issues need video + step-by-step screenshots. Static issues (typos, visual glitches) only need a single screenshot -- set Repro Video to N/A. -->
 
-### ISSUE-002: Accessing a deleted deal URL shows unhandled Rails exception
+### ~~ISSUE-002: Accessing a deleted deal URL shows unhandled Rails exception~~ ✅ Fixed (c95d388)
 
 | Field | Value |
 |-------|-------|
-| **Severity** | low |
+| **Severity** | ~~low~~ |
 | **Category** | functional |
 | **URL** | http://localhost:3000/deals/50 (deleted deal) |
 | **Repro Video** | N/A |
@@ -47,11 +47,11 @@ The fix is to add `rescue_from ActiveRecord::RecordNotFound, with: :record_not_f
 
 ---
 
-### ISSUE-001: "Closed" date shown on open-stage deals
+### ~~ISSUE-001: "Closed" date shown on open-stage deals~~ ✅ Fixed (c95d388)
 
 | Field | Value |
 |-------|-------|
-| **Severity** | medium |
+| **Severity** | ~~medium~~ |
 | **Category** | functional / content |
 | **URL** | http://localhost:3000/deals/49 |
 | **Repro Video** | N/A |
