@@ -140,7 +140,7 @@ export function ContactList({
               key={f.label}
               aria-label={f.label}
               onClick={() => navigate({ filter: f.value })}
-              className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${
+              className={`flex items-center gap-1.5 whitespace-nowrap rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${
                 isActive
                   ? "bg-sidebar-accent text-sidebar-accent-foreground font-semibold"
                   : "text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground"
@@ -179,7 +179,7 @@ export function ContactList({
                     navigate({ sort: s.value, sort_dir: s.defaultDir })
                   }
                 }}
-                className={`flex cursor-pointer items-center gap-1 rounded-md px-2 py-0.5 text-xs transition-colors ${
+                className={`flex cursor-pointer items-center gap-1 whitespace-nowrap rounded-md px-2 py-0.5 text-xs transition-colors ${
                   isActive
                     ? "text-foreground font-semibold"
                     : "text-muted-foreground hover:text-foreground"

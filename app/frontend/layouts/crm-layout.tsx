@@ -27,7 +27,7 @@ export function CrmLayout({ children }: { children: ReactNode }) {
           Desktop (md+): always visible as fixed-width sidebar. */}
       <div
         className={`flex shrink-0 flex-col overflow-hidden border-r ${
-          hasContact ? "hidden md:flex md:w-72" : "w-full md:w-72"
+          hasContact ? "hidden md:flex" : "w-full md:w-auto"
         }`}
       >
         <ContactList
