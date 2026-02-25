@@ -10,10 +10,16 @@ require "capybara/rspec"
 require "selenium-webdriver"
 require "inertia_rails/rspec"
 
-# Precompile Vite assets once before running the test suite.
-# Skip if already built (CI cache hit, or dev server fallback).
+# Precompile Vite assets before running the test suite.
+# Rebuilds whenever any frontend source file is newer than the manifest,
+# so stale assets never silently cause system spec failures.
 vite_manifest = Rails.public_path.join("vite-test/.vite/manifest.json")
-ViteRuby.commands.build unless vite_manifest.exist?
+stale =
+  !vite_manifest.exist? ||
+  Dir.glob(Rails.root.join("app/frontend/**/*")).any? do |f|
+    File.file?(f) && File.mtime(f) > vite_manifest.mtime
+  end
+ViteRuby.commands.build if stale
 
 Rails.root.glob("spec/support/**/*.rb").sort_by(&:to_s).each { |f| require f }
 
