@@ -40,21 +40,38 @@ export function NavTheme() {
 
   if (state === "collapsed") {
     return (
-      <SidebarMenuItem>
-        <Tooltip open={tooltipOpen}>
-          <TooltipTrigger asChild>
-            <SidebarMenuButton
-              onMouseEnter={() => setTooltipOpen(true)}
-              onMouseLeave={() => setTooltipOpen(false)}
-              onClick={cycleAppearance}
-              className="text-neutral-600 hover:text-neutral-800 dark:text-neutral-300 dark:hover:text-neutral-100"
-            >
-              <Icon className="h-4 w-4" />
-            </SidebarMenuButton>
-          </TooltipTrigger>
-          <TooltipContent side="right">Change Appearance</TooltipContent>
-        </Tooltip>
-      </SidebarMenuItem>
+      <>
+        <SidebarMenuItem>
+          <Tooltip open={tooltipOpen}>
+            <TooltipTrigger asChild>
+              <SidebarMenuButton
+                onMouseEnter={() => setTooltipOpen(true)}
+                onMouseLeave={() => setTooltipOpen(false)}
+                onClick={cycleAppearance}
+                className="text-neutral-600 hover:text-neutral-800 dark:text-neutral-300 dark:hover:text-neutral-100"
+              >
+                <Icon className="h-4 w-4" />
+              </SidebarMenuButton>
+            </TooltipTrigger>
+            <TooltipContent side="right">Change Appearance</TooltipContent>
+          </Tooltip>
+        </SidebarMenuItem>
+        <SidebarMenuItem>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <SidebarMenuButton
+                asChild
+                className="text-neutral-600 hover:text-neutral-800 dark:text-neutral-300 dark:hover:text-neutral-100"
+              >
+                <a href={repoUrl} target="_blank" rel="noopener noreferrer">
+                  <Github className="h-4 w-4" />
+                </a>
+              </SidebarMenuButton>
+            </TooltipTrigger>
+            <TooltipContent side="right">Repository</TooltipContent>
+          </Tooltip>
+        </SidebarMenuItem>
+      </>
     )
   }
 
