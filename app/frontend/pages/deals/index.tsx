@@ -294,7 +294,7 @@ export default function DealsIndex() {
     <>
       <Head title="Deals" />
       <div className="scrollbar-subtle h-full overflow-y-auto">
-        <div className="mx-auto w-full max-w-7xl px-6 py-8">
+        <div className="mx-auto w-full max-w-screen-2xl px-6 py-8">
           {/* Page header */}
           <div className="mb-6 flex items-center justify-between">
             <div>
