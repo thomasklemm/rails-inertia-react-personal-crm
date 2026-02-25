@@ -4,6 +4,11 @@ import type { ReactNode } from "react"
 
 import { ActivityItem } from "@/components/crm/activity-item"
 import { Input } from "@/components/ui/input"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 import AppLayout from "@/layouts/app-layout"
 import { activitiesPath } from "@/routes"
 import type { Activity, ActivityKind, BreadcrumbItem } from "@/types"
@@ -117,7 +122,7 @@ export default function ActivitiesIndex() {
               <Search className="text-muted-foreground absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2" />
               <Input
                 className="h-9 pl-8"
-                placeholder="Search activities or contacts…"
+                placeholder="Search activities, contacts, companies, deals…"
                 defaultValue={q ?? ""}
                 onChange={(e) => navigate({ q: e.target.value || undefined })}
               />
@@ -128,11 +133,10 @@ export default function ActivitiesIndex() {
               <div className="bg-muted inline-flex rounded-lg border p-0.5">
                 {KIND_FILTERS.map((f) => {
                   const isActive = (kind ?? undefined) === f.value
-                  return (
+                  const btn = (
                     <button
                       key={f.label}
                       onClick={() => navigate({ kind: f.value })}
-                      title={f.title}
                       className={`flex items-center gap-1.5 rounded-md px-3 py-1 text-xs font-medium transition-all ${
                         isActive
                           ? "bg-background text-foreground shadow-sm"
@@ -143,6 +147,14 @@ export default function ActivitiesIndex() {
                       {f.label}
                     </button>
                   )
+                  return f.title ? (
+                    <Tooltip key={f.label}>
+                      <TooltipTrigger asChild>{btn}</TooltipTrigger>
+                      <TooltipContent>{f.title}</TooltipContent>
+                    </Tooltip>
+                  ) : (
+                    btn
+                  )
                 })}
               </div>
 
@@ -151,11 +163,10 @@ export default function ActivitiesIndex() {
               <div className="bg-muted inline-flex rounded-lg border p-0.5">
                 {SUBJECT_FILTERS.map((f) => {
                   const isActive = (subject ?? undefined) === f.value
-                  return (
+                  const btn = (
                     <button
                       key={f.label}
                       onClick={() => navigate({ subject: f.value })}
-                      title={f.title}
                       className={`flex items-center gap-1.5 rounded-md px-3 py-1 text-xs font-medium transition-all ${
                         isActive
                           ? "bg-background text-foreground shadow-sm"
@@ -165,6 +176,14 @@ export default function ActivitiesIndex() {
                       {f.icon && <f.icon className="size-3.5" />}
                       {f.label}
                     </button>
+                  )
+                  return f.title ? (
+                    <Tooltip key={f.label}>
+                      <TooltipTrigger asChild>{btn}</TooltipTrigger>
+                      <TooltipContent>{f.title}</TooltipContent>
+                    </Tooltip>
+                  ) : (
+                    btn
                   )
                 })}
               </div>
