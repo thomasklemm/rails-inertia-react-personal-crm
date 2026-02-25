@@ -117,31 +117,38 @@ export function CommandPalette() {
     return () => document.removeEventListener("inertia:finish", onFinish)
   }, [])
 
-  // Debounced fetch
+  // Debounced fetch — AbortController prevents stale results from earlier requests
   useEffect(() => {
     if (query.length < 2) {
       setResults([])
       setLoading(false)
       return
     }
+    setResults([]) // Clear stale results immediately on query change
     setLoading(true)
     if (debounceRef.current) clearTimeout(debounceRef.current)
+    const controller = new AbortController()
     debounceRef.current = setTimeout(async () => {
       try {
         const res = await fetch(
           `${searchPath()}?q=${encodeURIComponent(query)}`,
           {
             headers: { Accept: "application/json" },
+            signal: controller.signal,
           },
         )
         const data = (await res.json()) as SearchResponse
         setResults(data.results)
-      } finally {
         setLoading(false)
+      } catch (err) {
+        if ((err as Error).name !== "AbortError") {
+          setLoading(false)
+        }
       }
     }, 200)
     return () => {
       if (debounceRef.current) clearTimeout(debounceRef.current)
+      controller.abort()
     }
   }, [query])
 
