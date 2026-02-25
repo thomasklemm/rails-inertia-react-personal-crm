@@ -2,6 +2,7 @@ import { Mail, MessageSquare, PenLine, Phone } from "lucide-react"
 import { useMemo, useState } from "react"
 
 import { Button } from "@/components/ui/button"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import type { Activity, ActivityKind } from "@/types"
 
 import { ActivityItem, ActivityNewItem } from "./activity-item"
@@ -98,15 +99,20 @@ export function ActivityLog({
         <div className="flex items-center gap-2">
           <h3 className="text-base font-semibold tracking-tight">{title}</h3>
           {canLog && !isLogging && (
-            <Button
-              size="sm"
-              variant="outline"
-              className="h-7 gap-1 px-2 text-xs font-medium"
-              onClick={() => setIsLogging(true)}
-            >
-              <PenLine className="size-3" />
-              Log
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="h-7 gap-1 px-2 text-xs font-medium"
+                  onClick={() => setIsLogging(true)}
+                >
+                  <PenLine className="size-3" />
+                  Log
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Log Activity</TooltipContent>
+            </Tooltip>
           )}
           <div className="bg-muted ml-auto inline-flex rounded-lg border p-0.5">
             {FILTERS.map((f) => (
