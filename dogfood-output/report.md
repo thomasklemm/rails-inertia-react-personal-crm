@@ -17,6 +17,21 @@
 | Low | 1 |
 | **Total** | **4** |
 
+## Verification
+
+All 4 issues verified fixed on 2026-02-25 (commit `06cb1e8`).
+
+| Issue | Status | Evidence |
+|-------|--------|----------|
+| ISSUE-001 | ✅ Fixed | Demo credentials now log in and redirect to Dashboard |
+| ISSUE-002 | ✅ Fixed | Toast "That email or password is incorrect" shown on failure |
+| ISSUE-003 | ✅ Fixed | User stays on Activity Log after saving an edit |
+| ISSUE-004 | ✅ Fixed | Calendar opens on March 2026 with Mar 1 pre-selected |
+
+Screenshots: `verification/screenshots/` · Videos: `verification/videos/`
+
+---
+
 ## Issues
 
 ### ISSUE-001: Demo credentials on sign-in page do not work
@@ -27,6 +42,7 @@
 | **Category** | functional |
 | **URL** | http://localhost:3000/sign_in |
 | **Repro Video** | N/A |
+| **Fixed** | ✅ 2026-02-25 (commit `06cb1e8`) |
 
 **Description**
 
@@ -53,6 +69,7 @@ The sign-in page displays demo credentials (`demo@example.com` / `password123456
 | **Category** | ux |
 | **URL** | http://localhost:3000/sign_in |
 | **Repro Video** | N/A |
+| **Fixed** | ✅ 2026-02-25 (commit `06cb1e8`) |
 
 **Description**
 
@@ -79,6 +96,7 @@ When a user submits the sign-in form with invalid credentials, the page silently
 | **Category** | ux |
 | **URL** | http://localhost:3000/activities |
 | **Repro Video** | videos/issue-003-activity-redirect.webm |
+| **Fixed** | ✅ 2026-02-25 (commit `06cb1e8`) |
 
 **Description**
 
@@ -108,6 +126,7 @@ When a user edits an activity on the global Activity Log page (`/activities`) an
 | **Category** | ux |
 | **URL** | http://localhost:3000/contacts/{id} |
 | **Repro Video** | N/A |
+| **Fixed** | ✅ 2026-02-25 (commit `06cb1e8`) |
 
 **Description**
 
