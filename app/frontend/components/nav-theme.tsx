@@ -107,7 +107,7 @@ export function NavTheme() {
               href={repoUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex h-6 w-6 items-center justify-center rounded text-muted-foreground transition-colors hover:text-foreground"
+              className="text-muted-foreground hover:text-foreground flex h-6 w-6 items-center justify-center rounded transition-colors"
             >
               <Github className="h-3.5 w-3.5" />
             </a>
