@@ -21,7 +21,7 @@ RSpec.describe "Activities", type: :system do
     it "filters activities by kind" do
       create(:activity, subject: contact, kind: "call", body: "Called to follow up.", user: user)
       visit activities_path
-      click_button "Calls"
+      find('button[aria-label="Calls"]').click
       expect(page).not_to have_text("Discussed renewal terms.")
       expect(page).to have_text("Called to follow up.")
     end

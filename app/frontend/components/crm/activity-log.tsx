@@ -125,6 +125,7 @@ export function ActivityLog({
               const isActive = kindFilter === f.value
               const btn = (
                 <button
+                  aria-label={f.label}
                   onClick={() => setKindFilter(f.value)}
                   className={`flex items-center gap-1.5 rounded-md px-3 py-1 text-xs font-medium transition-all ${
                     isActive

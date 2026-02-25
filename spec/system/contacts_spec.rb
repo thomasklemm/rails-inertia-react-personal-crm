@@ -45,9 +45,9 @@ RSpec.describe "Contacts", type: :system do
     it "shows the Log button and kind filters" do
       visit contact_path(contact)
       expect(page).to have_button("Log")
-      expect(page).to have_button("Notes")
-      expect(page).to have_button("Calls")
-      expect(page).to have_button("Emails")
+      expect(page).to have_css('button[aria-label="Notes"]')
+      expect(page).to have_css('button[aria-label="Calls"]')
+      expect(page).to have_css('button[aria-label="Emails"]')
     end
   end
 

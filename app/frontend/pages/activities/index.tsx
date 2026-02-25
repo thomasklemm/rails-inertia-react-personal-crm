@@ -148,6 +148,7 @@ export default function ActivitiesIndex() {
                   const isActive = (kind ?? undefined) === f.value
                   const btn = (
                     <button
+                      aria-label={f.title ?? f.label}
                       onClick={() => navigate({ kind: f.value })}
                       className={`flex items-center gap-1.5 rounded-md px-3 py-1 text-xs font-medium transition-all ${
                         isActive
@@ -177,6 +178,7 @@ export default function ActivitiesIndex() {
                   const isActive = (subject ?? undefined) === f.value
                   const btn = (
                     <button
+                      aria-label={f.title ?? f.label}
                       onClick={() => navigate({ subject: f.value })}
                       className={`flex items-center gap-1.5 rounded-md px-3 py-1 text-xs font-medium transition-all ${
                         isActive
