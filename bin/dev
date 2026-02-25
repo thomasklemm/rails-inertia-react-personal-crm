@@ -1,10 +1,10 @@
 #!/usr/bin/env sh
 
 # Find the lowest free TCP port starting from $1.
-# Uses nc (netcat) which is reliable across macOS versions.
+# Uses lsof so it catches listeners on any interface (IPv4 or IPv6).
 free_port() {
   port=${1:-3000}
-  while nc -z 127.0.0.1 "$port" 2>/dev/null; do
+  while lsof -iTCP:"$port" -sTCP:LISTEN -P -n >/dev/null 2>&1; do
     port=$((port + 1))
   done
   echo "$port"
