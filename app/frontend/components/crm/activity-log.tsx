@@ -20,7 +20,6 @@ import {
 import { activitiesPath } from "@/routes"
 import type { Activity, ActivityKind } from "@/types"
 
-
 import { ActivityItem } from "./activity-item"
 
 const KINDS: { value: ActivityKind; label: string; icon: React.ElementType }[] =

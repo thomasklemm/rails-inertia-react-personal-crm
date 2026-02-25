@@ -29,12 +29,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
-import {
-  activityPath,
-  companyPath,
-  contactPath,
-  dealPath,
-} from "@/routes"
+import { activityPath, companyPath, contactPath, dealPath } from "@/routes"
 import type { Activity, ActivityKind } from "@/types"
 
 const KIND_ICONS = {
@@ -288,4 +283,3 @@ export function ActivityItem({
     </>
   )
 }
-
