@@ -7,6 +7,7 @@ import {
   CheckCircle2,
   Edit,
   Pencil,
+  Plus,
   Trash2,
   TrendingUp,
   User,
@@ -29,6 +30,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 import { Textarea } from "@/components/ui/textarea"
 import AppLayout from "@/layouts/app-layout"
@@ -77,6 +79,11 @@ export default function DealsShow() {
   const [savingNotes, setSavingNotes] = useState(false)
   const notesRef = useRef<HTMLTextAreaElement>(null)
 
+  const [editingValue, setEditingValue] = useState(false)
+  const [valueInput, setValueInput] = useState("")
+  const [savingValue, setSavingValue] = useState(false)
+  const valueInputRef = useRef<HTMLInputElement>(null)
+
   const currentStageIdx = DEAL_STAGES.indexOf(deal.stage)
   const nextStage = DEAL_STAGES[currentStageIdx + 1] ?? null
   const isOpen = OPEN_STAGES.includes(deal.stage)
@@ -107,6 +114,32 @@ export default function DealsShow() {
   function cancelEditNotes() {
     setEditingNotes(false)
     setNotesValue(deal.notes ?? "")
+  }
+
+  function startEditValue() {
+    setValueInput(deal.value > 0 ? String(deal.value) : "")
+    setEditingValue(true)
+    setTimeout(() => valueInputRef.current?.focus(), 0)
+  }
+
+  function cancelEditValue() {
+    setEditingValue(false)
+  }
+
+  function saveValue() {
+    setSavingValue(true)
+    router.patch(
+      dealPath(deal.id),
+      { value: parseFloat(valueInput) || 0 },
+      {
+        preserveScroll: true,
+        onSuccess: () => {
+          setEditingValue(false)
+          setSavingValue(false)
+        },
+        onError: () => setSavingValue(false),
+      },
+    )
   }
 
   function saveNotes() {
@@ -143,10 +176,57 @@ export default function DealsShow() {
                 >
                   {STAGE_LABELS[deal.stage] ?? deal.stage}
                 </span>
-                {deal.value > 0 && (
-                  <span className="text-muted-foreground text-sm font-medium">
-                    {formatValue(deal.value)}
-                  </span>
+                {editingValue ? (
+                  <div className="flex items-center gap-1">
+                    <span className="text-muted-foreground text-xs">$</span>
+                    <Input
+                      ref={valueInputRef}
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      value={valueInput}
+                      onChange={(e) => setValueInput(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Escape") cancelEditValue()
+                        if (e.key === "Enter") saveValue()
+                      }}
+                      className="h-6 w-28 px-1.5 text-sm"
+                      disabled={savingValue}
+                    />
+                    <button
+                      onClick={saveValue}
+                      disabled={savingValue}
+                      className="hover:bg-muted rounded p-0.5"
+                    >
+                      <Check className="text-muted-foreground size-3" />
+                    </button>
+                    <button
+                      onClick={cancelEditValue}
+                      disabled={savingValue}
+                      className="hover:bg-muted rounded p-0.5"
+                    >
+                      <X className="text-muted-foreground size-3" />
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    onClick={startEditValue}
+                    className="group/value flex items-center gap-1 transition-colors"
+                  >
+                    {deal.value > 0 ? (
+                      <>
+                        <span className="text-muted-foreground text-sm font-medium">
+                          {formatValue(deal.value)}
+                        </span>
+                        <Pencil className="text-muted-foreground size-3 opacity-0 transition-opacity group-hover/value:opacity-100" />
+                      </>
+                    ) : (
+                      <span className="text-muted-foreground flex items-center gap-0.5 text-xs hover:text-foreground">
+                        <Plus className="size-3" />
+                        Add value
+                      </span>
+                    )}
+                  </button>
                 )}
                 {deal.closed_at && (
                   <span className="text-muted-foreground text-xs">
@@ -244,36 +324,54 @@ export default function DealsShow() {
 
           {/* Deal info */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {deal.contact && (
-              <div className="rounded-lg border p-3">
-                <dt className="text-muted-foreground mb-1.5 flex items-center gap-1 text-xs font-medium">
-                  <User className="size-3" /> Contact
-                </dt>
-                <dd>
+            <div className={`rounded-lg border p-3 ${!deal.contact ? "border-dashed" : ""}`}>
+              <dt className="text-muted-foreground mb-1.5 flex items-center gap-1 text-xs font-medium">
+                <User className="size-3" /> Contact
+              </dt>
+              <dd>
+                {deal.contact ? (
                   <a
                     href={contactPath(deal.contact.id)}
                     className="text-sm font-medium hover:underline"
                   >
                     {deal.contact.first_name} {deal.contact.last_name}
                   </a>
-                </dd>
-              </div>
-            )}
-            {deal.company && (
-              <div className="rounded-lg border p-3">
-                <dt className="text-muted-foreground mb-1.5 flex items-center gap-1 text-xs font-medium">
-                  <Building2 className="size-3" /> Company
-                </dt>
-                <dd>
+                ) : (
+                  <ModalLink
+                    navigate
+                    href={editDealPath(deal.id)}
+                    className="text-muted-foreground hover:text-foreground flex items-center gap-1 text-sm transition-colors"
+                  >
+                    <Plus className="size-3" />
+                    Assign Contact
+                  </ModalLink>
+                )}
+              </dd>
+            </div>
+            <div className={`rounded-lg border p-3 ${!deal.company ? "border-dashed" : ""}`}>
+              <dt className="text-muted-foreground mb-1.5 flex items-center gap-1 text-xs font-medium">
+                <Building2 className="size-3" /> Company
+              </dt>
+              <dd>
+                {deal.company ? (
                   <a
                     href={companyPath(deal.company.id)}
                     className="text-sm font-medium hover:underline"
                   >
                     {deal.company.name}
                   </a>
-                </dd>
-              </div>
-            )}
+                ) : (
+                  <ModalLink
+                    navigate
+                    href={editDealPath(deal.id)}
+                    className="text-muted-foreground hover:text-foreground flex items-center gap-1 text-sm transition-colors"
+                  >
+                    <Plus className="size-3" />
+                    Assign Company
+                  </ModalLink>
+                )}
+              </dd>
+            </div>
           </div>
 
           <Separator />
