@@ -10,6 +10,7 @@ import {
 
 import { NavFooter } from "@/components/nav-footer"
 import { NavMain } from "@/components/nav-main"
+import { NavTheme } from "@/components/nav-theme"
 import { NavUser } from "@/components/nav-user"
 import {
   Sidebar,
@@ -90,8 +91,10 @@ export function AppSidebar() {
         <NavMain items={mainNavItems} />
       </SidebarContent>
 
-      <SidebarFooter>
-        <NavFooter items={footerNavItems} className="mt-auto" />
+      <SidebarFooter className="pb-4">
+        <NavFooter items={footerNavItems} className="mt-auto">
+          <NavTheme />
+        </NavFooter>
         <NavUser />
       </SidebarFooter>
     </Sidebar>
