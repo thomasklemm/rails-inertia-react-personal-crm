@@ -4,12 +4,13 @@ import type { ReactNode } from "react"
 
 import { ContactAvatar } from "@/components/crm/contact-avatar"
 import { DashboardActivityFeed } from "@/components/crm/dashboard-activity-feed"
+import { DashboardDealsWidget } from "@/components/crm/dashboard-deals"
 import { DashboardStarredContacts } from "@/components/crm/dashboard-starred-contacts"
 import { DashboardStatsRow } from "@/components/crm/dashboard-stats"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import AppLayout from "@/layouts/app-layout"
 import { contactPath, dashboardPath } from "@/routes"
-import type { Activity, BreadcrumbItem, Contact, DashboardStats } from "@/types"
+import type { Activity, BreadcrumbItem, Contact, DashboardStats, Deal } from "@/types"
 
 interface DueFollowUp {
   id: number
@@ -21,6 +22,7 @@ interface DueFollowUp {
 
 interface Props {
   stats: DashboardStats
+  open_deals: Deal[]
   recent_activities: Activity[]
   starred_contacts: Contact[]
   due_follow_ups: DueFollowUp[]
@@ -72,7 +74,7 @@ function followUpMeta(dateString: string): { label: string; classes: string } {
 }
 
 export default function DashboardShow() {
-  const { stats, recent_activities, starred_contacts, due_follow_ups } =
+  const { stats, open_deals, recent_activities, starred_contacts, due_follow_ups } =
     usePage<Props>().props
 
   return (
@@ -139,6 +141,12 @@ export default function DashboardShow() {
           ) : (
             <DashboardStarredContacts contacts={starred_contacts} />
           )}
+
+          {/* Pipeline Deals */}
+          <DashboardDealsWidget
+            deals={open_deals}
+            pipeline_value={stats.pipeline_value}
+          />
 
           {/* Recent Activity — full width */}
           <DashboardActivityFeed activities={recent_activities} />
