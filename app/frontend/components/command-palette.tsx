@@ -87,10 +87,18 @@ export function CommandPalette() {
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const { updateAppearance } = useAppearance()
 
-  // ⌘K / Ctrl+K shortcut
+  // ⌘K / Ctrl+K shortcut — skip when focus is inside an editable element
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
       if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        const target = e.target as Element
+        if (
+          target.tagName === "INPUT" ||
+          target.tagName === "TEXTAREA" ||
+          (target as HTMLElement).isContentEditable
+        ) {
+          return
+        }
         e.preventDefault()
         setOpen((o) => !o)
       }
