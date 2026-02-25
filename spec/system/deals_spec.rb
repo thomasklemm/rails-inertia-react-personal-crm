@@ -49,7 +49,7 @@ RSpec.describe "Deals", type: :system do
       expect(page).to have_text("Lead")
       expect(page).to have_text("Qualified")
 
-      click_button "Qualified"
+      click_button "Advance to Qualified"
 
       # Page reloads with the new stage reflected
       expect(page).to have_current_path(deal_path(lead_deal))

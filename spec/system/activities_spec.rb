@@ -44,14 +44,14 @@ RSpec.describe "Activities", type: :system do
 
     it "finds activities by body text" do
       visit activities_path
-      fill_in "Search activities or contacts…", with: "renewal"
+      fill_in "Search activities, contacts, companies, or deals…", with: "renewal"
       expect(page).to have_text("Discussed renewal terms.")
       expect(page).not_to have_text("Partnership call.")
     end
 
     it "finds activities by contact name" do
       visit activities_path
-      fill_in "Search activities or contacts…", with: "Zara"
+      fill_in "Search activities, contacts, companies, or deals…", with: "Zara"
       expect(page).to have_text("Discussed renewal terms.")
       expect(page).not_to have_text("Partnership call.")
     end
@@ -59,21 +59,21 @@ RSpec.describe "Activities", type: :system do
     it "finds activities by company name" do
       create(:activity, subject: company, body: "Company review meeting.", user: user)
       visit activities_path
-      fill_in "Search activities or contacts…", with: "Acme"
+      fill_in "Search activities, contacts, companies, or deals…", with: "Acme"
       expect(page).to have_text("Company review meeting.")
       expect(page).not_to have_text("Discussed renewal terms.")
     end
 
     it "matches each search word independently across subject and body" do
       visit activities_path
-      fill_in "Search activities or contacts…", with: "Zara renewal"
+      fill_in "Search activities, contacts, companies, or deals…", with: "Zara renewal"
       expect(page).to have_text("Discussed renewal terms.")
       expect(page).not_to have_text("Partnership call.")
     end
 
     it "returns no results when words don't all match" do
       visit activities_path
-      fill_in "Search activities or contacts…", with: "Zara partnership"
+      fill_in "Search activities, contacts, companies, or deals…", with: "Zara partnership"
       expect(page).not_to have_text("Discussed renewal terms.")
       expect(page).not_to have_text("Partnership call.")
     end
