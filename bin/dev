@@ -1,20 +1,22 @@
 #!/usr/bin/env sh
 
-# Find the lowest free TCP port starting from $1
+# Find the lowest free TCP port starting from $1.
+# Uses nc (netcat) which is reliable across macOS versions.
 free_port() {
   port=${1:-3000}
-  while lsof -Pi ":$port" -sTCP:LISTEN -t >/dev/null 2>&1; do
+  while nc -z 127.0.0.1 "$port" 2>/dev/null; do
     port=$((port + 1))
   done
   echo "$port"
 }
 
-# Rails port — honour explicit PORT, otherwise auto-detect from 3000
+# Rails port — honour explicit PORT, otherwise auto-detect from 3000.
+# Thruster (bin/thrust) will listen on PORT and proxy to Puma on PORT+100.
 if [ -z "$PORT" ]; then
   PORT=$(free_port 3000)
 fi
 
-# Vite port — honour explicit VITE_RUBY_PORT, otherwise auto-detect from 3036
+# Vite port — honour explicit VITE_RUBY_PORT, otherwise auto-detect from 3036.
 if [ -z "$VITE_RUBY_PORT" ]; then
   VITE_RUBY_PORT=$(free_port 3036)
 fi
