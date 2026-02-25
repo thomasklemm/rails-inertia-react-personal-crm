@@ -1,5 +1,5 @@
 import { Mail, MessageSquare, PenLine, Phone } from "lucide-react"
-import { useMemo, useState } from "react"
+import { Fragment, useMemo, useState } from "react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -100,39 +100,51 @@ export function ActivityLog({
   return (
     <div>
       <div className="mb-4">
-        <div className="flex flex-wrap items-center gap-2">
-          <h3 className="text-base font-semibold tracking-tight">{title}</h3>
-          {canLog && !isLogging && (
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="h-7 gap-1 px-2 text-xs font-medium"
-                  onClick={() => setIsLogging(true)}
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <h3 className="text-base font-semibold tracking-tight">{title}</h3>
+            {canLog && !isLogging && (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="h-7 gap-1 px-2 text-xs font-medium"
+                    onClick={() => setIsLogging(true)}
+                  >
+                    <PenLine className="size-3" />
+                    Log
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Log Activity</TooltipContent>
+              </Tooltip>
+            )}
+          </div>
+          <div className="bg-muted inline-flex shrink-0 rounded-lg border p-0.5">
+            {FILTERS.map((f) => {
+              const isActive = kindFilter === f.value
+              const btn = (
+                <button
+                  onClick={() => setKindFilter(f.value)}
+                  className={`flex items-center gap-1.5 rounded-md px-3 py-1 text-xs font-medium transition-all ${
+                    isActive
+                      ? "bg-background text-foreground shadow-sm"
+                      : "text-muted-foreground hover:bg-background/70 hover:text-foreground"
+                  }`}
                 >
-                  <PenLine className="size-3" />
-                  Log
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>Log Activity</TooltipContent>
-            </Tooltip>
-          )}
-          <div className="bg-muted ml-auto inline-flex shrink-0 rounded-lg border p-0.5">
-            {FILTERS.map((f) => (
-              <button
-                key={f.label}
-                onClick={() => setKindFilter(f.value)}
-                className={`flex items-center gap-1.5 rounded-md px-3 py-1 text-xs font-medium transition-all ${
-                  kindFilter === f.value
-                    ? "bg-background text-foreground shadow-sm"
-                    : "text-muted-foreground hover:bg-background/70 hover:text-foreground"
-                }`}
-              >
-                {f.icon && <f.icon className="size-3.5" />}
-                {f.label}
-              </button>
-            ))}
+                  {f.icon && <f.icon className="size-3.5" />}
+                  {(!f.icon || isActive) && f.label}
+                </button>
+              )
+              return f.icon && !isActive ? (
+                <Tooltip key={f.label}>
+                  <TooltipTrigger asChild>{btn}</TooltipTrigger>
+                  <TooltipContent>{f.label}</TooltipContent>
+                </Tooltip>
+              ) : (
+                <Fragment key={f.label}>{btn}</Fragment>
+              )
+            })}
           </div>
         </div>
         {description && (

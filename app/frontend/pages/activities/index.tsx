@@ -8,7 +8,7 @@ import {
   TrendingUp,
   User,
 } from "lucide-react"
-import type { ReactNode } from "react"
+import { Fragment, type ReactNode } from "react"
 
 import { ActivityItem } from "@/components/crm/activity-item"
 import { Input } from "@/components/ui/input"
@@ -148,7 +148,6 @@ export default function ActivitiesIndex() {
                   const isActive = (kind ?? undefined) === f.value
                   const btn = (
                     <button
-                      key={f.label}
                       onClick={() => navigate({ kind: f.value })}
                       className={`flex items-center gap-1.5 rounded-md px-3 py-1 text-xs font-medium transition-all ${
                         isActive
@@ -157,16 +156,16 @@ export default function ActivitiesIndex() {
                       }`}
                     >
                       {f.icon && <f.icon className="size-3.5" />}
-                      {f.label}
+                      {(!f.icon || isActive) && f.label}
                     </button>
                   )
-                  return f.title ? (
+                  return f.icon && !isActive ? (
                     <Tooltip key={f.label}>
                       <TooltipTrigger asChild>{btn}</TooltipTrigger>
-                      <TooltipContent>{f.title}</TooltipContent>
+                      <TooltipContent>{f.title ?? f.label}</TooltipContent>
                     </Tooltip>
                   ) : (
-                    btn
+                    <Fragment key={f.label}>{btn}</Fragment>
                   )
                 })}
               </div>
@@ -178,7 +177,6 @@ export default function ActivitiesIndex() {
                   const isActive = (subject ?? undefined) === f.value
                   const btn = (
                     <button
-                      key={f.label}
                       onClick={() => navigate({ subject: f.value })}
                       className={`flex items-center gap-1.5 rounded-md px-3 py-1 text-xs font-medium transition-all ${
                         isActive
@@ -187,16 +185,16 @@ export default function ActivitiesIndex() {
                       }`}
                     >
                       {f.icon && <f.icon className="size-3.5" />}
-                      {f.label}
+                      {(!f.icon || isActive) && f.label}
                     </button>
                   )
-                  return f.title ? (
+                  return f.icon && !isActive ? (
                     <Tooltip key={f.label}>
                       <TooltipTrigger asChild>{btn}</TooltipTrigger>
-                      <TooltipContent>{f.title}</TooltipContent>
+                      <TooltipContent>{f.title ?? f.label}</TooltipContent>
                     </Tooltip>
                   ) : (
-                    btn
+                    <Fragment key={f.label}>{btn}</Fragment>
                   )
                 })}
               </div>
