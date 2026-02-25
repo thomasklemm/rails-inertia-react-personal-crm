@@ -156,15 +156,32 @@ RSpec.describe "Activities", type: :request do
       }.not_to change(Activity, :count)
     end
 
-    it "saves a custom occurred_at when provided" do
+    it "defaults occurred_at to the current time when not provided" do
+      post activities_path, params: {
+        subject_type: "Contact", subject_id: contact.id,
+        kind: "note", body: "Spontaneous note."
+      }
+      expect(Activity.last.occurred_at).to be_within(5.seconds).of(Time.current)
+    end
+
+    it "saves a custom occurred_at when provided as a full ISO8601 timestamp" do
       past = 3.days.ago.change(usec: 0)
       post activities_path, params: {
         subject_type: "Contact", subject_id: contact.id,
         kind: "note", body: "Backdated note.",
         occurred_at: past.iso8601
       }
-      activity = Activity.last
-      expect(activity.occurred_at).to be_within(1.second).of(past)
+      expect(Activity.last.occurred_at).to be_within(1.second).of(past)
+    end
+
+    it "saves a custom occurred_at when provided as a YYYY-MM-DD date string (frontend format)" do
+      date_str = 3.days.ago.strftime("%Y-%m-%d")
+      post activities_path, params: {
+        subject_type: "Contact", subject_id: contact.id,
+        kind: "note", body: "Backdated note.",
+        occurred_at: date_str
+      }
+      expect(Activity.last.occurred_at.to_date).to eq(Date.parse(date_str))
     end
   end
 

@@ -164,27 +164,59 @@ RSpec.describe "Activities", type: :system do
       )
       visit activities_path
 
-      # Both activities appear in the DOM (the page uses a scrollable container
-      # so we assert against page.body which includes all rendered HTML)
-      expect(page.body).to include("Discussed renewal terms.")
-      expect(page.body).to include("Old quarterly review.")
+      # Date headings render uppercase via CSS text-transform
+      expect(page).to have_text("TODAY")
+      expect(page).to have_text("Discussed renewal terms.")
+      expect(page).to have_text("Old quarterly review.")
 
-      # The recent activity appears before the backdated one (desc order)
-      expect(page.body.index("Discussed renewal terms.")).to be < page.body.index("Old quarterly review.")
+      rendered = page.find("body").text
+      # Recent activity appears before the backdated one (desc occurred_at order)
+      expect(rendered.index("Discussed renewal terms.")).to be < rendered.index("Old quarterly review.")
+      # Backdated activity appears after the Today heading (i.e. not grouped under Today)
+      expect(rendered.index("TODAY")).to be < rendered.index("Old quarterly review.")
     end
 
-    it "loads the edit activity page (date picker rendered client-side)" do
-      visit edit_activity_path(activity)
-      # The page loads the Inertia shell with the activity data embedded
-      expect(page.body).to include("activities/edit")
-      expect(page.body).to include(activity.body)
+    it "groups an activity logged yesterday under the 'Yesterday' heading" do
+      create(:activity,
+        subject: contact,
+        body: "Yesterday's check-in.",
+        occurred_at: 1.day.ago,
+        user: user
+      )
+      visit activities_path
+
+      # Date headings render uppercase via CSS text-transform
+      expect(page).to have_text("YESTERDAY")
+      expect(page).to have_text("Yesterday's check-in.")
     end
 
-    it "loads the contact page with the activity log (Today button rendered client-side)" do
+    it "logs a backdated note via the 'Yesterday' preset in the activity log popover" do
       visit contact_path(contact)
-      # The contact page loads with activity data embedded in the Inertia JSON props
-      expect(page.body).to include("contacts/show")
-      expect(page.body).to include(activity.body)
+      click_button "Log"
+
+      # Default date is Today — click the date picker trigger to change it
+      find("button", text: "Today").click
+
+      # Select Yesterday from the preset
+      find("button", text: "Yesterday", exact_text: true).click
+
+      fill_in "Add a note…", with: "Backdated follow-up."
+      click_button "Log Note"
+
+      expect(page).to have_text("Yesterday")
+      expect(page).to have_text("Backdated follow-up.")
+    end
+
+    it "updates occurred_at to Yesterday via the date picker on the edit page" do
+      visit edit_activity_path(activity)
+
+      # Date picker trigger shows "Today" (activity.occurred_at defaults to now)
+      find("button", text: "Today").click
+      find("button", text: "Yesterday", exact_text: true).click
+
+      click_button "Save Changes"
+
+      expect(activity.reload.occurred_at.to_date).to eq(1.day.ago.to_date)
     end
   end
 end
