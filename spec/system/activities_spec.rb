@@ -80,9 +80,9 @@ RSpec.describe "Activities", type: :system do
   end
 
   describe "inline editing an activity" do
-    it "edits the body by double-clicking the text" do
+    it "edits the body by clicking the text" do
       visit activities_path
-      find("p", text: "Discussed renewal terms.").double_click
+      find("button", text: "Discussed renewal terms.").click
       find("textarea").set("Updated via inline edit.")
       click_button "Save"
       expect(page).to have_text("Updated via inline edit.")
@@ -91,7 +91,7 @@ RSpec.describe "Activities", type: :system do
 
     it "changes the activity kind inline" do
       visit activities_path
-      find("p", text: "Discussed renewal terms.").double_click
+      find("button", text: "Discussed renewal terms.").click
       find("button", text: "Call", exact_text: true).click
       click_button "Save"
       expect(page).to have_text("Call")
@@ -99,7 +99,7 @@ RSpec.describe "Activities", type: :system do
 
     it "cancels inline editing and restores the original text" do
       visit activities_path
-      find("p", text: "Discussed renewal terms.").double_click
+      find("button", text: "Discussed renewal terms.").click
       find("textarea").set("This should not be saved.")
       click_button "Cancel"
       expect(page).to have_text("Discussed renewal terms.")

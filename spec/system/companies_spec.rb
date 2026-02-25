@@ -109,9 +109,9 @@ RSpec.describe "Companies", type: :system do
       expect(page).to have_css("textarea")
     end
 
-    it "saves updated notes by double-clicking the text" do
+    it "saves updated notes by clicking the text" do
       visit company_path(company_with_notes)
-      find("p", text: "Original notes here.").double_click
+      find("button", text: "Original notes here.").click
       find("textarea").set("Updated company notes.")
       click_button "Save"
       expect(page).to have_text("Updated company notes.")
@@ -120,7 +120,7 @@ RSpec.describe "Companies", type: :system do
 
     it "cancels editing and restores original notes" do
       visit company_path(company_with_notes)
-      find("p", text: "Original notes here.").double_click
+      find("button", text: "Original notes here.").click
       find("textarea").set("Should not be saved.")
       click_button "Cancel"
       expect(page).to have_text("Original notes here.")
@@ -129,7 +129,7 @@ RSpec.describe "Companies", type: :system do
 
     it "opens editing by clicking the placeholder when no notes exist" do
       visit company_path(company)
-      find("p", text: "Add notes…").click
+      find("button", text: "Add notes…").click
       expect(page).to have_css("textarea")
     end
   end
