@@ -34,11 +34,11 @@ FactoryBot.define do
     end
 
     trait :with_contact do
-      contact { association :contact }
+      contact { create(:contact, user: user) }
     end
 
     trait :with_company do
-      company { association :company }
+      company { create(:company, user: user) }
     end
   end
 end

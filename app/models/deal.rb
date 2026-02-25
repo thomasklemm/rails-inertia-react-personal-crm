@@ -32,6 +32,7 @@ class Deal < ApplicationRecord
   end
 
   def next_stage
+    return nil unless open?
     idx = STAGES.index(stage)
     STAGES[idx + 1] if idx && idx < STAGES.length - 1
   end

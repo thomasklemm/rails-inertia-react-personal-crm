@@ -103,6 +103,8 @@ class DealsController < InertiaController
   def deal_params
     p = params.permit(:title, :stage, :value, :notes, :contact_id, :company_id)
     p[:value_cents] = (p.delete(:value).to_f * 100).round if p.key?(:value)
+    p[:contact_id] = Current.user.contacts.where(id: p[:contact_id]).pick(:id) if p[:contact_id].present?
+    p[:company_id] = Current.user.companies.where(id: p[:company_id]).pick(:id) if p[:company_id].present?
     p
   end
 end

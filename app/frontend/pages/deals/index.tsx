@@ -267,6 +267,9 @@ export default function DealsIndex() {
       const targetStage = over.data?.current?.stage as DealStage | undefined
       if (!targetStage || targetStage === deal.stage) return
 
+      // Capture pre-move snapshot for rollback
+      const preMoveDeals = localDeals
+
       // Optimistic update
       setLocalDeals((prev) => {
         const next = { ...prev }
@@ -278,17 +281,17 @@ export default function DealsIndex() {
         return next
       })
 
-      // Server update — rollback on error
+      // Server update — rollback on error to the pre-move snapshot
       router.patch(
         moveDealPath(deal.id),
         { stage: targetStage },
         {
           preserveScroll: true,
-          onError: () => setLocalDeals(deals_by_stage),
+          onError: () => setLocalDeals(preMoveDeals),
         },
       )
     },
-    [deals_by_stage],
+    [localDeals],
   )
 
   const totalDeals = stagesTyped.reduce(

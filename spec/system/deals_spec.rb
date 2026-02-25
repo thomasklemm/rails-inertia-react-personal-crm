@@ -35,7 +35,7 @@ RSpec.describe "Deals", type: :system do
       visit deals_path
       click_link "Add Deal"
       expect(page).to have_text("New Deal")
-      fill_in "Title", with: "New Pipeline Deal"
+      fill_in "Deal Title", with: "New Pipeline Deal"
       click_button "Create Deal"
       expect(page).to have_text("New Pipeline Deal")
     end

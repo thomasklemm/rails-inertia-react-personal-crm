@@ -128,11 +128,11 @@ RSpec.describe Deal, type: :model do
       expect(build(:deal, :proposal).next_stage).to eq("closed_won")
     end
 
-    it "advances closed_won → closed_lost" do
-      expect(build(:deal, :closed_won).next_stage).to eq("closed_lost")
+    it "returns nil for closed_won (terminal stage)" do
+      expect(build(:deal, :closed_won).next_stage).to be_nil
     end
 
-    it "returns nil for closed_lost (final stage)" do
+    it "returns nil for closed_lost (terminal stage)" do
       expect(build(:deal, :closed_lost).next_stage).to be_nil
     end
   end

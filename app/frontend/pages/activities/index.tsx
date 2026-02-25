@@ -135,7 +135,7 @@ export default function ActivitiesIndex() {
               <Search className="text-muted-foreground absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2" />
               <Input
                 className="h-9 pl-8"
-                placeholder="Search activities, contacts, companies, deals…"
+                placeholder="Search activities, contacts, companies, or deals…"
                 defaultValue={q ?? ""}
                 onChange={(e) => navigate({ q: e.target.value || undefined })}
               />
