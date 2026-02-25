@@ -13,13 +13,39 @@
 |----------|-------|
 | Critical | 0 |
 | High | 0 |
-| Medium | 0 |
-| Low | 0 |
-| **Total** | **0** |
+| Medium | 1 |
+| Low | 1 |
+| **Total** | **2** |
 
 ## Issues
 
 <!-- Copy this block for each issue found. Interactive issues need video + step-by-step screenshots. Static issues (typos, visual glitches) only need a single screenshot -- set Repro Video to N/A. -->
+
+### ISSUE-002: Accessing a deleted deal URL shows unhandled Rails exception
+
+| Field | Value |
+|-------|-------|
+| **Severity** | low |
+| **Category** | functional |
+| **URL** | http://localhost:3000/deals/50 (deleted deal) |
+| **Repro Video** | N/A |
+
+**Description**
+
+When a deal is deleted and a user navigates directly to its URL (e.g., via browser history, a stale bookmark, or a back-navigation after deletion), the app raises an unhandled `ActiveRecord::RecordNotFound` exception instead of redirecting to the deals index or showing a friendly 404 message. In development this shows the Rails error page; in production it would render a generic 500 page unless a global `rescue_from` handler is in place.
+
+The fix is to add `rescue_from ActiveRecord::RecordNotFound, with: :record_not_found` in `ApplicationController` (or specifically in `DealsController`) that redirects to `deals_path` with a notice.
+
+**Repro Steps**
+
+1. Open a deal (e.g., `/deals/50`).
+2. Delete the deal.
+3. Navigate directly to the deleted deal's URL again.
+   ![ActiveRecord::RecordNotFound error page](screenshots/deleted-deal-access.png)
+
+4. **Observe:** Rails exception page shown — "Couldn't find Deal with 'id'='50'". Expected: redirect to `/deals` with a "Deal not found" flash message.
+
+---
 
 ### ISSUE-001: "Closed" date shown on open-stage deals
 
