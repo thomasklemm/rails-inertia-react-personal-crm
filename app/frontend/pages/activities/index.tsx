@@ -1,5 +1,5 @@
 import { Head, router, usePage } from "@inertiajs/react"
-import { Mail, MessageSquare, Phone, Search } from "lucide-react"
+import { Building2, Mail, MessageSquare, Phone, Search, TrendingUp, User } from "lucide-react"
 import type { ReactNode } from "react"
 
 import { ActivityItem } from "@/components/crm/activity-item"
@@ -31,11 +31,15 @@ const KIND_FILTERS: {
   { label: "Emails", value: "email", icon: Mail },
 ]
 
-const SUBJECT_FILTERS: { label: string; value: string | undefined }[] = [
+const SUBJECT_FILTERS: {
+  label: string
+  value: string | undefined
+  icon?: React.ElementType
+}[] = [
   { label: "All", value: undefined },
-  { label: "Contacts", value: "contact" },
-  { label: "Companies", value: "company" },
-  { label: "Deals", value: "deal" },
+  { label: "Contacts", value: "contact", icon: User },
+  { label: "Companies", value: "company", icon: Building2 },
+  { label: "Deals", value: "deal", icon: TrendingUp },
 ]
 
 function groupByDate(activities: Activity[]) {
@@ -106,17 +110,19 @@ export default function ActivitiesIndex() {
 
           {/* Search + filters */}
           <div className="space-y-2">
-            <div className="flex flex-wrap items-center gap-3">
-              <div className="relative min-w-0 flex-1">
-                <Search className="text-muted-foreground absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2" />
-                <Input
-                  className="h-9 pl-8"
-                  placeholder="Search activities or contacts…"
-                  defaultValue={q ?? ""}
-                  onChange={(e) => navigate({ q: e.target.value || undefined })}
-                />
-              </div>
+            {/* Search */}
+            <div className="relative">
+              <Search className="text-muted-foreground absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2" />
+              <Input
+                className="h-9 pl-8"
+                placeholder="Search activities or contacts…"
+                defaultValue={q ?? ""}
+                onChange={(e) => navigate({ q: e.target.value || undefined })}
+              />
+            </div>
 
+            {/* Filter pills — kind + subject on one row */}
+            <div className="flex flex-wrap items-center gap-2">
               <div className="bg-muted inline-flex rounded-lg border p-0.5">
                 {KIND_FILTERS.map((f) => {
                   const isActive = (kind ?? undefined) === f.value
@@ -136,9 +142,9 @@ export default function ActivitiesIndex() {
                   )
                 })}
               </div>
-            </div>
 
-            <div className="flex items-center gap-3">
+              <div className="bg-border h-4 w-px shrink-0" />
+
               <div className="bg-muted inline-flex rounded-lg border p-0.5">
                 {SUBJECT_FILTERS.map((f) => {
                   const isActive = (subject ?? undefined) === f.value
@@ -152,6 +158,7 @@ export default function ActivitiesIndex() {
                           : "text-muted-foreground hover:bg-background/70 hover:text-foreground"
                       }`}
                     >
+                      {f.icon && <f.icon className="size-3.5" />}
                       {f.label}
                     </button>
                   )
