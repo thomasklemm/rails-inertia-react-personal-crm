@@ -11,7 +11,6 @@ free_port() {
 }
 
 # Rails port — honour explicit PORT, otherwise auto-detect from 3000.
-# Thruster (bin/thrust) will listen on PORT and proxy to Puma on PORT+100.
 if [ -z "$PORT" ]; then
   PORT=$(free_port 3000)
 fi
@@ -31,7 +30,7 @@ echo ""
 
 if command -v overmind 1> /dev/null 2>&1
 then
-  overmind start -f Procfile.dev "$@"
+  overmind start -f Procfile.dev --no-port "$@"
   exit $?
 fi
 
