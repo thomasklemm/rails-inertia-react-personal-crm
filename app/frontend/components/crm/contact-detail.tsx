@@ -219,10 +219,14 @@ export function ContactDetail({
                 <button
                   onClick={handleStar}
                   title={contact.starred ? "Unstar" : "Star"}
+                  aria-label={
+                    contact.starred ? "Unstar contact" : "Star contact"
+                  }
                   className="inline-flex shrink-0 items-center rounded p-0.5 transition-colors hover:bg-amber-50 dark:hover:bg-amber-900/20"
                 >
                   <Star
                     className={`size-4 transition-colors ${contact.starred ? "fill-amber-400 text-amber-400 hover:fill-amber-500 hover:text-amber-500" : "text-muted-foreground/40 hover:text-amber-400"}`}
+                    aria-hidden="true"
                   />
                 </button>
               </TooltipTrigger>
@@ -269,12 +273,15 @@ export function ContactDetail({
                 size="icon-sm"
                 variant="outline"
                 title={contact.archived ? "Restore" : "Archive"}
+                aria-label={
+                  contact.archived ? "Restore contact" : "Archive contact"
+                }
                 onClick={() => setArchiveDialogOpen(true)}
               >
                 {contact.archived ? (
-                  <ArchiveRestore className="size-4" />
+                  <ArchiveRestore className="size-4" aria-hidden="true" />
                 ) : (
-                  <Archive className="size-4" />
+                  <Archive className="size-4" aria-hidden="true" />
                 )}
               </Button>
             </TooltipTrigger>
@@ -288,10 +295,11 @@ export function ContactDetail({
                 size="icon-sm"
                 variant="ghost"
                 title="Delete"
+                aria-label="Delete contact"
                 className="hover:bg-destructive/10 hover:text-destructive dark:hover:bg-destructive/20"
                 onClick={() => setDeleteDialogOpen(true)}
               >
-                <Trash2 className="size-4" />
+                <Trash2 className="size-4" aria-hidden="true" />
               </Button>
             </TooltipTrigger>
             <TooltipContent>Delete</TooltipContent>
@@ -531,8 +539,12 @@ export function ContactDetail({
               onClick={startEditNotes}
               className="hover:bg-muted rounded p-0.5 opacity-0 transition-opacity group-hover/notes:opacity-100"
               title="Edit notes"
+              aria-label="Edit notes"
             >
-              <Pencil className="text-muted-foreground size-3" />
+              <Pencil
+                className="text-muted-foreground size-3"
+                aria-hidden="true"
+              />
             </button>
           )}
         </div>
@@ -573,20 +585,21 @@ export function ContactDetail({
             </div>
           </div>
         ) : contact.notes ? (
-          <p
-            className="cursor-text text-sm whitespace-pre-wrap"
-            onDoubleClick={startEditNotes}
-            title="Double-click to edit"
+          <button
+            type="button"
+            onClick={startEditNotes}
+            className="w-full cursor-text text-left text-sm whitespace-pre-wrap"
           >
             {contact.notes}
-          </p>
+          </button>
         ) : (
-          <p
-            className="text-muted-foreground cursor-text text-sm"
+          <button
+            type="button"
             onClick={startEditNotes}
+            className="text-muted-foreground w-full cursor-text text-left text-sm"
           >
             Add notes…
-          </p>
+          </button>
         )}
       </div>
 

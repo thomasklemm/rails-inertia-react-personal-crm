@@ -56,7 +56,7 @@ export default function ActivitiesEdit({ activity }: Props) {
               value={data.kind}
               onValueChange={(v) => setData("kind", v as ActivityKind)}
             >
-              <SelectTrigger>
+              <SelectTrigger id="kind">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>

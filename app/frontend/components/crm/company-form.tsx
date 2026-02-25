@@ -68,6 +68,7 @@ export function CompanyForm({
           value={data.name}
           onChange={(e) => setData("name", e.target.value)}
           autoFocus={autoFocus}
+          autoComplete="organization"
         />
         {errors.name && (
           <p className="text-destructive text-xs">{errors.name}</p>
@@ -84,6 +85,7 @@ export function CompanyForm({
           value={data.website}
           onChange={(e) => setData("website", e.target.value)}
           placeholder="https://example.com"
+          autoComplete="url"
         />
         {errors.website && (
           <p className="text-destructive text-xs">{errors.website}</p>
@@ -100,6 +102,7 @@ export function CompanyForm({
             type="tel"
             value={data.phone}
             onChange={(e) => setData("phone", e.target.value)}
+            autoComplete="tel"
           />
           {errors.phone && (
             <p className="text-destructive text-xs">{errors.phone}</p>
@@ -113,6 +116,8 @@ export function CompanyForm({
             type="email"
             value={data.email}
             onChange={(e) => setData("email", e.target.value)}
+            autoComplete="email"
+            spellCheck={false}
           />
           {errors.email && (
             <p className="text-destructive text-xs">{errors.email}</p>
@@ -135,8 +140,10 @@ export function CompanyForm({
       </div>
 
       {/* Industry tags */}
-      <div className="space-y-2">
-        <Label>Industry</Label>
+      <fieldset className="space-y-1.5">
+        <legend className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+          Industry
+        </legend>
         <div className="flex flex-wrap gap-1.5">
           {ALL_COMPANY_TAGS.map((tag) => {
             const isSelected = data.tags.includes(tag)
@@ -145,6 +152,7 @@ export function CompanyForm({
                 key={tag}
                 type="button"
                 onClick={() => toggleTag(tag)}
+                aria-pressed={data.tags.includes(tag)}
                 className={cn(
                   "cursor-pointer rounded-full border px-2.5 py-0.5 text-sm font-medium capitalize transition-colors",
                   isSelected
@@ -157,7 +165,7 @@ export function CompanyForm({
             )
           })}
         </div>
-      </div>
+      </fieldset>
 
       {/* Notes */}
       <div className="space-y-1.5">

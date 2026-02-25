@@ -73,6 +73,7 @@ export function ContactForm({
             value={data.first_name}
             onChange={(e) => setData("first_name", e.target.value)}
             autoFocus={autoFocus}
+            autoComplete="given-name"
           />
           {errors.first_name && (
             <p className="text-destructive text-xs">{errors.first_name}</p>
@@ -85,6 +86,7 @@ export function ContactForm({
             name="last_name"
             value={data.last_name}
             onChange={(e) => setData("last_name", e.target.value)}
+            autoComplete="family-name"
           />
           {errors.last_name && (
             <p className="text-destructive text-xs">{errors.last_name}</p>
@@ -102,6 +104,8 @@ export function ContactForm({
             type="email"
             value={data.email}
             onChange={(e) => setData("email", e.target.value)}
+            autoComplete="email"
+            spellCheck={false}
           />
           {errors.email && (
             <p className="text-destructive text-xs">{errors.email}</p>
@@ -115,6 +119,7 @@ export function ContactForm({
             type="tel"
             value={data.phone}
             onChange={(e) => setData("phone", e.target.value)}
+            autoComplete="tel"
           />
           {errors.phone && (
             <p className="text-destructive text-xs">{errors.phone}</p>
@@ -129,7 +134,7 @@ export function ContactForm({
           value={data.company_id || "none"}
           onValueChange={(v) => setData("company_id", v === "none" ? "" : v)}
         >
-          <SelectTrigger>
+          <SelectTrigger id="company_id">
             <SelectValue placeholder="No company" />
           </SelectTrigger>
           <SelectContent>
@@ -144,8 +149,10 @@ export function ContactForm({
       </div>
 
       {/* Tags */}
-      <div className="space-y-2">
-        <Label>Tags</Label>
+      <fieldset className="space-y-1.5">
+        <legend className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+          Tags
+        </legend>
         <div className="flex flex-wrap gap-1.5">
           {ALL_TAGS.map((tag) => {
             const isSelected = data.tags.includes(tag)
@@ -154,6 +161,7 @@ export function ContactForm({
                 key={tag}
                 type="button"
                 onClick={() => toggleTag(tag)}
+                aria-pressed={data.tags.includes(tag)}
                 className={cn(
                   "cursor-pointer rounded-full border px-2.5 py-0.5 text-sm font-medium capitalize transition-colors",
                   isSelected
@@ -166,7 +174,7 @@ export function ContactForm({
             )
           })}
         </div>
-      </div>
+      </fieldset>
 
       {/* Notes */}
       <div className="space-y-1.5">

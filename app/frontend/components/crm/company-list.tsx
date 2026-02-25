@@ -115,7 +115,10 @@ export function CompanyList({
       {/* Search */}
       <div className="px-3 pb-2">
         <div className="relative">
-          <Search className="text-muted-foreground absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2" />
+          <Search
+            className="text-muted-foreground absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2"
+            aria-hidden="true"
+          />
           <Input
             ref={searchRef}
             className="h-8 pl-8 text-sm"

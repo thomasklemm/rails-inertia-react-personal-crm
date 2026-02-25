@@ -132,7 +132,10 @@ export default function ActivitiesIndex() {
           <div className="space-y-2">
             {/* Search */}
             <div className="relative">
-              <Search className="text-muted-foreground absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2" aria-hidden="true" />
+              <Search
+                className="text-muted-foreground absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2"
+                aria-hidden="true"
+              />
               <Input
                 className="h-9 pl-8"
                 placeholder="Search activities, contacts, companies, or deals…"

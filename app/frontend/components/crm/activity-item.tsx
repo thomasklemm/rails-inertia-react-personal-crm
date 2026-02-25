@@ -229,6 +229,7 @@ export function ActivityItem({
                     variant="ghost"
                     className="size-6"
                     title="Edit"
+                    aria-label="Edit activity"
                     onClick={startEdit}
                   >
                     <Pencil className="size-3" />
@@ -238,19 +239,20 @@ export function ActivityItem({
                     variant="ghost"
                     className="hover:text-destructive size-6"
                     title="Delete"
+                    aria-label="Delete activity"
                     onClick={() => setDeleteDialogOpen(true)}
                   >
                     <Trash2 className="size-3" />
                   </Button>
                 </div>
               </div>
-              <p
-                className="text-foreground/80 mt-0.5 cursor-text text-sm"
-                onDoubleClick={startEdit}
-                title="Double-click to edit"
+              <button
+                type="button"
+                className="text-foreground/80 mt-0.5 w-full cursor-text text-left text-sm"
+                onClick={startEdit}
               >
                 {activity.body}
-              </p>
+              </button>
             </>
           )}
         </div>

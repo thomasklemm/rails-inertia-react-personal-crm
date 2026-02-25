@@ -56,7 +56,10 @@ export function DashboardStatsRow({ stats }: DashboardStatsRowProps) {
               <p className="text-muted-foreground text-xs font-semibold tracking-widest uppercase">
                 {card.label}
               </p>
-              <Icon className="text-muted-foreground/40 group-hover:text-muted-foreground/70 size-4 transition-colors" />
+              <Icon
+                aria-hidden="true"
+                className="text-muted-foreground/40 group-hover:text-muted-foreground/70 size-4 transition-colors"
+              />
             </div>
             <p className="mt-2 font-mono text-4xl leading-none font-black tracking-tight tabular-nums">
               {stats[card.key]}

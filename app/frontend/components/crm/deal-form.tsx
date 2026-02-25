@@ -104,8 +104,10 @@ export function DealForm({
       </div>
 
       {/* Stage */}
-      <div className="space-y-1.5">
-        <Label>Stage</Label>
+      <fieldset className="space-y-1.5">
+        <legend className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+          Stage
+        </legend>
         <div className="flex flex-wrap gap-1.5">
           {stages.map((s) => {
             const stage = s as DealStage
@@ -116,6 +118,7 @@ export function DealForm({
                 key={stage}
                 type="button"
                 onClick={() => setData("stage", stage)}
+                aria-pressed={data.stage === stage}
                 className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${isActive ? colors.active : colors.idle}`}
               >
                 {STAGE_LABELS[stage] ?? stage}
@@ -123,7 +126,7 @@ export function DealForm({
             )
           })}
         </div>
-      </div>
+      </fieldset>
 
       {/* Value */}
       <div className="space-y-1.5">
@@ -151,7 +154,7 @@ export function DealForm({
             value={data.contact_id || "none"}
             onValueChange={(v) => setData("contact_id", v === "none" ? "" : v)}
           >
-            <SelectTrigger>
+            <SelectTrigger id="contact_id">
               <SelectValue placeholder="No contact" />
             </SelectTrigger>
             <SelectContent>
@@ -170,7 +173,7 @@ export function DealForm({
             value={data.company_id || "none"}
             onValueChange={(v) => setData("company_id", v === "none" ? "" : v)}
           >
-            <SelectTrigger>
+            <SelectTrigger id="company_id">
               <SelectValue placeholder="No company" />
             </SelectTrigger>
             <SelectContent>

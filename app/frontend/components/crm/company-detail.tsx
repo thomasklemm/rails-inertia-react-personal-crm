@@ -132,6 +132,9 @@ export function CompanyDetail({
                 <button
                   onClick={handleStar}
                   className="inline-flex shrink-0 items-center rounded p-0.5 transition-colors hover:bg-amber-50 dark:hover:bg-amber-900/20"
+                  aria-label={
+                    company.starred ? "Unstar company" : "Star company"
+                  }
                 >
                   <Star
                     className={`size-4 transition-colors ${company.starred ? "fill-amber-400 text-amber-400 hover:fill-amber-500 hover:text-amber-500" : "text-muted-foreground/40 hover:text-amber-400"}`}
@@ -173,6 +176,7 @@ export function CompanyDetail({
                 className="hover:bg-destructive/10 hover:text-destructive dark:hover:bg-destructive/20"
                 onClick={() => setDeleteDialogOpen(true)}
                 title="Delete"
+                aria-label="Delete company"
               >
                 <Trash2 className="size-4" />
               </Button>
@@ -307,6 +311,7 @@ export function CompanyDetail({
                 onClick={startEditNotes}
                 className="hover:bg-muted rounded p-0.5 opacity-0 transition-opacity group-hover/notes:opacity-100"
                 title="Edit notes"
+                aria-label="Edit notes"
               >
                 <Pencil className="text-muted-foreground size-3" />
               </button>
@@ -349,20 +354,21 @@ export function CompanyDetail({
               </div>
             </div>
           ) : company.notes ? (
-            <p
-              className="cursor-text text-sm whitespace-pre-wrap"
-              onDoubleClick={startEditNotes}
-              title="Double-click to edit"
+            <button
+              type="button"
+              onClick={startEditNotes}
+              className="w-full cursor-text text-left text-sm whitespace-pre-wrap"
             >
               {company.notes}
-            </p>
+            </button>
           ) : (
-            <p
-              className="text-muted-foreground cursor-text text-sm"
+            <button
+              type="button"
               onClick={startEditNotes}
+              className="text-muted-foreground w-full cursor-text text-left text-sm"
             >
               Add notes…
-            </p>
+            </button>
           )}
         </div>
       </div>

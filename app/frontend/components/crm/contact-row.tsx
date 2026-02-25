@@ -53,23 +53,35 @@ export function ContactRow({
             {contact.first_name} {contact.last_name}
           </span>
           {contact.starred && (
-            <Star className="size-3 shrink-0 fill-amber-400 text-amber-400" />
+            <Star
+              className="size-3 shrink-0 fill-amber-400 text-amber-400"
+              aria-hidden="true"
+            />
           )}
           {contact.archived && (
-            <Archive className="text-muted-foreground size-3 shrink-0" />
+            <Archive
+              className="text-muted-foreground size-3 shrink-0"
+              aria-hidden="true"
+            />
           )}
           {contact.follow_up_at &&
             (() => {
               const today = new Date().toISOString().split("T")[0]
               const isOverdue = contact.follow_up_at <= today
               return isOverdue ? (
-                <CalendarClock className="size-3 shrink-0 text-amber-500" />
+                <CalendarClock
+                  className="size-3 shrink-0 text-amber-500"
+                  aria-hidden="true"
+                />
               ) : (
                 <span
                   title={contact.follow_up_at ?? undefined}
                   className="shrink-0"
                 >
-                  <Calendar className="text-muted-foreground size-3" />
+                  <Calendar
+                    className="text-muted-foreground size-3"
+                    aria-hidden="true"
+                  />
                 </span>
               )
             })()}

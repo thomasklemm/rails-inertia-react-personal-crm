@@ -51,7 +51,10 @@ export function CompanyRow({
         <div className="flex items-center gap-1.5">
           <span className="truncate text-sm font-medium">{company.name}</span>
           {company.starred && (
-            <Star className="size-3 shrink-0 fill-amber-400 text-amber-400" />
+            <Star
+              className="size-3 shrink-0 fill-amber-400 text-amber-400"
+              aria-hidden="true"
+            />
           )}
         </div>
         {company.tags.length > 0 && (
@@ -68,7 +71,7 @@ export function CompanyRow({
 
       {(company.contacts_count ?? 0) > 0 && (
         <div className="text-muted-foreground flex shrink-0 items-center gap-0.5 text-xs">
-          <Users className="size-3" />
+          <Users className="size-3" aria-hidden="true" />
           <span>{company.contacts_count}</span>
         </div>
       )}

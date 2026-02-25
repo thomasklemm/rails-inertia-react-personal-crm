@@ -24,7 +24,7 @@ export function DashboardStarredContacts({
           className="text-muted-foreground hover:text-foreground flex items-center gap-1 text-xs transition-colors"
         >
           View All
-          <ArrowRight className="size-3" />
+          <ArrowRight aria-hidden="true" className="size-3" />
         </Link>
       </CardHeader>
 
@@ -32,7 +32,10 @@ export function DashboardStarredContacts({
       <CardContent className="p-0">
         {contacts.length === 0 ? (
           <div className="text-muted-foreground flex flex-col items-center gap-2 px-6 py-8 text-center text-sm">
-            <Star className="text-muted-foreground/40 size-7" />
+            <Star
+              aria-hidden="true"
+              className="text-muted-foreground/40 size-7"
+            />
             <p className="text-sm">No starred contacts yet.</p>
             <Link
               href={contactsPath()}
@@ -60,7 +63,10 @@ export function DashboardStarredContacts({
                     </p>
                   )}
                 </div>
-                <ArrowRight className="text-muted-foreground/40 size-3.5 shrink-0" />
+                <ArrowRight
+                  aria-hidden="true"
+                  className="text-muted-foreground/40 size-3.5 shrink-0"
+                />
               </Link>
             ))}
           </div>

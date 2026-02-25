@@ -48,6 +48,7 @@ export function NavTheme() {
                 onMouseEnter={() => setTooltipOpen(true)}
                 onMouseLeave={() => setTooltipOpen(false)}
                 onClick={cycleAppearance}
+                aria-label="Change appearance"
                 className="text-neutral-600 hover:text-neutral-800 dark:text-neutral-300 dark:hover:text-neutral-100"
               >
                 <Icon className="h-4 w-4" />
@@ -86,6 +87,7 @@ export function NavTheme() {
                 <TooltipTrigger asChild>
                   <button
                     onClick={() => updateAppearance(mode)}
+                    aria-label={modeLabel}
                     className={cn(
                       "flex h-6 w-6 items-center justify-center rounded transition-colors",
                       appearance === mode

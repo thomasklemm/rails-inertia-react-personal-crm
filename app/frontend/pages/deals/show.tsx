@@ -204,6 +204,7 @@ export default function DealsShow() {
                     <button
                       onClick={saveValue}
                       disabled={savingValue}
+                      aria-label="Save value"
                       className="hover:bg-muted rounded p-0.5"
                     >
                       <Check className="text-muted-foreground size-3" />
@@ -211,6 +212,7 @@ export default function DealsShow() {
                     <button
                       onClick={cancelEditValue}
                       disabled={savingValue}
+                      aria-label="Cancel"
                       className="hover:bg-muted rounded p-0.5"
                     >
                       <X className="text-muted-foreground size-3" />
@@ -258,7 +260,7 @@ export default function DealsShow() {
               <Button
                 size="icon-sm"
                 variant="ghost"
-                title="Delete"
+                aria-label="Delete deal"
                 className="hover:bg-destructive/10 hover:text-destructive dark:hover:bg-destructive/20"
                 onClick={() => setDeleteDialogOpen(true)}
               >
@@ -475,7 +477,7 @@ export default function DealsShow() {
                 <button
                   onClick={startEditNotes}
                   className="hover:bg-muted rounded p-0.5 opacity-0 transition-opacity group-hover/notes:opacity-100"
-                  title="Edit notes"
+                  aria-label="Edit notes"
                 >
                   <Pencil className="text-muted-foreground size-3" />
                 </button>
@@ -519,20 +521,21 @@ export default function DealsShow() {
                 </div>
               </div>
             ) : deal.notes ? (
-              <p
-                className="cursor-text text-sm whitespace-pre-wrap"
-                onDoubleClick={startEditNotes}
-                title="Double-click to edit"
+              <button
+                type="button"
+                className="w-full cursor-text text-left text-sm whitespace-pre-wrap"
+                onClick={startEditNotes}
               >
                 {deal.notes}
-              </p>
+              </button>
             ) : (
-              <p
-                className="text-muted-foreground cursor-text text-sm"
+              <button
+                type="button"
+                className="text-muted-foreground w-full cursor-text text-left text-sm"
                 onClick={startEditNotes}
               >
                 Add notes…
-              </p>
+              </button>
             )}
           </div>
 
