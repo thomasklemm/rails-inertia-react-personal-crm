@@ -110,7 +110,7 @@ export default function DashboardShow() {
                 </CardHeader>
                 <div className="border-b" />
                 <CardContent className="p-0">
-                  <div className="scrollbar-card max-h-72 divide-y overflow-y-scroll overscroll-contain">
+                  <div className="scrollbar-subtle max-h-72 divide-y overflow-y-scroll overscroll-contain">
                     {due_follow_ups.map((followUp) => {
                       const { label, classes } = followUpMeta(
                         followUp.follow_up_at,

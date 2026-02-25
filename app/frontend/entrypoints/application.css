@@ -190,48 +190,26 @@
 @layer utilities {
   .scrollbar-subtle {
     scrollbar-width: thin;
-    scrollbar-color: oklch(0.83 0.012 75 / 0.5) transparent;
+    scrollbar-color: oklch(0.83 0.012 75 / 0.5) oklch(0.96 0.004 75);
   }
   .scrollbar-subtle::-webkit-scrollbar {
     width: 3px;
     height: 6px;
   }
   .scrollbar-subtle::-webkit-scrollbar-track {
-    background: transparent;
+    background: oklch(0.96 0.004 75);
   }
   .scrollbar-subtle::-webkit-scrollbar-thumb {
     background-color: oklch(0.83 0.012 75 / 0.5);
     border-radius: 9999px;
   }
   .dark .scrollbar-subtle {
-    scrollbar-color: oklch(0.31 0.028 260 / 0.6) transparent;
+    scrollbar-color: oklch(0.31 0.028 260 / 0.6) oklch(0.21 0.012 260);
+  }
+  .dark .scrollbar-subtle::-webkit-scrollbar-track {
+    background: oklch(0.21 0.012 260);
   }
   .dark .scrollbar-subtle::-webkit-scrollbar-thumb {
     background-color: oklch(0.31 0.028 260 / 0.6);
-  }
-
-  /* Card-internal scrollbars: always-visible but subtle track */
-  .scrollbar-card {
-    scrollbar-width: thin;
-    scrollbar-color: oklch(0.80 0.01 75) oklch(0.97 0.003 75);
-  }
-  .scrollbar-card::-webkit-scrollbar {
-    width: 3px;
-  }
-  .scrollbar-card::-webkit-scrollbar-track {
-    background: oklch(0.97 0.003 75);
-  }
-  .scrollbar-card::-webkit-scrollbar-thumb {
-    background-color: oklch(0.80 0.01 75);
-    border-radius: 9999px;
-  }
-  .dark .scrollbar-card {
-    scrollbar-color: oklch(0.40 0.015 260) oklch(0.20 0.01 260);
-  }
-  .dark .scrollbar-card::-webkit-scrollbar-track {
-    background: oklch(0.20 0.01 260);
-  }
-  .dark .scrollbar-card::-webkit-scrollbar-thumb {
-    background-color: oklch(0.40 0.015 260);
   }
 }
