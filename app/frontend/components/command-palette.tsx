@@ -126,16 +126,14 @@ export function CommandPalette() {
   }, [])
 
   // Debounced fetch — AbortController prevents stale results from earlier requests
+  // Results and loading are gated by `query.length >= 2` in the render, so no
+  // synchronous state reset is needed here when the query is too short.
   useEffect(() => {
-    if (query.length < 2) {
-      setResults([])
-      setLoading(false)
-      return
-    }
-    setLoading(true)
+    if (query.length < 2) return
     if (debounceRef.current) clearTimeout(debounceRef.current)
     const controller = new AbortController()
     debounceRef.current = setTimeout(async () => {
+      setLoading(true)
       try {
         const res = await fetch(
           `${searchPath()}?q=${encodeURIComponent(query)}`,
