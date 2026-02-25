@@ -48,13 +48,21 @@ import type { Activity, BreadcrumbItem, Deal } from "@/types"
 const STAGE_COLORS: Record<string, string> = {
   lead: "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300",
   qualified: "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300",
-  proposal: "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300",
-  closed_won: "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300",
+  proposal:
+    "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300",
+  closed_won:
+    "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300",
   closed_lost: "bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300",
 }
 
 const OPEN_STAGES = ["lead", "qualified", "proposal"]
-const DEAL_STAGES = ["lead", "qualified", "proposal", "closed_won", "closed_lost"]
+const DEAL_STAGES = [
+  "lead",
+  "qualified",
+  "proposal",
+  "closed_won",
+  "closed_lost",
+]
 
 function formatValue(value: number) {
   return new Intl.NumberFormat("en-US", {
@@ -221,7 +229,7 @@ export default function DealsShow() {
                         <Pencil className="text-muted-foreground size-3 opacity-0 transition-opacity group-hover/value:opacity-100" />
                       </>
                     ) : (
-                      <span className="text-muted-foreground flex items-center gap-0.5 text-xs hover:text-foreground">
+                      <span className="text-muted-foreground hover:text-foreground flex items-center gap-0.5 text-xs">
                         <Plus className="size-3" />
                         Add value
                       </span>
@@ -270,7 +278,9 @@ export default function DealsShow() {
                 className="bg-primary/40 absolute top-4 left-4 h-0.5 transition-all duration-300"
                 style={{
                   width: `calc((100% - 2rem) * ${
-                    (isOpen ? OPEN_STAGES.indexOf(deal.stage) : OPEN_STAGES.length - 1) /
+                    (isOpen
+                      ? OPEN_STAGES.indexOf(deal.stage)
+                      : OPEN_STAGES.length - 1) /
                     (OPEN_STAGES.length - 1)
                   })`,
                 }}
@@ -289,9 +299,9 @@ export default function DealsShow() {
                     className="group/stage relative z-10 flex flex-col items-center gap-1.5"
                   >
                     <div
-                      className={`flex size-8 items-center justify-center rounded-full border-2 bg-background transition-all ${
+                      className={`bg-background flex size-8 items-center justify-center rounded-full border-2 transition-all ${
                         isCurrent
-                          ? "border-primary bg-primary text-primary-foreground shadow-sm ring-4 ring-primary/15"
+                          ? "border-primary bg-primary text-primary-foreground ring-primary/15 shadow-sm ring-4"
                           : isPast
                             ? "border-primary/40 text-primary"
                             : "border-border text-muted-foreground group-hover/stage:border-primary/40 group-hover/stage:text-foreground"
@@ -323,15 +333,22 @@ export default function DealsShow() {
                 <>
                   {/* Advance button — only when next stage is another open stage */}
                   {nextStage && OPEN_STAGES.includes(nextStage) && (
-                    <Button size="sm" onClick={handleAdvance} className="gap-1.5">
+                    <Button
+                      size="sm"
+                      onClick={handleAdvance}
+                      className="gap-1.5"
+                    >
                       <ArrowRight className="size-3.5" />
-                      Advance to {STAGE_LABELS[nextStage as keyof typeof STAGE_LABELS]}
+                      Advance to{" "}
+                      {STAGE_LABELS[nextStage as keyof typeof STAGE_LABELS]}
                     </Button>
                   )}
                   {/* Outcome buttons */}
                   <div
                     className={`flex gap-2 ${
-                      nextStage && OPEN_STAGES.includes(nextStage) ? "ml-auto" : ""
+                      nextStage && OPEN_STAGES.includes(nextStage)
+                        ? "ml-auto"
+                        : ""
                     }`}
                   >
                     <Button
@@ -379,7 +396,7 @@ export default function DealsShow() {
                   <Button
                     size="sm"
                     variant="ghost"
-                    className="ml-auto gap-1.5 text-muted-foreground"
+                    className="text-muted-foreground ml-auto gap-1.5"
                     onClick={() => handleMove("lead")}
                   >
                     <ArrowRight className="size-3.5 rotate-180" />
@@ -392,7 +409,9 @@ export default function DealsShow() {
 
           {/* Deal info */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <div className={`rounded-lg border p-3 ${!deal.contact ? "border-dashed" : ""}`}>
+            <div
+              className={`rounded-lg border p-3 ${!deal.contact ? "border-dashed" : ""}`}
+            >
               <dt className="text-muted-foreground mb-1.5 flex items-center gap-1 text-xs font-medium">
                 <User className="size-3" /> Contact
               </dt>
@@ -416,7 +435,9 @@ export default function DealsShow() {
                 )}
               </dd>
             </div>
-            <div className={`rounded-lg border p-3 ${!deal.company ? "border-dashed" : ""}`}>
+            <div
+              className={`rounded-lg border p-3 ${!deal.company ? "border-dashed" : ""}`}
+            >
               <dt className="text-muted-foreground mb-1.5 flex items-center gap-1 text-xs font-medium">
                 <Building2 className="size-3" /> Company
               </dt>
@@ -447,7 +468,9 @@ export default function DealsShow() {
           {/* Notes — inline editable */}
           <div className="group/notes">
             <div className="mb-1.5 flex items-center gap-1.5">
-              <h3 className="text-muted-foreground text-xs font-medium">Notes</h3>
+              <h3 className="text-muted-foreground text-xs font-medium">
+                Notes
+              </h3>
               {!editingNotes && (
                 <button
                   onClick={startEditNotes}
@@ -469,7 +492,8 @@ export default function DealsShow() {
                   className="resize-none text-sm"
                   onKeyDown={(e) => {
                     if (e.key === "Escape") cancelEditNotes()
-                    if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) saveNotes()
+                    if (e.key === "Enter" && (e.metaKey || e.ctrlKey))
+                      saveNotes()
                   }}
                 />
                 <div className="flex gap-1.5">
@@ -529,7 +553,8 @@ export default function DealsShow() {
           <AlertDialogHeader>
             <AlertDialogTitle>Delete {deal.title}?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. All activities for this deal will be permanently deleted.
+              This action cannot be undone. All activities for this deal will be
+              permanently deleted.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

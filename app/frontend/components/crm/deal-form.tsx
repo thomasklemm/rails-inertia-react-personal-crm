@@ -14,11 +14,28 @@ import { Textarea } from "@/components/ui/textarea"
 import type { DealStage } from "@/types"
 
 const STAGE_COLORS: Record<DealStage, { active: string; idle: string }> = {
-  lead:        { active: "bg-slate-200 text-slate-800 dark:bg-slate-700 dark:text-slate-100",  idle: "text-muted-foreground hover:bg-muted hover:text-foreground" },
-  qualified:   { active: "bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-200",  idle: "text-muted-foreground hover:bg-muted hover:text-foreground" },
-  proposal:    { active: "bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-200", idle: "text-muted-foreground hover:bg-muted hover:text-foreground" },
-  closed_won:  { active: "bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-200", idle: "text-muted-foreground hover:bg-muted hover:text-foreground" },
-  closed_lost: { active: "bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-200",      idle: "text-muted-foreground hover:bg-muted hover:text-foreground" },
+  lead: {
+    active: "bg-slate-200 text-slate-800 dark:bg-slate-700 dark:text-slate-100",
+    idle: "text-muted-foreground hover:bg-muted hover:text-foreground",
+  },
+  qualified: {
+    active: "bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-200",
+    idle: "text-muted-foreground hover:bg-muted hover:text-foreground",
+  },
+  proposal: {
+    active:
+      "bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-200",
+    idle: "text-muted-foreground hover:bg-muted hover:text-foreground",
+  },
+  closed_won: {
+    active:
+      "bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-200",
+    idle: "text-muted-foreground hover:bg-muted hover:text-foreground",
+  },
+  closed_lost: {
+    active: "bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-200",
+    idle: "text-muted-foreground hover:bg-muted hover:text-foreground",
+  },
 }
 
 export const STAGE_LABELS: Record<DealStage, string> = {
@@ -32,7 +49,7 @@ export const STAGE_LABELS: Record<DealStage, string> = {
 export interface DealFormData {
   title: string
   stage: DealStage
-  value: string        // dollars as string for the input
+  value: string // dollars as string for the input
   closed_at: string
   notes: string
   contact_id: string
@@ -59,10 +76,18 @@ interface DealFormProps {
   submitLabel: string
 }
 
-export function DealForm({ form, stages, contacts, companies, cancelHref, submitLabel }: DealFormProps) {
+export function DealForm({
+  form,
+  stages,
+  contacts,
+  companies,
+  cancelHref,
+  submitLabel,
+}: DealFormProps) {
   const { data, setData, errors, processing } = form
 
-  const showClosedAt = data.stage === "closed_won" || data.stage === "closed_lost"
+  const showClosedAt =
+    data.stage === "closed_won" || data.stage === "closed_lost"
 
   return (
     <div className="space-y-5">

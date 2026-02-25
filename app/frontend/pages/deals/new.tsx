@@ -12,7 +12,13 @@ interface Props {
   companies: { id: number; name: string }[]
 }
 
-export default function DealsNew({ stages, contact_id, company_id, contacts, companies }: Props) {
+export default function DealsNew({
+  stages,
+  contact_id,
+  company_id,
+  contacts,
+  companies,
+}: Props) {
   const form = useForm<DealFormData>({
     title: "",
     stage: "lead",

@@ -10,7 +10,13 @@ import { DashboardStatsRow } from "@/components/crm/dashboard-stats"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import AppLayout from "@/layouts/app-layout"
 import { contactPath, dashboardPath } from "@/routes"
-import type { Activity, BreadcrumbItem, Contact, DashboardStats, Deal } from "@/types"
+import type {
+  Activity,
+  BreadcrumbItem,
+  Contact,
+  DashboardStats,
+  Deal,
+} from "@/types"
 
 interface DueFollowUp {
   id: number
@@ -74,8 +80,13 @@ function followUpMeta(dateString: string): { label: string; classes: string } {
 }
 
 export default function DashboardShow() {
-  const { stats, open_deals, recent_activities, starred_contacts, due_follow_ups } =
-    usePage<Props>().props
+  const {
+    stats,
+    open_deals,
+    recent_activities,
+    starred_contacts,
+    due_follow_ups,
+  } = usePage<Props>().props
 
   return (
     <>

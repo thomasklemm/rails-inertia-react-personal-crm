@@ -1,5 +1,13 @@
 import { Head, router, usePage } from "@inertiajs/react"
-import { Building2, Mail, MessageSquare, Phone, Search, TrendingUp, User } from "lucide-react"
+import {
+  Building2,
+  Mail,
+  MessageSquare,
+  Phone,
+  Search,
+  TrendingUp,
+  User,
+} from "lucide-react"
 import type { ReactNode } from "react"
 
 import { ActivityItem } from "@/components/crm/activity-item"
@@ -89,7 +97,12 @@ export default function ActivitiesIndex() {
   const { activities, q, kind, subject } = usePage<Props>().props
 
   function navigate(params: { q?: string; kind?: string; subject?: string }) {
-    const merged = { q: q ?? "", kind: kind ?? "", subject: subject ?? "", ...params }
+    const merged = {
+      q: q ?? "",
+      kind: kind ?? "",
+      subject: subject ?? "",
+      ...params,
+    }
     const clean = Object.fromEntries(
       Object.entries(merged).filter(([, v]) => v !== "" && v !== undefined),
     )

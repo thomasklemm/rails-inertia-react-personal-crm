@@ -45,11 +45,13 @@ const STAGE_COLORS: Record<DealStage, { header: string; badge: string }> = {
   },
   proposal: {
     header: "border-t-amber-400",
-    badge: "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300",
+    badge:
+      "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300",
   },
   closed_won: {
     header: "border-t-green-400",
-    badge: "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300",
+    badge:
+      "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300",
   },
   closed_lost: {
     header: "border-t-red-400",
@@ -85,11 +87,11 @@ function DealCard({
       onClick={(e) => {
         if (isDragging) e.preventDefault()
       }}
-      className={`group block rounded-lg border bg-card p-3 shadow-sm transition-shadow hover:shadow-md ${
+      className={`group bg-card block rounded-lg border p-3 shadow-sm transition-shadow hover:shadow-md ${
         isDragging ? "rotate-1 opacity-80 shadow-lg" : ""
       }`}
     >
-      <p className="text-sm font-medium leading-snug group-hover:underline">
+      <p className="text-sm leading-snug font-medium group-hover:underline">
         {deal.title}
       </p>
       {(deal.contact ?? deal.company) && (
@@ -147,11 +149,11 @@ function ColumnContent({
 
   return (
     <div
-      className={`flex min-h-[200px] flex-col overflow-hidden rounded-xl border-t-4 bg-muted/30 transition-colors ${colors.header} ${
-        isDragOver ? "bg-primary/5 ring-2 ring-primary/20" : ""
+      className={`bg-muted/30 flex min-h-[200px] flex-col overflow-hidden rounded-xl border-t-4 transition-colors ${colors.header} ${
+        isDragOver ? "bg-primary/5 ring-primary/20 ring-2" : ""
       }`}
     >
-      <div className="border-b bg-muted/20 px-3 py-3">
+      <div className="bg-muted/20 border-b px-3 py-3">
         <div className="flex items-center justify-between">
           <span className="text-sm font-semibold">{STAGE_LABELS[stage]}</span>
           <span className="text-muted-foreground text-xs font-medium">
@@ -168,9 +170,7 @@ function ColumnContent({
         {deals.length === 0 ? (
           <div
             className={`rounded-md border-2 border-dashed p-4 text-center transition-colors ${
-              isDragOver
-                ? "border-primary/40 bg-primary/5"
-                : "border-border/50"
+              isDragOver ? "border-primary/40 bg-primary/5" : "border-border/50"
             }`}
           >
             <p className="text-muted-foreground text-xs">
@@ -232,7 +232,9 @@ export default function DealsIndex() {
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
-    useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 5 } }),
+    useSensor(TouchSensor, {
+      activationConstraint: { delay: 250, tolerance: 5 },
+    }),
     useSensor(KeyboardSensor),
   )
 
@@ -277,10 +279,14 @@ export default function DealsIndex() {
       })
 
       // Server update — rollback on error
-      router.patch(moveDealPath(deal.id), { stage: targetStage }, {
-        preserveScroll: true,
-        onError: () => setLocalDeals(deals_by_stage),
-      })
+      router.patch(
+        moveDealPath(deal.id),
+        { stage: targetStage },
+        {
+          preserveScroll: true,
+          onError: () => setLocalDeals(deals_by_stage),
+        },
+      )
     },
     [deals_by_stage],
   )

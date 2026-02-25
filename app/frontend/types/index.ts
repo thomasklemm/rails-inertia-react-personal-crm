@@ -126,13 +126,18 @@ export interface DashboardStats {
   pipeline_value: number
 }
 
-export type DealStage = "lead" | "qualified" | "proposal" | "closed_won" | "closed_lost"
+export type DealStage =
+  | "lead"
+  | "qualified"
+  | "proposal"
+  | "closed_won"
+  | "closed_lost"
 
 export interface Deal {
   id: number
   title: string
   stage: DealStage
-  value: number         // dollars (float, converted from value_cents server-side)
+  value: number // dollars (float, converted from value_cents server-side)
   value_cents: number
   closed_at: string | null
   notes: string | null

@@ -2,7 +2,11 @@ import { Mail, MessageSquare, PenLine, Phone } from "lucide-react"
 import { useMemo, useState } from "react"
 
 import { Button } from "@/components/ui/button"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 import type { Activity, ActivityKind } from "@/types"
 
 import { ActivityItem, ActivityNewItem } from "./activity-item"

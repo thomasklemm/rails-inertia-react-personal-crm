@@ -9,8 +9,10 @@ import type { Deal, DealStage } from "@/types"
 const STAGE_COLORS: Record<DealStage, string> = {
   lead: "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300",
   qualified: "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300",
-  proposal: "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300",
-  closed_won: "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300",
+  proposal:
+    "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300",
+  closed_won:
+    "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300",
   closed_lost: "bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300",
 }
 
@@ -38,7 +40,12 @@ export function DealsList({ deals, contactId, companyId }: DealsListProps) {
     <div>
       <div className="mb-3 flex items-center gap-2">
         <h3 className="text-base font-semibold tracking-tight">Deals</h3>
-        <Button size="sm" variant="outline" className="h-7 gap-1 px-2 text-xs font-medium" asChild>
+        <Button
+          size="sm"
+          variant="outline"
+          className="h-7 gap-1 px-2 text-xs font-medium"
+          asChild
+        >
           <ModalLink navigate href={newDealHref}>
             <Plus className="size-3" />
             Add Deal
@@ -53,7 +60,7 @@ export function DealsList({ deals, contactId, companyId }: DealsListProps) {
             <a
               key={deal.id}
               href={dealPath(deal.id)}
-              className="flex items-center gap-3 rounded-lg border p-3 transition-colors hover:bg-muted/50"
+              className="hover:bg-muted/50 flex items-center gap-3 rounded-lg border p-3 transition-colors"
             >
               <div className="bg-primary/10 flex size-8 shrink-0 items-center justify-center rounded-lg">
                 <TrendingUp className="text-primary size-4" />
@@ -61,14 +68,20 @@ export function DealsList({ deals, contactId, companyId }: DealsListProps) {
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-medium">{deal.title}</p>
                 {deal.company && (
-                  <p className="text-muted-foreground truncate text-xs">{deal.company.name}</p>
+                  <p className="text-muted-foreground truncate text-xs">
+                    {deal.company.name}
+                  </p>
                 )}
               </div>
               <div className="flex shrink-0 items-center gap-2">
                 {formatValue(deal.value) && (
-                  <span className="text-sm font-medium tabular-nums">{formatValue(deal.value)}</span>
+                  <span className="text-sm font-medium tabular-nums">
+                    {formatValue(deal.value)}
+                  </span>
                 )}
-                <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${STAGE_COLORS[deal.stage] ?? ""}`}>
+                <span
+                  className={`rounded-full px-2 py-0.5 text-xs font-medium ${STAGE_COLORS[deal.stage] ?? ""}`}
+                >
                   {STAGE_LABELS[deal.stage] ?? deal.stage}
                 </span>
               </div>

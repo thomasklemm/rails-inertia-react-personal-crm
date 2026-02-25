@@ -1,7 +1,12 @@
 import { Link } from "@inertiajs/react"
 import { Activity, Building2, TrendingUp, Users } from "lucide-react"
 
-import { activitiesPath, companiesPath, contactsPath, dealsPath } from "@/routes"
+import {
+  activitiesPath,
+  companiesPath,
+  contactsPath,
+  dealsPath,
+} from "@/routes"
 import type { DashboardStats } from "@/types"
 
 interface DashboardStatsRowProps {
