@@ -142,14 +142,14 @@ export default function DashboardShow() {
             <DashboardStarredContacts contacts={starred_contacts} />
           )}
 
-          {/* Pipeline Deals */}
-          <DashboardDealsWidget
-            deals={open_deals}
-            pipeline_value={stats.pipeline_value}
-          />
-
-          {/* Recent Activity — full width */}
-          <DashboardActivityFeed activities={recent_activities} />
+          {/* Pipeline + Recent Activity — side by side on large screens */}
+          <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[2fr_3fr]">
+            <DashboardDealsWidget
+              deals={open_deals}
+              pipeline_value={stats.pipeline_value}
+            />
+            <DashboardActivityFeed activities={recent_activities} />
+          </div>
         </div>
       </div>
     </>
