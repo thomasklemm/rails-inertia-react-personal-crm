@@ -68,8 +68,9 @@ export function useAppearance() {
 
     document.addEventListener("appearance-changed", onAppearanceChanged)
 
+    // Do NOT remove the prefers-color-scheme listener here — it is owned by
+    // initializeTheme() and must stay active for the lifetime of the app.
     return () => {
-      mediaQuery()?.removeEventListener("change", handleSystemThemeChange)
       document.removeEventListener("appearance-changed", onAppearanceChanged)
     }
   }, [appearance])
