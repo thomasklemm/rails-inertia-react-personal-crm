@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Moon, Sun, SunMoon } from "lucide-react"
+import { Github, Moon, Sun, SunMoon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import {
@@ -22,6 +22,9 @@ const appearanceConfig = {
   dark: { label: "Dark", Icon: Moon },
   system: { label: "System", Icon: SunMoon },
 } as const
+
+const repoUrl =
+  "https://github.com/thomasklemm/rails-inertia-react-personal-crm"
 
 export function NavTheme() {
   const { appearance, updateAppearance } = useAppearance()
@@ -57,30 +60,43 @@ export function NavTheme() {
 
   return (
     <SidebarMenuItem>
-      <div className="flex h-8 items-center px-2">
-        <span className="flex-1 text-sm text-neutral-600 dark:text-neutral-300">
-          Appearance
-        </span>
-        <div className="flex gap-0.5 rounded-md border p-0.5">
+      <div className="flex h-8 items-center justify-between px-2">
+        <div className="flex items-center gap-0.5 rounded-md bg-black/10 p-0.5 dark:bg-white/10">
           {modes.map((mode) => {
             const { Icon: ModeIcon, label: modeLabel } = appearanceConfig[mode]
             return (
-              <button
-                key={mode}
-                onClick={() => updateAppearance(mode)}
-                title={modeLabel}
-                className={cn(
-                  "flex h-6 w-6 items-center justify-center rounded transition-colors",
-                  appearance === mode
-                    ? "bg-background text-foreground shadow-sm"
-                    : "text-muted-foreground hover:text-foreground",
-                )}
-              >
-                <ModeIcon className="h-3.5 w-3.5" />
-              </button>
+              <Tooltip key={mode}>
+                <TooltipTrigger asChild>
+                  <button
+                    onClick={() => updateAppearance(mode)}
+                    className={cn(
+                      "flex h-6 w-6 items-center justify-center rounded transition-colors",
+                      appearance === mode
+                        ? "bg-background text-foreground shadow-sm"
+                        : "text-muted-foreground hover:text-foreground",
+                    )}
+                  >
+                    <ModeIcon className="h-3.5 w-3.5" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>{modeLabel}</TooltipContent>
+              </Tooltip>
             )
           })}
         </div>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <a
+              href={repoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex h-6 w-6 items-center justify-center rounded text-muted-foreground transition-colors hover:text-foreground"
+            >
+              <Github className="h-3.5 w-3.5" />
+            </a>
+          </TooltipTrigger>
+          <TooltipContent>Repository</TooltipContent>
+        </Tooltip>
       </div>
     </SidebarMenuItem>
   )

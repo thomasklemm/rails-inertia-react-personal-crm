@@ -2,13 +2,11 @@ import { Link } from "@inertiajs/react"
 import {
   ActivitySquare,
   Building2,
-  Github,
   LayoutDashboard,
   TrendingUp,
   Users,
 } from "lucide-react"
 
-import { NavFooter } from "@/components/nav-footer"
 import { NavMain } from "@/components/nav-main"
 import { NavTheme } from "@/components/nav-theme"
 import { NavUser } from "@/components/nav-user"
@@ -60,14 +58,6 @@ const mainNavItems: NavItem[] = [
   },
 ]
 
-const footerNavItems: NavItem[] = [
-  {
-    title: "Repository",
-    href: "https://github.com/thomasklemm/rails-inertia-react-personal-crm",
-    icon: Github,
-  },
-]
-
 export function AppSidebar() {
   return (
     <Sidebar collapsible="icon">
@@ -92,9 +82,7 @@ export function AppSidebar() {
       </SidebarContent>
 
       <SidebarFooter className="pb-4">
-        <NavFooter items={footerNavItems} className="mt-auto">
-          <NavTheme />
-        </NavFooter>
+        <NavTheme />
         <NavUser />
       </SidebarFooter>
     </Sidebar>
