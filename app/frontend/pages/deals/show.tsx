@@ -170,7 +170,7 @@ export default function DealsShow() {
     <>
       <Head title={deal.title} />
       <div className="scrollbar-subtle h-full overflow-y-auto">
-        <div className="mx-auto w-full max-w-4xl space-y-6 px-6 py-8">
+        <div className="mx-auto w-full max-w-4xl space-y-6 px-4 py-6 sm:px-6 sm:py-8">
           {/* Header */}
           <div className="flex items-start gap-4">
             <div className="bg-primary/10 flex size-12 shrink-0 items-center justify-center rounded-xl">
@@ -252,7 +252,7 @@ export default function DealsShow() {
               <Button size="sm" variant="outline" asChild>
                 <ModalLink navigate href={editDealPath(deal.id)} title="Edit">
                   <Edit className="size-4" />
-                  Edit
+                  <span className="hidden sm:inline">Edit</span>
                 </ModalLink>
               </Button>
               <Button
@@ -328,7 +328,7 @@ export default function DealsShow() {
             </div>
 
             {/* Action row */}
-            <div className="mt-4 flex items-center gap-2 border-t pt-3">
+            <div className="mt-4 flex flex-wrap items-center gap-2 border-t pt-3">
               {isOpen ? (
                 <>
                   {/* Advance button — only when next stage is another open stage */}

@@ -18,10 +18,18 @@ export function CompaniesLayout({ children }: { children: ReactNode }) {
   const { companies, q, filter, sort, sort_dir, company } =
     usePage<CompaniesPageProps>().props
 
+  const hasCompany = company?.id != null
+
   return (
     <div className="flex flex-1 overflow-hidden">
-      {/* Left panel — company list */}
-      <div className="flex w-72 shrink-0 flex-col overflow-hidden border-r">
+      {/* Left panel — company list.
+          Mobile: full-width when no company selected, hidden when company shown.
+          Desktop (md+): always visible as fixed-width sidebar. */}
+      <div
+        className={`flex shrink-0 flex-col overflow-hidden border-r ${
+          hasCompany ? "hidden md:flex md:w-72" : "w-full md:w-72"
+        }`}
+      >
         <CompanyList
           companies={companies ?? []}
           q={q}
@@ -32,8 +40,14 @@ export function CompaniesLayout({ children }: { children: ReactNode }) {
         />
       </div>
 
-      {/* Right panel — page content */}
-      <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
+      {/* Right panel — page content.
+          Mobile: hidden when no company selected, full-width when company shown.
+          Desktop (md+): always visible, fills remaining space. */}
+      <div
+        className={`flex min-w-0 flex-1 flex-col overflow-hidden ${
+          hasCompany ? "" : "hidden md:flex"
+        }`}
+      >
         {children}
       </div>
     </div>

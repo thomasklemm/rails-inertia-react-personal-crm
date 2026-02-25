@@ -100,7 +100,7 @@ export function ActivityLog({
   return (
     <div>
       <div className="mb-4">
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <h3 className="text-base font-semibold tracking-tight">{title}</h3>
           {canLog && !isLogging && (
             <Tooltip>
@@ -118,7 +118,7 @@ export function ActivityLog({
               <TooltipContent>Log Activity</TooltipContent>
             </Tooltip>
           )}
-          <div className="bg-muted ml-auto inline-flex rounded-lg border p-0.5">
+          <div className="bg-muted ml-auto inline-flex shrink-0 rounded-lg border p-0.5">
             {FILTERS.map((f) => (
               <button
                 key={f.label}

@@ -120,7 +120,7 @@ export default function ActivitiesIndex() {
       <Head title="Activity Log" />
       <div className="flex min-h-0 flex-1 flex-col">
         {/* Sticky header + filters */}
-        <div className="mx-auto w-full max-w-3xl shrink-0 px-6 pt-8 pb-6">
+        <div className="mx-auto w-full max-w-3xl shrink-0 px-4 pt-6 pb-4 sm:px-6 sm:pt-8 sm:pb-6">
           <div className="mb-6">
             <h1 className="text-2xl font-bold">Activity Log</h1>
             <p className="text-muted-foreground mt-0.5 text-sm">
@@ -171,7 +171,7 @@ export default function ActivitiesIndex() {
                 })}
               </div>
 
-              <div className="bg-border h-4 w-px shrink-0" />
+              <div className="bg-border hidden h-4 w-px shrink-0 sm:block" />
 
               <div className="bg-muted inline-flex rounded-lg border p-0.5">
                 {SUBJECT_FILTERS.map((f) => {
@@ -205,7 +205,7 @@ export default function ActivitiesIndex() {
         </div>
 
         {/* Scrollable activity groups */}
-        <div className="scrollbar-subtle mx-auto min-h-0 w-full max-w-3xl flex-1 overflow-y-auto px-6 pb-8">
+        <div className="scrollbar-subtle mx-auto min-h-0 w-full max-w-3xl flex-1 overflow-y-auto px-4 pb-8 sm:px-6">
           {groups.length === 0 ? (
             <p className="text-muted-foreground py-12 text-center text-sm">
               No activities found.

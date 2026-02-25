@@ -18,10 +18,18 @@ export function CrmLayout({ children }: { children: ReactNode }) {
   const { contacts, q, filter, sort, sort_dir, contact } =
     usePage<CrmPageProps>().props
 
+  const hasContact = contact?.id != null
+
   return (
     <div className="flex flex-1 overflow-hidden">
-      {/* Left panel — contact list */}
-      <div className="flex w-72 shrink-0 flex-col overflow-hidden border-r">
+      {/* Left panel — contact list.
+          Mobile: full-width when no contact selected, hidden when contact shown.
+          Desktop (md+): always visible as fixed-width sidebar. */}
+      <div
+        className={`flex shrink-0 flex-col overflow-hidden border-r ${
+          hasContact ? "hidden md:flex md:w-72" : "w-full md:w-72"
+        }`}
+      >
         <ContactList
           contacts={contacts ?? []}
           q={q}
@@ -32,8 +40,14 @@ export function CrmLayout({ children }: { children: ReactNode }) {
         />
       </div>
 
-      {/* Right panel — page content */}
-      <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
+      {/* Right panel — page content.
+          Mobile: hidden when no contact selected, full-width when contact shown.
+          Desktop (md+): always visible, fills remaining space. */}
+      <div
+        className={`flex min-w-0 flex-1 flex-col overflow-hidden ${
+          hasContact ? "" : "hidden md:flex"
+        }`}
+      >
         {children}
       </div>
     </div>

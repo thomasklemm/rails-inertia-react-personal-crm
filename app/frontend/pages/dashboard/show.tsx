@@ -92,7 +92,7 @@ export default function DashboardShow() {
     <>
       <Head title="Dashboard" />
       <div className="scrollbar-subtle h-full overflow-y-auto">
-        <div className="mx-auto w-full max-w-6xl space-y-6 px-6 py-8">
+        <div className="mx-auto w-full max-w-6xl space-y-6 px-4 py-6 sm:px-6 sm:py-8">
           <DashboardStatsRow stats={stats} />
 
           {/* Due Follow-Ups + Starred Contacts side by side */}

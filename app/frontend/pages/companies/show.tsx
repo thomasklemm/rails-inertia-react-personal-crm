@@ -1,4 +1,5 @@
 import { Head, usePage } from "@inertiajs/react"
+import { ChevronLeft } from "lucide-react"
 import type { ReactNode } from "react"
 
 import { ActivityLog } from "@/components/crm/activity-log"
@@ -25,10 +26,26 @@ export default function CompaniesShow() {
   const { company, contacts, activities, deals, q, filter, sort, sort_dir } =
     usePage<Props>().props
 
+  const listParams = Object.fromEntries(
+    Object.entries({ q, filter, sort, sort_dir }).filter(
+      ([, v]) => v !== undefined && v !== "",
+    ),
+  )
+
   return (
     <>
       <Head title={company.name} />
       <div className="scrollbar-subtle h-full overflow-y-auto">
+        {/* Mobile-only back link to companies list */}
+        <div className="md:hidden border-b px-4 py-2.5">
+          <a
+            href={companiesPath(listParams)}
+            className="text-muted-foreground hover:text-foreground flex items-center gap-1 text-sm transition-colors"
+          >
+            <ChevronLeft className="size-4" />
+            Companies
+          </a>
+        </div>
         <div className="mx-auto w-full max-w-4xl">
           <CompanyDetail
             company={company}
@@ -38,10 +55,10 @@ export default function CompaniesShow() {
             sort={sort}
             sort_dir={sort_dir}
           />
-          <div className="border-t px-6 py-5">
+          <div className="border-t px-4 py-5 sm:px-6">
             <DealsList deals={deals ?? []} companyId={company.id} />
           </div>
-          <div className="border-t px-6 py-5">
+          <div className="border-t px-4 py-5 sm:px-6">
             <ActivityLog
               activities={activities}
               description="Includes activities logged for this company and all of its contacts."

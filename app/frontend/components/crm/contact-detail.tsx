@@ -204,7 +204,7 @@ export function ContactDetail({
   }
 
   return (
-    <div className="flex flex-col gap-6 p-6">
+    <div className="flex flex-col gap-6 p-4 sm:p-6">
       {/* Header */}
       <div className="flex items-start gap-3">
         <ContactAvatar contact={contact} size="lg" />
@@ -260,7 +260,7 @@ export function ContactDetail({
               title="Edit"
             >
               <Edit className="size-4" />
-              Edit
+              <span className="hidden sm:inline">Edit</span>
             </ModalLink>
           </Button>
           <Tooltip>

@@ -117,7 +117,7 @@ export function CompanyDetail({
   }
 
   return (
-    <div className="flex flex-col gap-6 p-6">
+    <div className="flex flex-col gap-6 p-4 sm:p-6">
       {/* Header */}
       <div className="flex items-start gap-3">
         <CompanyAvatar company={company} size="lg" />
@@ -162,7 +162,7 @@ export function CompanyDetail({
               title="Edit"
             >
               <Edit className="size-4" />
-              Edit
+              <span className="hidden sm:inline">Edit</span>
             </ModalLink>
           </Button>
           <Tooltip>
