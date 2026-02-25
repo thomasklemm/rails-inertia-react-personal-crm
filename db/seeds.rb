@@ -9,11 +9,9 @@ Company.delete_all
 
 # ── Demo user ─────────────────────────────────────────────────────────────────
 
-demo_user = User.find_or_create_by!(email: "demo@example.com") do |u|
-  u.name     = "Demo User"
-  u.password = "password123456"
-  u.verified = true
-end
+demo_user = User.find_or_initialize_by(email: "demo@example.com")
+demo_user.assign_attributes(name: "Demo User", password: "password123456", verified: true)
+demo_user.save!
 
 # ── Companies ────────────────────────────────────────────────────────────────
 

@@ -372,6 +372,7 @@ export function ContactDetail({
                 <Calendar
                   mode="single"
                   selected={selectedDate}
+                  defaultMonth={selectedDate}
                   onSelect={handleFollowUpSelect}
                   initialFocus
                 />
