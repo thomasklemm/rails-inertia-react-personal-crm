@@ -23,6 +23,10 @@ class Deal < ApplicationRecord
   scope :lost,       -> { where(stage: "closed_lost") }
   scope :active,     -> { where(stage: OPEN_STAGES) }
 
+  def self.search(q)
+    where("deals.title LIKE ?", "%#{q}%")
+  end
+
   def value
     value_cents / 100.0
   end

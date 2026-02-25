@@ -146,3 +146,24 @@ export interface Deal {
   created_at: string
   updated_at: string
 }
+
+// ── Search types ─────────────────────────────────────────────────────────────
+
+export interface SearchResultItem {
+  id: number
+  type: "contact" | "company" | "deal"
+  title: string
+  subtitle?: string | null
+  starred?: boolean
+  tags?: string[]
+  url: string
+}
+
+export interface SearchResultGroup {
+  group: string
+  items: SearchResultItem[]
+}
+
+export interface SearchResponse {
+  results: SearchResultGroup[]
+}
