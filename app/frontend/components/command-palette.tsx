@@ -132,7 +132,6 @@ export function CommandPalette() {
       setLoading(false)
       return
     }
-    setResults([]) // Clear stale results immediately on query change
     setLoading(true)
     if (debounceRef.current) clearTimeout(debounceRef.current)
     const controller = new AbortController()
