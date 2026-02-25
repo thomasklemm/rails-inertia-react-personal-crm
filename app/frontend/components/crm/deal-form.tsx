@@ -13,6 +13,14 @@ import {
 import { Textarea } from "@/components/ui/textarea"
 import type { DealStage } from "@/types"
 
+const STAGE_COLORS: Record<DealStage, { active: string; idle: string }> = {
+  lead:        { active: "bg-slate-200 text-slate-800 dark:bg-slate-700 dark:text-slate-100",  idle: "text-muted-foreground hover:bg-muted hover:text-foreground" },
+  qualified:   { active: "bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-200",  idle: "text-muted-foreground hover:bg-muted hover:text-foreground" },
+  proposal:    { active: "bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-200", idle: "text-muted-foreground hover:bg-muted hover:text-foreground" },
+  closed_won:  { active: "bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-200", idle: "text-muted-foreground hover:bg-muted hover:text-foreground" },
+  closed_lost: { active: "bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-200",      idle: "text-muted-foreground hover:bg-muted hover:text-foreground" },
+}
+
 export const STAGE_LABELS: Record<DealStage, string> = {
   lead: "Lead",
   qualified: "Qualified",
@@ -74,42 +82,44 @@ export function DealForm({ form, stages, contacts, companies, cancelHref, submit
         )}
       </div>
 
-      {/* Stage + Value */}
-      <div className="grid grid-cols-2 gap-3">
-        <div className="space-y-1.5">
-          <Label htmlFor="stage">Stage</Label>
-          <Select
-            value={data.stage}
-            onValueChange={(v) => setData("stage", v as DealStage)}
-          >
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {stages.map((s) => (
-                <SelectItem key={s} value={s}>
-                  {STAGE_LABELS[s as DealStage] ?? s}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+      {/* Stage */}
+      <div className="space-y-1.5">
+        <Label>Stage</Label>
+        <div className="flex flex-wrap gap-1.5">
+          {stages.map((s) => {
+            const stage = s as DealStage
+            const colors = STAGE_COLORS[stage]
+            const isActive = data.stage === stage
+            return (
+              <button
+                key={stage}
+                type="button"
+                onClick={() => setData("stage", stage)}
+                className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${isActive ? colors.active : colors.idle}`}
+              >
+                {STAGE_LABELS[stage] ?? stage}
+              </button>
+            )
+          })}
         </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="value">Value ($)</Label>
-          <Input
-            id="value"
-            name="value"
-            type="number"
-            min="0"
-            step="0.01"
-            value={data.value}
-            onChange={(e) => setData("value", e.target.value)}
-            placeholder="0.00"
-          />
-          {errors.value && (
-            <p className="text-destructive text-xs">{errors.value}</p>
-          )}
-        </div>
+      </div>
+
+      {/* Value */}
+      <div className="space-y-1.5">
+        <Label htmlFor="value">Value ($)</Label>
+        <Input
+          id="value"
+          name="value"
+          type="number"
+          min="0"
+          step="0.01"
+          value={data.value}
+          onChange={(e) => setData("value", e.target.value)}
+          placeholder="0.00"
+        />
+        {errors.value && (
+          <p className="text-destructive text-xs">{errors.value}</p>
+        )}
       </div>
 
       {/* Contact + Company */}
