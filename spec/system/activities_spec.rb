@@ -79,37 +79,19 @@ RSpec.describe "Activities", type: :system do
     end
   end
 
-  describe "inline editing an activity" do
-    it "edits the body by clicking the text" do
+  describe "editing an activity via pencil button" do
+    it "opens the edit dialog when the pencil icon is clicked" do
       visit activities_path
-      find("button", text: "Discussed renewal terms.").click
-      find("textarea").set("Updated via inline edit.")
-      click_button "Save"
-      expect(page).to have_text("Updated via inline edit.")
-      expect(page).not_to have_text("Discussed renewal terms.")
-    end
-
-    it "changes the activity kind inline" do
-      visit activities_path
-      find("button", text: "Discussed renewal terms.").click
-      find("button", text: "Call", exact_text: true).click
-      click_button "Save"
-      expect(page).to have_text("Call")
-    end
-
-    it "cancels inline editing and restores the original text" do
-      visit activities_path
-      find("button", text: "Discussed renewal terms.").click
-      find("textarea").set("This should not be saved.")
-      click_button "Cancel"
-      expect(page).to have_text("Discussed renewal terms.")
-      expect(page).not_to have_text("This should not be saved.")
+      find("button[title='Edit']", visible: :all).click
+      expect(page).to have_css("[role='dialog']")
+      expect(page).to have_field(with: "Discussed renewal terms.")
     end
   end
 
   describe "logging an activity from a contact" do
     it "logs a note" do
-      visit new_activity_path(subject_type: "Contact", subject_id: contact.id)
+      visit contact_path(contact)
+      click_button "Log Activity"
       fill_in "Add a note…", with: "Met at conference."
       click_button "Log Note"
       expect(page).to have_current_path(contact_path(contact))
@@ -117,8 +99,9 @@ RSpec.describe "Activities", type: :system do
     end
 
     it "logs a call by switching the activity kind" do
-      visit new_activity_path(subject_type: "Contact", subject_id: contact.id)
-      within("form") { find("button", text: "Call", exact_text: true).click }
+      visit contact_path(contact)
+      click_button "Log Activity"
+      within("[role='dialog']") { find("button", text: "Call", exact_text: true).click }
       fill_in "What was discussed?", with: "Negotiated contract terms."
       click_button "Log Call"
       expect(page).to have_current_path(contact_path(contact))
@@ -128,7 +111,8 @@ RSpec.describe "Activities", type: :system do
 
   describe "logging an activity from a company" do
     it "logs a note" do
-      visit new_activity_path(subject_type: "Company", subject_id: company.id)
+      visit company_path(company)
+      click_button "Log Activity"
       fill_in "Add a note…", with: "Company partnership discussed."
       click_button "Log Note"
       expect(page).to have_current_path(company_path(company))
@@ -137,11 +121,15 @@ RSpec.describe "Activities", type: :system do
   end
 
   describe "editing an activity" do
-    it "updates the activity body" do
-      visit edit_activity_path(activity)
-      fill_in "Details", with: "Updated: signed the contract."
-      click_button "Save Changes"
+    it "updates the activity body via the edit dialog" do
+      visit activities_path
+      find("button[title='Edit']", visible: :all).click
+      within("[role='dialog']") do
+        fill_in with: "Updated: signed the contract."
+        click_button "Save Changes"
+      end
       expect(page).to have_text("Updated: signed the contract.")
+      expect(page).not_to have_text("Discussed renewal terms.")
     end
   end
 
@@ -190,9 +178,9 @@ RSpec.describe "Activities", type: :system do
       expect(page).to have_text("Yesterday's check-in.")
     end
 
-    it "logs a backdated note via the 'Yesterday' preset in the activity log popover" do
+    it "logs a backdated note via the 'Yesterday' preset in the activity log dialog" do
       visit contact_path(contact)
-      click_button "Log"
+      click_button "Log Activity"
 
       # Default date is Today — click the date picker trigger to change it
       find("button", text: "Today").click
@@ -207,14 +195,15 @@ RSpec.describe "Activities", type: :system do
       expect(page).to have_text("Backdated follow-up.")
     end
 
-    it "updates occurred_at to Yesterday via the date picker on the edit page" do
-      visit edit_activity_path(activity)
+    it "updates occurred_at to Yesterday via the date picker in the edit dialog" do
+      visit activities_path
 
-      # Date picker trigger shows "Today" (activity.occurred_at defaults to now)
-      find("button", text: "Today").click
+      find("button[title='Edit']", visible: :all).click
+      # Click the "Today" date trigger inside the dialog
+      within("[role='dialog']") { find("button", text: "Today").click }
+      # The date picker popover renders outside the dialog via portal
       find("button", text: "Yesterday", exact_text: true).click
-
-      click_button "Save Changes"
+      within("[role='dialog']") { click_button "Save Changes" }
 
       expect(activity.reload.occurred_at.to_date).to eq(1.day.ago.to_date)
     end

@@ -40,7 +40,8 @@ class ActivitiesController < InertiaController
       activities: scope.map(&:as_activity_json),
       q: params[:q],
       kind: params[:kind],
-      subject: params[:subject]
+      subject: params[:subject],
+      subjects: subject_options
     }
   end
 
@@ -53,7 +54,7 @@ class ActivitiesController < InertiaController
   def create
     @activity = Current.user.activities.new(activity_params)
     if @activity.save
-      redirect_to url_for(@activity.subject), notice: "Activity logged."
+      redirect_back_or_to url_for(@activity.subject), notice: "Activity logged."
     else
       redirect_back_or_to contacts_path, inertia: {errors: @activity.errors.as_json}
     end
@@ -111,5 +112,15 @@ class ActivitiesController < InertiaController
 
   def activity_update_params
     params.permit(:kind, :body, :occurred_at)
+  end
+
+  def subject_options
+    contacts = Current.user.contacts.active.order(:last_name, :first_name)
+      .map { |c| {id: c.id, type: "Contact", name: "#{c.first_name} #{c.last_name}"} }
+    companies = Current.user.companies.order(:name)
+      .map { |c| {id: c.id, type: "Company", name: c.name} }
+    deals = Current.user.deals.active.order(:title)
+      .map { |d| {id: d.id, type: "Deal", name: d.title} }
+    contacts + companies + deals
   end
 end

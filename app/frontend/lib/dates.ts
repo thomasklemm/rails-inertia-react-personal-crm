@@ -32,6 +32,45 @@ export function isYesterday(dateString: string): boolean {
 
 // ── Display helpers ───────────────────────────────────────────────────────────
 
+/** Short date label from a "YYYY-MM-DD" key: "Feb 27" or "Feb 27, 2024". */
+export function shortDate(key: string): string {
+  const [yr, mo, dy] = key.split("-").map(Number)
+  const d = new Date(yr, mo - 1, dy)
+  const isThisYear = yr === new Date().getFullYear()
+  return d.toLocaleDateString("en", {
+    month: "short",
+    day: "numeric",
+    ...(isThisYear ? {} : { year: "numeric" }),
+  })
+}
+
+/** Date-based occurrence label for activity items whose occurred_at is a date,
+ *  not a precise timestamp. Never shows hours — smallest unit is calendar days. */
+export function occurrenceLabel(dateString: string): string {
+  const dateKey = dateString.slice(0, 10)
+  if (dateKey === todayDateString()) return "Today"
+  if (dateKey === yesterdayDateString()) return "Yesterday"
+
+  const [yr, mo, dy] = dateKey.split("-").map(Number)
+  const dayStart = new Date(yr, mo - 1, dy)
+  const now = new Date()
+  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+  const days = Math.round(
+    (todayStart.getTime() - dayStart.getTime()) / 86_400_000,
+  )
+
+  if (days < 7) return `${days} days ago`
+  const weeks = Math.floor(days / 7)
+  if (weeks === 1) return "1 week ago"
+  if (weeks < 5) return `${weeks} weeks ago`
+
+  return dayStart.toLocaleDateString("en", {
+    month: "short",
+    day: "numeric",
+    ...(yr === now.getFullYear() ? {} : { year: "numeric" }),
+  })
+}
+
 /** Relative time label for an ISO timestamp. Falls back to an absolute date
  *  for items older than ~5 weeks so "60 days ago" never appears. */
 export function timeAgo(dateString: string): string {

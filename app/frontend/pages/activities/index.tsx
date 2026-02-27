@@ -3,6 +3,7 @@ import {
   Building2,
   Mail,
   MessageSquare,
+  PenLine,
   Phone,
   Search,
   TrendingUp,
@@ -11,8 +12,10 @@ import {
 import { Fragment, type ReactNode } from "react"
 
 import { ActivityItem } from "@/components/crm/activity-item"
+import { ActivityLogDialog } from "@/components/crm/activity-log-dialog"
+import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { todayDateString, yesterdayDateString } from "@/lib/dates"
+import { shortDate, todayDateString, yesterdayDateString } from "@/lib/dates"
 import {
   Tooltip,
   TooltipContent,
@@ -20,13 +23,14 @@ import {
 } from "@/components/ui/tooltip"
 import AppLayout from "@/layouts/app-layout"
 import { activitiesPath } from "@/routes"
-import type { Activity, ActivityKind, BreadcrumbItem } from "@/types"
+import type { Activity, ActivityKind, ActivitySubject, BreadcrumbItem } from "@/types"
 
 interface Props {
   activities: Activity[]
   q?: string
   kind?: string
   subject?: string
+  subjects?: ActivitySubject[]
   [key: string]: unknown
 }
 
@@ -74,11 +78,7 @@ function groupByDate(activities: Activity[]) {
     } else {
       const [yr, mo, dy] = key.split("-").map(Number)
       const d = new Date(yr, mo - 1, dy) // local midnight — for formatting only
-      label = d.toLocaleDateString("en", {
-        weekday: "long",
-        month: "long",
-        day: "numeric",
-      })
+      label = d.toLocaleDateString("en", { weekday: "long" })
     }
 
     const existing = groups.find((g) => g.key === key)
@@ -93,7 +93,7 @@ function groupByDate(activities: Activity[]) {
 }
 
 export default function ActivitiesIndex() {
-  const { activities, q, kind, subject } = usePage<Props>().props
+  const { activities, q, kind, subject, subjects } = usePage<Props>().props
 
   function navigate(params: { q?: string; kind?: string; subject?: string }) {
     const merged = {
@@ -120,11 +120,24 @@ export default function ActivitiesIndex() {
       <div className="flex min-h-0 flex-1 flex-col">
         {/* Sticky header + filters */}
         <div className="mx-auto w-full max-w-3xl shrink-0 px-4 pt-6 pb-4 sm:px-6 sm:pt-8 sm:pb-6">
-          <div className="mb-6">
-            <h1 className="text-2xl font-bold">Activity Log</h1>
-            <p className="text-muted-foreground mt-0.5 text-sm">
-              All activities across contacts, companies, and deals
-            </p>
+          <div className="mb-6 flex items-start justify-between gap-4">
+            <div>
+              <h1 className="text-2xl font-bold">Activity Log</h1>
+              <p className="text-muted-foreground mt-0.5 text-sm">
+                All activities across contacts, companies, and deals
+              </p>
+            </div>
+            {subjects && (
+              <ActivityLogDialog
+                subjects={subjects}
+                trigger={
+                  <Button size="sm" className="gap-1.5 shrink-0">
+                    <PenLine className="size-3.5" />
+                    Log Activity
+                  </Button>
+                }
+              />
+            )}
           </div>
 
           {/* Search + filters */}
@@ -217,9 +230,14 @@ export default function ActivitiesIndex() {
               {groups.map((group) => (
                 <div key={group.key}>
                   <div className="mb-4 flex items-baseline justify-between">
-                    <span className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
-                      {group.label}
-                    </span>
+                    <div className="flex items-baseline gap-1.5">
+                      <span className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
+                        {group.label}
+                      </span>
+                      <span className="text-muted-foreground/60 text-xs">
+                        {shortDate(group.key)}
+                      </span>
+                    </div>
                     <span className="text-muted-foreground text-xs">
                       {group.items.length}{" "}
                       {group.items.length === 1 ? "activity" : "activities"}

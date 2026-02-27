@@ -12,6 +12,7 @@ import AppLayout from "@/layouts/app-layout"
 import { contactPath, dashboardPath } from "@/routes"
 import type {
   Activity,
+  ActivitySubject,
   BreadcrumbItem,
   Contact,
   DashboardStats,
@@ -32,6 +33,7 @@ interface Props {
   recent_activities: Activity[]
   starred_contacts: Contact[]
   due_follow_ups: DueFollowUp[]
+  subjects?: ActivitySubject[]
   [key: string]: unknown
 }
 
@@ -86,6 +88,7 @@ export default function DashboardShow() {
     recent_activities,
     starred_contacts,
     due_follow_ups,
+    subjects,
   } = usePage<Props>().props
 
   return (
@@ -159,7 +162,7 @@ export default function DashboardShow() {
               deals={open_deals}
               pipeline_value={stats.pipeline_value}
             />
-            <DashboardActivityFeed activities={recent_activities} />
+            <DashboardActivityFeed activities={recent_activities} subjects={subjects} />
           </div>
         </div>
       </div>
