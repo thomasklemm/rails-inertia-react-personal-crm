@@ -291,7 +291,11 @@ export function CompanyDetail({
             <div className="overflow-hidden rounded-lg border">
               {contacts.map((contact, index) => (
                 <div key={contact.id} className={index > 0 ? "border-t" : ""}>
-                  <ContactRow contact={contact} isActive={false} rounded={false} />
+                  <ContactRow
+                    contact={contact}
+                    isActive={false}
+                    rounded={false}
+                  />
                 </div>
               ))}
             </div>

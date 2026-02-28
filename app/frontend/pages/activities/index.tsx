@@ -25,7 +25,12 @@ import {
 } from "@/components/ui/tooltip"
 import AppLayout from "@/layouts/app-layout"
 import { activitiesPath } from "@/routes"
-import type { Activity, ActivityKind, ActivitySubject, BreadcrumbItem } from "@/types"
+import type {
+  Activity,
+  ActivityKind,
+  ActivitySubject,
+  BreadcrumbItem,
+} from "@/types"
 
 interface Props {
   activities: Activity[]
@@ -135,7 +140,7 @@ export default function ActivitiesIndex() {
               <ActivityLogDialog
                 subjects={subjects}
                 trigger={
-                  <Button size="sm" className="gap-1.5 shrink-0">
+                  <Button size="sm" className="shrink-0 gap-1.5">
                     <Plus className="size-3.5" />
                     Log Activity
                   </Button>

@@ -213,9 +213,7 @@ export function ActivityItem({
 
             {/* Kind picker */}
             <div className="space-y-1.5">
-              <p className="text-muted-foreground text-xs font-medium">
-                What?
-              </p>
+              <p className="text-muted-foreground text-xs font-medium">What?</p>
               <div className="bg-muted inline-flex rounded-lg border p-0.5">
                 {KINDS.map(({ value, label, icon: KIcon }) => (
                   <button
@@ -237,9 +235,7 @@ export function ActivityItem({
 
             {/* Date picker */}
             <div className="space-y-1.5">
-              <p className="text-muted-foreground text-xs font-medium">
-                When?
-              </p>
+              <p className="text-muted-foreground text-xs font-medium">When?</p>
               <ActivityDatePicker
                 value={editOccurredAt}
                 onChange={setEditOccurredAt}
@@ -248,7 +244,9 @@ export function ActivityItem({
 
             {/* Body textarea */}
             <div className="space-y-1.5">
-              <p className="text-muted-foreground text-xs font-medium">Details</p>
+              <p className="text-muted-foreground text-xs font-medium">
+                Details
+              </p>
               <Textarea
                 value={editBody}
                 onChange={(e) => setEditBody(e.target.value)}

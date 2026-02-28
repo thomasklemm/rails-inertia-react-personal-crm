@@ -162,7 +162,10 @@ export default function DashboardShow() {
               deals={open_deals}
               pipeline_value={stats.pipeline_value}
             />
-            <DashboardActivityFeed activities={recent_activities} subjects={subjects} />
+            <DashboardActivityFeed
+              activities={recent_activities}
+              subjects={subjects}
+            />
           </div>
         </div>
       </div>

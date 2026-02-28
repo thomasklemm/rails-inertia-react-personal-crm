@@ -47,8 +47,10 @@ const KINDS: { value: ActivityKind; label: string; icon: React.ElementType }[] =
   ]
 
 function SubjectIcon({ type }: { type: string }) {
-  if (type === "Contact") return <User className="text-muted-foreground size-3.5" />
-  if (type === "Company") return <Building2 className="text-muted-foreground size-3.5" />
+  if (type === "Contact")
+    return <User className="text-muted-foreground size-3.5" />
+  if (type === "Company")
+    return <Building2 className="text-muted-foreground size-3.5" />
   return <TrendingUp className="text-muted-foreground size-3.5" />
 }
 
@@ -62,7 +64,7 @@ function Highlight({ text, query }: { text: string; query: string }) {
         i % 2 === 1 ? (
           <mark
             key={i}
-            className="bg-amber-100 text-amber-800 dark:bg-amber-800/40 dark:text-amber-200 rounded-[2px] font-medium not-italic"
+            className="rounded-[2px] bg-amber-100 font-medium text-amber-800 not-italic dark:bg-amber-800/40 dark:text-amber-200"
           >
             {part}
           </mark>
@@ -94,18 +96,25 @@ function SubjectPicker({ subjects, selected, onSelect }: SubjectPickerProps) {
   // Manual filtering — query state is fully owned, persists across open/close
   const q = query.toLowerCase()
   const matches = (s: ActivitySubject) =>
-    !q || s.name.toLowerCase().includes(q) || (s.subtitle ?? "").toLowerCase().includes(q)
+    !q ||
+    s.name.toLowerCase().includes(q) ||
+    (s.subtitle ?? "").toLowerCase().includes(q)
   const filteredContacts = contacts.filter(matches)
   const filteredCompanies = companies.filter(matches)
   const filteredDeals = deals.filter(matches)
   const hasNoResults =
-    !filteredContacts.length && !filteredCompanies.length && !filteredDeals.length
+    !filteredContacts.length &&
+    !filteredCompanies.length &&
+    !filteredDeals.length
 
   // First item value in the current filtered list
-  const firstValue =
-    filteredContacts[0] ? `contact-${filteredContacts[0].id}` :
-    filteredCompanies[0] ? `company-${filteredCompanies[0].id}` :
-    filteredDeals[0] ? `deal-${filteredDeals[0].id}` : ""
+  const firstValue = filteredContacts[0]
+    ? `contact-${filteredContacts[0].id}`
+    : filteredCompanies[0]
+      ? `company-${filteredCompanies[0].id}`
+      : filteredDeals[0]
+        ? `deal-${filteredDeals[0].id}`
+        : ""
 
   // Ordered flat list for manual keyboard navigation
   const allFilteredItems = [
@@ -116,10 +125,13 @@ function SubjectPicker({ subjects, selected, onSelect }: SubjectPickerProps) {
 
   // Reset search + highlight first item every time the dropdown opens
   function openDropdown() {
-    const first =
-      contacts[0] ? `contact-${contacts[0].id}` :
-      companies[0] ? `company-${companies[0].id}` :
-      deals[0] ? `deal-${deals[0].id}` : ""
+    const first = contacts[0]
+      ? `contact-${contacts[0].id}`
+      : companies[0]
+        ? `company-${companies[0].id}`
+        : deals[0]
+          ? `deal-${deals[0].id}`
+          : ""
     setQuery("")
     setCommandValue(first)
     setOpen(true)
@@ -127,7 +139,9 @@ function SubjectPicker({ subjects, selected, onSelect }: SubjectPickerProps) {
 
   // Re-highlight first item whenever the query changes
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => { if (open) setCommandValue(firstValue) }, [query])
+  useEffect(() => {
+    if (open) setCommandValue(firstValue)
+  }, [query])
 
   // Scroll highlighted item into view when navigating with arrow keys
   useEffect(() => {
@@ -138,7 +152,10 @@ function SubjectPicker({ subjects, selected, onSelect }: SubjectPickerProps) {
 
   useEffect(() => {
     function handleMouseDown(e: MouseEvent) {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(e.target as Node)
+      ) {
         setOpen(false)
       }
     }
@@ -154,7 +171,9 @@ function SubjectPicker({ subjects, selected, onSelect }: SubjectPickerProps) {
         aria-expanded={open}
         tabIndex={0}
         onClick={openDropdown}
-        onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") openDropdown() }}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") openDropdown()
+        }}
         className="border-input w-full cursor-pointer rounded-md border px-3 py-2 text-sm"
       >
         {selected ? (
@@ -170,7 +189,10 @@ function SubjectPicker({ subjects, selected, onSelect }: SubjectPickerProps) {
             </div>
             <button
               type="button"
-              onClick={(e) => { e.stopPropagation(); onSelect(null) }}
+              onClick={(e) => {
+                e.stopPropagation()
+                onSelect(null)
+              }}
               className="text-muted-foreground hover:text-foreground ml-1 shrink-0"
               aria-label="Clear selection"
             >
@@ -204,23 +226,35 @@ function SubjectPicker({ subjects, selected, onSelect }: SubjectPickerProps) {
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Search contacts, companies, deals…"
-                className="placeholder:text-muted-foreground flex-1 bg-transparent py-2 text-sm outline-none focus:outline-none focus:ring-0"
+                className="placeholder:text-muted-foreground flex-1 bg-transparent py-2 text-sm outline-none focus:ring-0 focus:outline-none"
                 style={{ outline: "none" }}
                 onKeyDown={(e) => {
                   if (e.key === "ArrowDown") {
                     e.preventDefault()
-                    const idx = allFilteredItems.findIndex((item) => item.value === commandValue)
-                    const next = allFilteredItems[idx + 1] ?? allFilteredItems[0]
+                    const idx = allFilteredItems.findIndex(
+                      (item) => item.value === commandValue,
+                    )
+                    const next =
+                      allFilteredItems[idx + 1] ?? allFilteredItems[0]
                     if (next) setCommandValue(next.value)
                   } else if (e.key === "ArrowUp") {
                     e.preventDefault()
-                    const idx = allFilteredItems.findIndex((item) => item.value === commandValue)
-                    const prev = allFilteredItems[idx - 1] ?? allFilteredItems[allFilteredItems.length - 1]
+                    const idx = allFilteredItems.findIndex(
+                      (item) => item.value === commandValue,
+                    )
+                    const prev =
+                      allFilteredItems[idx - 1] ??
+                      allFilteredItems[allFilteredItems.length - 1]
                     if (prev) setCommandValue(prev.value)
                   } else if (e.key === "Enter") {
                     e.preventDefault()
-                    const item = allFilteredItems.find((item) => item.value === commandValue)
-                    if (item) { onSelect(item.subject); setOpen(false) }
+                    const item = allFilteredItems.find(
+                      (item) => item.value === commandValue,
+                    )
+                    if (item) {
+                      onSelect(item.subject)
+                      setOpen(false)
+                    }
                   } else if (e.key === "Escape") {
                     setOpen(false)
                   }
@@ -237,7 +271,10 @@ function SubjectPicker({ subjects, selected, onSelect }: SubjectPickerProps) {
                 </button>
               )}
             </div>
-            <CommandList ref={listRef} className="max-h-[220px] overflow-y-auto">
+            <CommandList
+              ref={listRef}
+              className="max-h-[220px] overflow-y-auto"
+            >
               {hasNoResults ? (
                 <CommandEmpty>No results found.</CommandEmpty>
               ) : (
@@ -248,7 +285,10 @@ function SubjectPicker({ subjects, selected, onSelect }: SubjectPickerProps) {
                         <CommandItem
                           key={`Contact-${s.id}`}
                           value={`contact-${s.id}`}
-                          onSelect={() => { onSelect(s); setOpen(false) }}
+                          onSelect={() => {
+                            onSelect(s)
+                            setOpen(false)
+                          }}
                         >
                           <User className="size-3.5 shrink-0" />
                           <div className="min-w-0 flex-1">
@@ -265,16 +305,18 @@ function SubjectPicker({ subjects, selected, onSelect }: SubjectPickerProps) {
                       ))}
                     </CommandGroup>
                   )}
-                  {filteredContacts.length > 0 && filteredCompanies.length > 0 && (
-                    <CommandSeparator />
-                  )}
+                  {filteredContacts.length > 0 &&
+                    filteredCompanies.length > 0 && <CommandSeparator />}
                   {filteredCompanies.length > 0 && (
                     <CommandGroup heading="Companies">
                       {filteredCompanies.map((s) => (
                         <CommandItem
                           key={`Company-${s.id}`}
                           value={`company-${s.id}`}
-                          onSelect={() => { onSelect(s); setOpen(false) }}
+                          onSelect={() => {
+                            onSelect(s)
+                            setOpen(false)
+                          }}
                         >
                           <Building2 className="size-3.5 shrink-0" />
                           <div className="truncate">
@@ -293,7 +335,10 @@ function SubjectPicker({ subjects, selected, onSelect }: SubjectPickerProps) {
                         <CommandItem
                           key={`Deal-${s.id}`}
                           value={`deal-${s.id}`}
-                          onSelect={() => { onSelect(s); setOpen(false) }}
+                          onSelect={() => {
+                            onSelect(s)
+                            setOpen(false)
+                          }}
                         >
                           <TrendingUp className="size-3.5 shrink-0" />
                           <div className="min-w-0 flex-1">
@@ -336,9 +381,8 @@ function ActivityLogForm({
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const showSubjectPicker = subjects != null && !subjectType
 
-  const [selectedSubject, setSelectedSubject] = useState<ActivitySubject | null>(
-    null,
-  )
+  const [selectedSubject, setSelectedSubject] =
+    useState<ActivitySubject | null>(null)
   const [kind, setKind] = useState<ActivityKind>("note")
   const [body, setBody] = useState("")
   const [occurredAt, setOccurredAt] = useState(todayDateString())
@@ -347,9 +391,7 @@ function ActivityLogForm({
   const resolvedSubjectType = showSubjectPicker
     ? selectedSubject?.type
     : subjectType
-  const resolvedSubjectId = showSubjectPicker
-    ? selectedSubject?.id
-    : subjectId
+  const resolvedSubjectId = showSubjectPicker ? selectedSubject?.id : subjectId
 
   const canSubmit =
     body.trim().length > 0 &&
@@ -457,11 +499,7 @@ function ActivityLogForm({
 
       {/* Actions */}
       <div className="flex gap-2">
-        <Button
-          type="submit"
-          className="gap-1.5"
-          disabled={!canSubmit}
-        >
+        <Button type="submit" className="gap-1.5" disabled={!canSubmit}>
           <Check className="size-4" />
           Log {KINDS.find((k) => k.value === kind)?.label}
         </Button>
