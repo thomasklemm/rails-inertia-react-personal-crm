@@ -83,13 +83,14 @@ interface SubjectPickerProps {
 function SubjectPicker({ subjects, selected, onSelect }: SubjectPickerProps) {
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState("")
+  const [commandValue, setCommandValue] = useState("")
   const containerRef = useRef<HTMLDivElement>(null)
 
   const contacts = subjects.filter((s) => s.type === "Contact")
   const companies = subjects.filter((s) => s.type === "Company")
   const deals = subjects.filter((s) => s.type === "Deal")
 
-  // Manual filtering — query state is fully owned here, persists across open/close
+  // Manual filtering — query state is fully owned, persists across open/close
   const q = query.toLowerCase()
   const matches = (s: ActivitySubject) =>
     !q || s.name.toLowerCase().includes(q) || (s.subtitle ?? "").toLowerCase().includes(q)
@@ -98,6 +99,27 @@ function SubjectPicker({ subjects, selected, onSelect }: SubjectPickerProps) {
   const filteredDeals = deals.filter(matches)
   const hasNoResults =
     !filteredContacts.length && !filteredCompanies.length && !filteredDeals.length
+
+  // First item value in the current filtered list
+  const firstValue =
+    filteredContacts[0] ? `contact-${filteredContacts[0].id}` :
+    filteredCompanies[0] ? `company-${filteredCompanies[0].id}` :
+    filteredDeals[0] ? `deal-${filteredDeals[0].id}` : ""
+
+  // Reset search + highlight first item every time the dropdown opens
+  function openDropdown() {
+    const first =
+      contacts[0] ? `contact-${contacts[0].id}` :
+      companies[0] ? `company-${companies[0].id}` :
+      deals[0] ? `deal-${deals[0].id}` : ""
+    setQuery("")
+    setCommandValue(first)
+    setOpen(true)
+  }
+
+  // Re-highlight first item whenever the query changes
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => { if (open) setCommandValue(firstValue) }, [query])
 
   useEffect(() => {
     function handleMouseDown(e: MouseEvent) {
@@ -111,75 +133,80 @@ function SubjectPicker({ subjects, selected, onSelect }: SubjectPickerProps) {
 
   return (
     <div className="relative" ref={containerRef}>
-      {/* Trigger — div so we can nest a clear <button> without button-in-button */}
+      {/* Trigger — div wrapper lets us nest a clear <button> without button-in-button */}
       <div
         role="combobox"
         aria-expanded={open}
         tabIndex={0}
-        onClick={() => setOpen(true)}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") setOpen(true)
-        }}
-        className="border-input flex h-9 w-full cursor-pointer items-center gap-2 rounded-md border px-3 text-sm"
+        onClick={openDropdown}
+        onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") openDropdown() }}
+        className="border-input w-full cursor-pointer rounded-md border px-3 py-2 text-sm"
       >
         {selected ? (
-          <>
+          <div className="flex items-center gap-2">
             <SubjectIcon type={selected.type} />
-            <span className="min-w-0 flex-1 truncate">{selected.name}</span>
-            {selected.subtitle && (
-              <span className="text-muted-foreground shrink-0 text-xs">
-                {selected.subtitle}
-              </span>
-            )}
+            <div className="min-w-0 flex-1">
+              <div className="truncate">{selected.name}</div>
+              {selected.subtitle && (
+                <div className="text-muted-foreground truncate text-xs">
+                  {selected.subtitle}
+                </div>
+              )}
+            </div>
             <button
               type="button"
-              onClick={(e) => {
-                e.stopPropagation()
-                onSelect(null)
-              }}
+              onClick={(e) => { e.stopPropagation(); onSelect(null) }}
               className="text-muted-foreground hover:text-foreground ml-1 shrink-0"
               aria-label="Clear selection"
             >
               <X className="size-3.5" />
             </button>
-          </>
+          </div>
         ) : (
-          <>
+          <div className="flex items-center gap-2">
             <span className="text-muted-foreground flex-1">
               Select contact, company, or deal…
             </span>
             <ChevronsUpDown className="text-muted-foreground size-3.5 shrink-0" />
-          </>
+          </div>
         )}
       </div>
 
-      {/* Inline dropdown — no portal, so Dialog scroll-trap never interferes */}
+      {/* Inline dropdown — no portal, no Dialog scroll-trap interference */}
       {open && (
-        <div className="border-border bg-popover absolute z-10 mt-1 w-full overflow-hidden rounded-md border shadow-md">
-          {/* Search input — plain <input> for full value control */}
-          <div className="flex items-center gap-2 border-b px-2 py-0.5">
-            <Search className="text-muted-foreground size-4 shrink-0 opacity-50" />
-            <input
-              autoFocus
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search contacts, companies, deals…"
-              className="placeholder:text-muted-foreground flex-1 bg-transparent py-2 text-sm outline-none"
-            />
-            {query && (
-              <button
-                type="button"
-                onClick={() => setQuery("")}
-                className="text-muted-foreground hover:text-foreground shrink-0"
-                aria-label="Clear search"
-              >
-                <X className="size-3.5" />
-              </button>
-            )}
-          </div>
-
-          {/* Results */}
-          <Command shouldFilter={false}>
+        <div className="border-border bg-popover absolute z-10 mt-1 w-full overflow-hidden rounded-md border shadow-md outline-none">
+          {/* Command wraps both input + list so arrow/enter key events bubble to cmdk */}
+          <Command
+            shouldFilter={false}
+            value={commandValue}
+            onValueChange={setCommandValue}
+            className="h-auto outline-none"
+          >
+            <div className="flex items-center gap-2 border-b px-2 py-0.5">
+              <Search className="text-muted-foreground size-4 shrink-0 opacity-50" />
+              <input
+                autoFocus
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search contacts, companies, deals…"
+                className="placeholder:text-muted-foreground flex-1 bg-transparent py-2 text-sm outline-none"
+                onKeyDown={(e) => {
+                  // Let arrow/enter bubble to Command; just prevent cursor movement
+                  if (e.key === "ArrowUp" || e.key === "ArrowDown") e.preventDefault()
+                  if (e.key === "Escape") setOpen(false)
+                }}
+              />
+              {query && (
+                <button
+                  type="button"
+                  onClick={() => setQuery("")}
+                  className="text-muted-foreground hover:text-foreground shrink-0"
+                  aria-label="Clear search"
+                >
+                  <X className="size-3.5" />
+                </button>
+              )}
+            </div>
             <CommandList className="max-h-[220px] overflow-y-auto">
               {hasNoResults ? (
                 <CommandEmpty>No results found.</CommandEmpty>
