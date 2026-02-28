@@ -138,9 +138,9 @@ function SubjectPicker({ subjects, selected, onSelect }: SubjectPickerProps) {
   }
 
   // Re-highlight first item whenever the query changes
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (open) setCommandValue(firstValue)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query])
 
   // Scroll highlighted item into view when navigating with arrow keys
