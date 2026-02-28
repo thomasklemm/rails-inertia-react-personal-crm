@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 class Activity < ApplicationRecord
-  KINDS = %w[note call email].freeze
+  KINDS = %w[note call email meeting linkedin].freeze
 
   belongs_to :user
   belongs_to :subject, polymorphic: true
 
-  enum :kind, note: "note", call: "call", email: "email"
+  enum :kind, note: "note", call: "call", email: "email", meeting: "meeting", linkedin: "linkedin"
 
   before_validation :set_occurred_at
 
