@@ -60,9 +60,9 @@ export function ActivityDatePicker({
       <PopoverTrigger asChild>
         <button
           type="button"
-          className="text-muted-foreground hover:text-foreground flex items-center gap-1.5 text-xs transition-colors"
+          className="border-input bg-background hover:bg-accent flex h-9 w-full items-center gap-2 rounded-md border px-3 text-sm transition-colors"
         >
-          <CalendarDays className="size-3.5" />
+          <CalendarDays className="text-muted-foreground size-4 shrink-0" />
           {label}
         </button>
       </PopoverTrigger>

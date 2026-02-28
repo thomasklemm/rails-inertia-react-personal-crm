@@ -196,6 +196,21 @@ export function ActivityItem({
             <DialogTitle>Edit Activity</DialogTitle>
           </DialogHeader>
           <div className="space-y-3">
+            {/* Subject (read-only) */}
+            <div className="space-y-1.5">
+              <p className="text-muted-foreground text-xs font-medium">Who?</p>
+              <div className="border-input bg-muted/40 text-muted-foreground flex h-9 items-center gap-2 rounded-md border px-3 text-sm">
+                {activity.subject.type === "Contact" ? (
+                  <User className="size-4 shrink-0" />
+                ) : activity.subject.type === "Deal" ? (
+                  <TrendingUp className="size-4 shrink-0" />
+                ) : (
+                  <Building2 className="size-4 shrink-0" />
+                )}
+                <span className="truncate">{activity.subject.name}</span>
+              </div>
+            </div>
+
             {/* Kind picker */}
             <div className="space-y-1.5">
               <p className="text-muted-foreground text-xs font-medium">
@@ -232,12 +247,15 @@ export function ActivityItem({
             </div>
 
             {/* Body textarea */}
-            <Textarea
-              value={editBody}
-              onChange={(e) => setEditBody(e.target.value)}
-              rows={4}
-              className="resize-none text-sm"
-            />
+            <div className="space-y-1.5">
+              <p className="text-muted-foreground text-xs font-medium">Details</p>
+              <Textarea
+                value={editBody}
+                onChange={(e) => setEditBody(e.target.value)}
+                rows={4}
+                className="resize-none text-sm"
+              />
+            </div>
 
             {/* Actions */}
             <div className="flex gap-2">
