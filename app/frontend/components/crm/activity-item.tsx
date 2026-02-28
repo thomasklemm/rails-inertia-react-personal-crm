@@ -2,6 +2,7 @@ import { router } from "@inertiajs/react"
 import {
   Building2,
   Check,
+  Linkedin,
   Mail,
   MessageSquare,
   Pencil,
@@ -9,6 +10,7 @@ import {
   Trash2,
   TrendingUp,
   User,
+  Users,
   X,
 } from "lucide-react"
 import { useState } from "react"
@@ -41,6 +43,16 @@ const KIND_ICONS: Record<ActivityKind, React.ElementType> = {
   note: MessageSquare,
   call: Phone,
   email: Mail,
+  meeting: Users,
+  linkedin: Linkedin,
+}
+
+const KIND_LABELS: Record<ActivityKind, string> = {
+  note: "Note",
+  call: "Call",
+  email: "Email",
+  meeting: "Meeting",
+  linkedin: "LinkedIn",
 }
 
 const KINDS: { value: ActivityKind; label: string; icon: React.ElementType }[] =
@@ -48,6 +60,8 @@ const KINDS: { value: ActivityKind; label: string; icon: React.ElementType }[] =
     { value: "note", label: "Note", icon: MessageSquare },
     { value: "call", label: "Call", icon: Phone },
     { value: "email", label: "Email", icon: Mail },
+    { value: "meeting", label: "Meeting", icon: Users },
+    { value: "linkedin", label: "LinkedIn", icon: Linkedin },
   ]
 
 interface ActivityItemProps {
@@ -120,8 +134,8 @@ export function ActivityItem({
         <div className={`min-w-0 flex-1 ${isLast ? "pb-0" : "pb-3"}`}>
           <div className="flex items-start justify-between gap-2">
             <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
-              <span className="text-sm font-medium capitalize">
-                {activity.kind}
+              <span className="text-sm font-medium">
+                {KIND_LABELS[activity.kind]}
               </span>
               <span className="text-muted-foreground text-xs">
                 {occurrenceLabel(activity.occurred_at)}

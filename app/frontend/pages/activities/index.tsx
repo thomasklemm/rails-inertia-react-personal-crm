@@ -1,6 +1,7 @@
 import { Head, router, usePage } from "@inertiajs/react"
 import {
   Building2,
+  Linkedin,
   Mail,
   MessageSquare,
   PenLine,
@@ -8,6 +9,7 @@ import {
   Search,
   TrendingUp,
   User,
+  Users,
 } from "lucide-react"
 import { Fragment, type ReactNode } from "react"
 
@@ -48,6 +50,8 @@ const KIND_FILTERS: {
   { label: "Notes", value: "note", icon: MessageSquare },
   { label: "Calls", value: "call", icon: Phone },
   { label: "Emails", value: "email", icon: Mail },
+  { label: "Meetings", value: "meeting", icon: Users },
+  { label: "LinkedIn", value: "linkedin", icon: Linkedin },
 ]
 
 const SUBJECT_FILTERS: {

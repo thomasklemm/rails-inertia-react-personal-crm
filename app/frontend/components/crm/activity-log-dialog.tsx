@@ -3,11 +3,13 @@ import {
   Building2,
   Check,
   ChevronsUpDown,
+  Linkedin,
   Mail,
   MessageSquare,
   Phone,
   TrendingUp,
   User,
+  Users,
   X,
 } from "lucide-react"
 import { useRef, useState } from "react"
@@ -45,6 +47,8 @@ const KINDS: { value: ActivityKind; label: string; icon: React.ElementType }[] =
     { value: "note", label: "Note", icon: MessageSquare },
     { value: "call", label: "Call", icon: Phone },
     { value: "email", label: "Email", icon: Mail },
+    { value: "meeting", label: "Meeting", icon: Users },
+    { value: "linkedin", label: "LinkedIn", icon: Linkedin },
   ]
 
 function SubjectIcon({ type }: { type: string }) {
@@ -221,7 +225,11 @@ function ActivityLogForm({
       ? "Add a note…"
       : kind === "call"
         ? "What was discussed?"
-        : "Email summary…"
+        : kind === "meeting"
+          ? "What was covered?"
+          : kind === "linkedin"
+            ? "Message or connection note…"
+            : "Email summary…"
 
   return (
     <form onSubmit={handleSubmit} className="space-y-3">
@@ -269,21 +277,24 @@ function ActivityLogForm({
       </div>
 
       {/* Textarea */}
-      <Textarea
-        ref={textareaRef}
-        value={body}
-        onChange={(e) => setBody(e.target.value)}
-        autoFocus
-        placeholder={placeholder}
-        rows={3}
-        className="resize-none text-sm"
-        onKeyDown={(e) => {
-          if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
-            if (canSubmit) handleSubmit(e as unknown as React.FormEvent)
-          }
-          if (e.key === "Escape") onDone()
-        }}
-      />
+      <div className="space-y-1.5">
+        <p className="text-muted-foreground text-xs font-medium">Details</p>
+        <Textarea
+          ref={textareaRef}
+          value={body}
+          onChange={(e) => setBody(e.target.value)}
+          autoFocus
+          placeholder={placeholder}
+          rows={3}
+          className="resize-none text-sm"
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
+              if (canSubmit) handleSubmit(e as unknown as React.FormEvent)
+            }
+            if (e.key === "Escape") onDone()
+          }}
+        />
+      </div>
 
       {/* Actions */}
       <div className="flex gap-1.5">

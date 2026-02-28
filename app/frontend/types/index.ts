@@ -69,7 +69,7 @@ export type CompanyTag =
   | "education"
   | "nonprofit"
 
-export type ActivityKind = "note" | "call" | "email"
+export type ActivityKind = "note" | "call" | "email" | "meeting" | "linkedin"
 
 export interface Company {
   id: number
