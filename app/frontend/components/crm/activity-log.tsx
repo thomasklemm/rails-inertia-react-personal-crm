@@ -1,5 +1,5 @@
 import { Fragment, useState } from "react"
-import { Mail, MessageSquare, PenLine, Phone } from "lucide-react"
+import { Linkedin, Mail, MessageSquare, Phone, Plus, Users } from "lucide-react"
 
 import { shortDate, todayDateString, yesterdayDateString } from "@/lib/dates"
 
@@ -22,6 +22,8 @@ const FILTERS: {
   { label: "Notes", value: "note", icon: MessageSquare },
   { label: "Calls", value: "call", icon: Phone },
   { label: "Emails", value: "email", icon: Mail },
+  { label: "Meetings", value: "meeting", icon: Users },
+  { label: "LinkedIn", value: "linkedin", icon: Linkedin },
 ]
 
 function groupByDate(activities: Activity[]) {
@@ -98,7 +100,7 @@ export function ActivityLog({
                     variant="outline"
                     className="h-7 gap-1 px-2 text-xs font-medium"
                   >
-                    <PenLine className="size-3" />
+                    <Plus className="size-3" />
                     Log Activity
                   </Button>
                 }

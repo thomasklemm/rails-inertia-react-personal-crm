@@ -4,7 +4,7 @@ import {
   Linkedin,
   Mail,
   MessageSquare,
-  PenLine,
+  Plus,
   Phone,
   Search,
   TrendingUp,
@@ -136,7 +136,7 @@ export default function ActivitiesIndex() {
                 subjects={subjects}
                 trigger={
                   <Button size="sm" className="gap-1.5 shrink-0">
-                    <PenLine className="size-3.5" />
+                    <Plus className="size-3.5" />
                     Log Activity
                   </Button>
                 }

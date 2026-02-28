@@ -1,5 +1,5 @@
 import { Link } from "@inertiajs/react"
-import { ArrowRight, PenLine } from "lucide-react"
+import { ArrowRight, Plus } from "lucide-react"
 
 import { ActivityItem } from "@/components/crm/activity-item"
 import { ActivityLogDialog } from "@/components/crm/activity-log-dialog"
@@ -66,7 +66,7 @@ export function DashboardActivityFeed({
                   variant="outline"
                   className="h-7 gap-1 px-2 text-xs font-medium"
                 >
-                  <PenLine className="size-3" />
+                  <Plus className="size-3" />
                   Log Activity
                 </Button>
               }
