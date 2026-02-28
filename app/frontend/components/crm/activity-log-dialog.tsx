@@ -7,6 +7,7 @@ import {
   Mail,
   MessageSquare,
   Phone,
+  Search,
   TrendingUp,
   User,
   Users,
@@ -21,7 +22,6 @@ import {
   Command,
   CommandEmpty,
   CommandGroup,
-  CommandInput,
   CommandItem,
   CommandList,
   CommandSeparator,
@@ -77,7 +77,7 @@ function Highlight({ text, query }: { text: string; query: string }) {
 interface SubjectPickerProps {
   subjects: ActivitySubject[]
   selected: ActivitySubject | null
-  onSelect: (subject: ActivitySubject) => void
+  onSelect: (subject: ActivitySubject | null) => void
 }
 
 function SubjectPicker({ subjects, selected, onSelect }: SubjectPickerProps) {
@@ -88,6 +88,16 @@ function SubjectPicker({ subjects, selected, onSelect }: SubjectPickerProps) {
   const contacts = subjects.filter((s) => s.type === "Contact")
   const companies = subjects.filter((s) => s.type === "Company")
   const deals = subjects.filter((s) => s.type === "Deal")
+
+  // Manual filtering — query state is fully owned here, persists across open/close
+  const q = query.toLowerCase()
+  const matches = (s: ActivitySubject) =>
+    !q || s.name.toLowerCase().includes(q) || (s.subtitle ?? "").toLowerCase().includes(q)
+  const filteredContacts = contacts.filter(matches)
+  const filteredCompanies = companies.filter(matches)
+  const filteredDeals = deals.filter(matches)
+  const hasNoResults =
+    !filteredContacts.length && !filteredCompanies.length && !filteredDeals.length
 
   useEffect(() => {
     function handleMouseDown(e: MouseEvent) {
@@ -101,105 +111,149 @@ function SubjectPicker({ subjects, selected, onSelect }: SubjectPickerProps) {
 
   return (
     <div className="relative" ref={containerRef}>
-      <Button
-        type="button"
-        variant="outline"
+      {/* Trigger — div so we can nest a clear <button> without button-in-button */}
+      <div
         role="combobox"
         aria-expanded={open}
-        className="h-8 w-full justify-between px-3 text-xs font-normal"
-        onClick={() => setOpen((v) => !v)}
+        tabIndex={0}
+        onClick={() => setOpen(true)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") setOpen(true)
+        }}
+        className="border-input flex h-9 w-full cursor-pointer items-center gap-2 rounded-md border px-3 text-sm"
       >
         {selected ? (
-          <span className="flex items-center gap-1.5 min-w-0">
+          <>
             <SubjectIcon type={selected.type} />
-            <span className="truncate">{selected.name}</span>
+            <span className="min-w-0 flex-1 truncate">{selected.name}</span>
             {selected.subtitle && (
-              <span className="text-muted-foreground truncate text-xs">
+              <span className="text-muted-foreground shrink-0 text-xs">
                 {selected.subtitle}
               </span>
             )}
-          </span>
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation()
+                onSelect(null)
+              }}
+              className="text-muted-foreground hover:text-foreground ml-1 shrink-0"
+              aria-label="Clear selection"
+            >
+              <X className="size-3.5" />
+            </button>
+          </>
         ) : (
-          <span className="text-muted-foreground">
-            Select contact, company, or deal…
-          </span>
+          <>
+            <span className="text-muted-foreground flex-1">
+              Select contact, company, or deal…
+            </span>
+            <ChevronsUpDown className="text-muted-foreground size-3.5 shrink-0" />
+          </>
         )}
-        <ChevronsUpDown className="text-muted-foreground size-3.5 shrink-0" />
-      </Button>
+      </div>
+
+      {/* Inline dropdown — no portal, so Dialog scroll-trap never interferes */}
       {open && (
         <div className="border-border bg-popover absolute z-10 mt-1 w-full overflow-hidden rounded-md border shadow-md">
-          <Command className="h-auto">
-            <CommandInput placeholder="Search contacts, companies, deals…" onValueChange={setQuery} />
+          {/* Search input — plain <input> for full value control */}
+          <div className="flex items-center gap-2 border-b px-2 py-0.5">
+            <Search className="text-muted-foreground size-4 shrink-0 opacity-50" />
+            <input
+              autoFocus
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search contacts, companies, deals…"
+              className="placeholder:text-muted-foreground flex-1 bg-transparent py-2 text-sm outline-none"
+            />
+            {query && (
+              <button
+                type="button"
+                onClick={() => setQuery("")}
+                className="text-muted-foreground hover:text-foreground shrink-0"
+                aria-label="Clear search"
+              >
+                <X className="size-3.5" />
+              </button>
+            )}
+          </div>
+
+          {/* Results */}
+          <Command shouldFilter={false}>
             <CommandList className="max-h-[220px] overflow-y-auto">
-              <CommandEmpty>No results found.</CommandEmpty>
-              {contacts.length > 0 && (
-                <CommandGroup heading="Contacts">
-                  {contacts.map((s) => (
-                    <CommandItem
-                      key={`Contact-${s.id}`}
-                      value={`contact-${s.name} ${s.subtitle ?? ""}`}
-                      onSelect={() => {
-                        onSelect(s)
-                        setOpen(false)
-                      }}
-                    >
-                      <User className="size-3.5 shrink-0" />
-                      <div className="min-w-0 flex-1">
-                        <div className="truncate"><Highlight text={s.name} query={query} /></div>
-                        {s.subtitle && (
-                          <div className="text-muted-foreground truncate text-xs">
-                            <Highlight text={s.subtitle} query={query} />
+              {hasNoResults ? (
+                <CommandEmpty>No results found.</CommandEmpty>
+              ) : (
+                <>
+                  {filteredContacts.length > 0 && (
+                    <CommandGroup heading="Contacts">
+                      {filteredContacts.map((s) => (
+                        <CommandItem
+                          key={`Contact-${s.id}`}
+                          value={`contact-${s.id}`}
+                          onSelect={() => { onSelect(s); setOpen(false) }}
+                        >
+                          <User className="size-3.5 shrink-0" />
+                          <div className="min-w-0 flex-1">
+                            <div className="truncate">
+                              <Highlight text={s.name} query={query} />
+                            </div>
+                            {s.subtitle && (
+                              <div className="text-muted-foreground truncate text-xs">
+                                <Highlight text={s.subtitle} query={query} />
+                              </div>
+                            )}
                           </div>
-                        )}
-                      </div>
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-              )}
-              {contacts.length > 0 && companies.length > 0 && (
-                <CommandSeparator />
-              )}
-              {companies.length > 0 && (
-                <CommandGroup heading="Companies">
-                  {companies.map((s) => (
-                    <CommandItem
-                      key={`Company-${s.id}`}
-                      value={`company-${s.name}`}
-                      onSelect={() => {
-                        onSelect(s)
-                        setOpen(false)
-                      }}
-                    >
-                      <Building2 className="size-3.5 shrink-0" />
-                      <div className="truncate"><Highlight text={s.name} query={query} /></div>
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-              )}
-              {companies.length > 0 && deals.length > 0 && <CommandSeparator />}
-              {deals.length > 0 && (
-                <CommandGroup heading="Deals">
-                  {deals.map((s) => (
-                    <CommandItem
-                      key={`Deal-${s.id}`}
-                      value={`deal-${s.name} ${s.subtitle ?? ""}`}
-                      onSelect={() => {
-                        onSelect(s)
-                        setOpen(false)
-                      }}
-                    >
-                      <TrendingUp className="size-3.5 shrink-0" />
-                      <div className="min-w-0 flex-1">
-                        <div className="truncate"><Highlight text={s.name} query={query} /></div>
-                        {s.subtitle && (
-                          <div className="text-muted-foreground truncate text-xs">
-                            <Highlight text={s.subtitle} query={query} />
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  )}
+                  {filteredContacts.length > 0 && filteredCompanies.length > 0 && (
+                    <CommandSeparator />
+                  )}
+                  {filteredCompanies.length > 0 && (
+                    <CommandGroup heading="Companies">
+                      {filteredCompanies.map((s) => (
+                        <CommandItem
+                          key={`Company-${s.id}`}
+                          value={`company-${s.id}`}
+                          onSelect={() => { onSelect(s); setOpen(false) }}
+                        >
+                          <Building2 className="size-3.5 shrink-0" />
+                          <div className="truncate">
+                            <Highlight text={s.name} query={query} />
                           </div>
-                        )}
-                      </div>
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  )}
+                  {filteredCompanies.length > 0 && filteredDeals.length > 0 && (
+                    <CommandSeparator />
+                  )}
+                  {filteredDeals.length > 0 && (
+                    <CommandGroup heading="Deals">
+                      {filteredDeals.map((s) => (
+                        <CommandItem
+                          key={`Deal-${s.id}`}
+                          value={`deal-${s.id}`}
+                          onSelect={() => { onSelect(s); setOpen(false) }}
+                        >
+                          <TrendingUp className="size-3.5 shrink-0" />
+                          <div className="min-w-0 flex-1">
+                            <div className="truncate">
+                              <Highlight text={s.name} query={query} />
+                            </div>
+                            {s.subtitle && (
+                              <div className="text-muted-foreground truncate text-xs">
+                                <Highlight text={s.subtitle} query={query} />
+                              </div>
+                            )}
+                          </div>
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  )}
+                </>
               )}
             </CommandList>
           </Command>
@@ -387,7 +441,7 @@ export function ActivityLogDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-xl">
         <DialogHeader>
           <DialogTitle>Log Activity</DialogTitle>
         </DialogHeader>
