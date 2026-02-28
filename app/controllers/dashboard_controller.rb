@@ -26,12 +26,15 @@ class DashboardController < InertiaController
   private
 
   def subject_options
-    contacts = Current.user.contacts.active.order(:last_name, :first_name)
-      .map { |c| {id: c.id, type: "Contact", name: "#{c.first_name} #{c.last_name}"} }
+    contacts = Current.user.contacts.active.includes(:company).order(:last_name, :first_name)
+      .map { |c| {id: c.id, type: "Contact", name: "#{c.first_name} #{c.last_name}", subtitle: c.company&.name}.compact }
     companies = Current.user.companies.order(:name)
       .map { |c| {id: c.id, type: "Company", name: c.name} }
     deals = Current.user.deals.active.order(:title)
-      .map { |d| {id: d.id, type: "Deal", name: d.title} }
+      .map do |d|
+        value_str = d.value_cents.positive? ? " · $#{helpers.number_with_delimiter(d.value_cents.div(100))}" : ""
+        {id: d.id, type: "Deal", name: d.title, subtitle: "#{d.stage.humanize}#{value_str}"}
+      end
     contacts + companies + deals
   end
 end
