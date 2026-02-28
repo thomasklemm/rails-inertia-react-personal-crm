@@ -288,13 +288,15 @@ export function CompanyDetail({
               No contacts at this company.
             </p>
           ) : (
-            <div className="divide-y overflow-hidden rounded-lg border">
-              {contacts.map((contact) => (
-                <ContactRow
-                  key={contact.id}
-                  contact={contact}
-                  isActive={false}
-                />
+            <div className="overflow-hidden rounded-lg border">
+              {contacts.map((contact, index) => (
+                <div key={contact.id} className={index > 0 ? "border-t" : ""}>
+                  <ContactRow
+                    contact={contact}
+                    isActive={false}
+                    rounded={false}
+                  />
+                </div>
               ))}
             </div>
           )}

@@ -83,7 +83,7 @@ RSpec.describe "Companies", type: :system do
       expect(page).to have_text("Called Bob about the renewal.")
     end
 
-    it "logs an activity inline" do
+    it "logs an activity via the Log popover" do
       visit company_path(company)
       click_button "Log"
       fill_in "Add a note…", with: "Quarterly check-in completed."

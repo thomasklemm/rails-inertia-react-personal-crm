@@ -11,6 +11,7 @@ import { TagBadge } from "./tag-badge"
 interface ContactRowProps {
   contact: Contact
   isActive: boolean
+  rounded?: boolean
   q?: string
   filter?: string
   sort?: string
@@ -20,6 +21,7 @@ interface ContactRowProps {
 export function ContactRow({
   contact,
   isActive,
+  rounded = true,
   q,
   filter,
   sort,
@@ -40,7 +42,7 @@ export function ContactRow({
     <Link
       ref={ref}
       href={contactPath(contact.id, params)}
-      className={`hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground flex items-center gap-3 rounded-lg px-3 py-2.5 transition-colors ${
+      className={`hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground flex items-center gap-3 px-3 py-2.5 transition-colors ${rounded ? "rounded-lg" : ""} ${
         isActive ? "bg-sidebar-accent text-sidebar-accent-foreground" : ""
       }`}
       prefetch

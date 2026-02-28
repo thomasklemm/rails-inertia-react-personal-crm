@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 require "rails_helper"
-include ActiveSupport::Testing::TimeHelpers
 
 RSpec.describe "Identity::EmailVerifications", type: :request do
+  include ActiveSupport::Testing::TimeHelpers
   let(:user) { create(:user, verified: false) }
 
   before do
@@ -34,11 +34,11 @@ RSpec.describe "Identity::EmailVerifications", type: :request do
       it "does not verify the email" do
         sid = user.generate_token_for(:email_verification)
 
-        travel 3.days
-
-        get identity_email_verification_url(sid:, email: user.email)
-        expect(response).to redirect_to(settings_email_path)
-        expect(flash[:alert]).to eq("That email verification link is invalid")
+        travel(3.days) do
+          get identity_email_verification_url(sid:, email: user.email)
+          expect(response).to redirect_to(settings_email_path)
+          expect(flash[:alert]).to eq("That email verification link is invalid")
+        end
       end
     end
   end

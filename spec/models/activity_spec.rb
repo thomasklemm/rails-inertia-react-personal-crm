@@ -47,11 +47,27 @@ RSpec.describe Activity, type: :model do
   end
 
   describe "default scope" do
-    it "orders by created_at desc" do
+    it "orders by occurred_at desc" do
       contact = create(:contact)
-      old    = create(:activity, subject: contact, created_at: 2.days.ago)
-      recent = create(:activity, subject: contact, created_at: 1.hour.ago)
+      old    = create(:activity, subject: contact, occurred_at: 2.days.ago)
+      recent = create(:activity, subject: contact, occurred_at: 1.hour.ago)
       expect(Activity.where(subject: contact).first).to eq(recent)
+    end
+  end
+
+  describe "occurred_at" do
+    it "defaults occurred_at to the current time when not provided" do
+      contact = create(:contact)
+      activity = create(:activity, subject: contact)
+      expect(activity.occurred_at).to be_present
+      expect(activity.occurred_at).to be_within(5.seconds).of(Time.current)
+    end
+
+    it "uses explicitly set occurred_at when provided" do
+      contact = create(:contact)
+      past = 3.days.ago
+      activity = create(:activity, subject: contact, occurred_at: past)
+      expect(activity.occurred_at).to be_within(1.second).of(past)
     end
   end
 
@@ -63,6 +79,15 @@ RSpec.describe Activity, type: :model do
       expect(json).to include("subject" => {id: contact.id, type: "Contact", name: "Jane Doe"})
       expect(json.keys).not_to include("subject_type", "subject_id", "user_id")
       expect(json).to include("id", "kind", "body", "created_at", "updated_at")
+    end
+
+    it "includes occurred_at in the JSON output" do
+      contact = create(:contact)
+      past = 3.days.ago
+      activity = create(:activity, subject: contact, occurred_at: past)
+      json = activity.as_activity_json
+      expect(json).to include("occurred_at")
+      expect(Time.parse(json["occurred_at"])).to be_within(1.second).of(past)
     end
 
     it "includes company subject with name and excludes raw FK columns" do

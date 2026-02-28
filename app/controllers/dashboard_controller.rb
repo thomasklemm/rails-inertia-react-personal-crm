@@ -18,7 +18,23 @@ class DashboardController < InertiaController
                     .map(&:as_deal_json),
       recent_activities: Current.user.activities.includes(:subject).limit(20).map(&:as_activity_json),
       starred_contacts: Current.user.contacts.active.starred.order(:last_name, :first_name).limit(8).as_json(include: :company),
-      due_follow_ups: Current.user.contacts.active.due_follow_up.order(follow_up_at: :asc).as_json(include: :company)
+      due_follow_ups: Current.user.contacts.active.due_follow_up.order(follow_up_at: :asc).as_json(include: :company),
+      subjects: subject_options
     }
+  end
+
+  private
+
+  def subject_options
+    contacts = Current.user.contacts.active.includes(:company).order(:last_name, :first_name)
+      .map { |c| {id: c.id, type: "Contact", name: "#{c.first_name} #{c.last_name}", subtitle: c.company&.name}.compact }
+    companies = Current.user.companies.order(:name)
+      .map { |c| {id: c.id, type: "Company", name: c.name} }
+    deals = Current.user.deals.active.order(:title)
+      .map do |d|
+        value_str = d.value_cents.positive? ? " · $#{helpers.number_with_delimiter(d.value_cents.div(100))}" : ""
+        {id: d.id, type: "Deal", name: d.title, subtitle: "#{d.stage.humanize}#{value_str}"}
+      end
+    contacts + companies + deals
   end
 end

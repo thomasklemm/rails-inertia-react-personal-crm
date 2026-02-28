@@ -69,7 +69,7 @@ export type CompanyTag =
   | "education"
   | "nonprofit"
 
-export type ActivityKind = "note" | "call" | "email"
+export type ActivityKind = "note" | "call" | "email" | "meeting" | "linkedin"
 
 export interface Company {
   id: number
@@ -107,6 +107,7 @@ export interface ActivitySubject {
   id: number
   type: "Contact" | "Company" | "Deal"
   name: string
+  subtitle?: string
 }
 
 export interface Activity {
@@ -114,6 +115,7 @@ export interface Activity {
   kind: ActivityKind
   body: string
   subject: ActivitySubject
+  occurred_at: string
   created_at: string
   updated_at: string
 }

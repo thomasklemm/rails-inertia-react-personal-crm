@@ -1,34 +1,31 @@
 import { Link } from "@inertiajs/react"
-import { ArrowRight } from "lucide-react"
+import { ArrowRight, Plus } from "lucide-react"
 
 import { ActivityItem } from "@/components/crm/activity-item"
+import { ActivityLogDialog } from "@/components/crm/activity-log-dialog"
+import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { shortDate, todayDateString, yesterdayDateString } from "@/lib/dates"
 import { activitiesPath } from "@/routes"
-import type { Activity } from "@/types"
+import type { Activity, ActivitySubject } from "@/types"
 
 function groupByDate(activities: Activity[]) {
   const groups: { label: string; key: string; items: Activity[] }[] = []
-  const now = new Date()
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
-  const yesterday = new Date(today)
-  yesterday.setDate(yesterday.getDate() - 1)
+  const todayKey = todayDateString()
+  const yesterdayKey = yesterdayDateString()
 
   for (const activity of activities) {
-    const d = new Date(activity.created_at)
-    const day = new Date(d.getFullYear(), d.getMonth(), d.getDate())
-    const key = day.toISOString()
+    const key = activity.occurred_at.slice(0, 10) // "YYYY-MM-DD"
 
     let label: string
-    if (day.getTime() === today.getTime()) {
+    if (key === todayKey) {
       label = "Today"
-    } else if (day.getTime() === yesterday.getTime()) {
+    } else if (key === yesterdayKey) {
       label = "Yesterday"
     } else {
-      label = day.toLocaleDateString(undefined, {
-        weekday: "long",
-        month: "long",
-        day: "numeric",
-      })
+      const [yr, mo, dy] = key.split("-").map(Number)
+      const d = new Date(yr, mo - 1, dy) // local midnight — for formatting only
+      label = d.toLocaleDateString("en", { weekday: "long" })
     }
 
     const existing = groups.find((g) => g.key === key)
@@ -44,10 +41,12 @@ function groupByDate(activities: Activity[]) {
 
 interface DashboardActivityFeedProps {
   activities: Activity[]
+  subjects?: ActivitySubject[]
 }
 
 export function DashboardActivityFeed({
   activities,
+  subjects,
 }: DashboardActivityFeedProps) {
   const groups = groupByDate(activities)
 
@@ -57,13 +56,30 @@ export function DashboardActivityFeed({
         <CardTitle className="text-base font-semibold">
           Recent Activity
         </CardTitle>
-        <Link
-          href={activitiesPath()}
-          className="text-muted-foreground hover:text-foreground flex items-center gap-1 text-xs transition-colors"
-        >
-          View All
-          <ArrowRight className="size-3" />
-        </Link>
+        <div className="flex items-center gap-2">
+          {subjects && (
+            <ActivityLogDialog
+              subjects={subjects}
+              trigger={
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="h-7 gap-1 px-2 text-xs font-medium"
+                >
+                  <Plus className="size-3" />
+                  Log Activity
+                </Button>
+              }
+            />
+          )}
+          <Link
+            href={activitiesPath()}
+            className="text-muted-foreground hover:text-foreground flex items-center gap-1 text-xs transition-colors"
+          >
+            View All
+            <ArrowRight className="size-3" />
+          </Link>
+        </div>
       </CardHeader>
 
       <div className="border-b" />
@@ -77,9 +93,14 @@ export function DashboardActivityFeed({
             {groups.map((group) => (
               <div key={group.key}>
                 <div className="bg-muted/40 flex items-baseline justify-between px-4 py-2">
-                  <span className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
-                    {group.label}
-                  </span>
+                  <div className="flex items-baseline gap-1.5">
+                    <span className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
+                      {group.label}
+                    </span>
+                    <span className="text-muted-foreground/60 text-xs">
+                      {shortDate(group.key)}
+                    </span>
+                  </div>
                   <span className="text-muted-foreground text-xs">
                     {group.items.length}{" "}
                     {group.items.length === 1 ? "activity" : "activities"}

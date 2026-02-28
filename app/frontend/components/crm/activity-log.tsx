@@ -1,6 +1,10 @@
-import { Mail, MessageSquare, PenLine, Phone } from "lucide-react"
-import { Fragment, useMemo, useState } from "react"
+import { Fragment, useState } from "react"
+import { Linkedin, Mail, MessageSquare, Phone, Plus, Users } from "lucide-react"
 
+import { shortDate, todayDateString, yesterdayDateString } from "@/lib/dates"
+
+import { ActivityLogDialog } from "@/components/crm/activity-log-dialog"
+import { ActivityItem } from "./activity-item"
 import { Button } from "@/components/ui/button"
 import {
   Tooltip,
@@ -8,8 +12,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import type { Activity, ActivityKind } from "@/types"
-
-import { ActivityItem, ActivityNewItem } from "./activity-item"
 
 const FILTERS: {
   label: string
@@ -20,31 +22,27 @@ const FILTERS: {
   { label: "Notes", value: "note", icon: MessageSquare },
   { label: "Calls", value: "call", icon: Phone },
   { label: "Emails", value: "email", icon: Mail },
+  { label: "Meetings", value: "meeting", icon: Users },
+  { label: "LinkedIn", value: "linkedin", icon: Linkedin },
 ]
 
 function groupByDate(activities: Activity[]) {
   const groups: { label: string; key: string; items: Activity[] }[] = []
-  const now = new Date()
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
-  const yesterday = new Date(today)
-  yesterday.setDate(yesterday.getDate() - 1)
+  const todayKey = todayDateString()
+  const yesterdayKey = yesterdayDateString()
 
   for (const activity of activities) {
-    const d = new Date(activity.created_at)
-    const day = new Date(d.getFullYear(), d.getMonth(), d.getDate())
-    const key = day.toISOString()
+    const key = activity.occurred_at.slice(0, 10) // "YYYY-MM-DD"
 
     let label: string
-    if (day.getTime() === today.getTime()) {
+    if (key === todayKey) {
       label = "Today"
-    } else if (day.getTime() === yesterday.getTime()) {
+    } else if (key === yesterdayKey) {
       label = "Yesterday"
     } else {
-      label = day.toLocaleDateString(undefined, {
-        weekday: "long",
-        month: "long",
-        day: "numeric",
-      })
+      const [yr, mo, dy] = key.split("-").map(Number)
+      const d = new Date(yr, mo - 1, dy) // local midnight — for formatting only
+      label = d.toLocaleDateString("en", { weekday: "long" })
     }
 
     const existing = groups.find((g) => g.key === key)
@@ -78,7 +76,6 @@ export function ActivityLog({
   const [kindFilter, setKindFilter] = useState<ActivityKind | undefined>(
     undefined,
   )
-  const [isLogging, setIsLogging] = useState(false)
 
   const canLog = subjectType != null && subjectId != null
 
@@ -87,37 +84,27 @@ export function ActivityLog({
     : activities
   const groups = groupByDate(filtered)
 
-  const todayKey = useMemo(() => {
-    const now = new Date()
-    return new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate(),
-    ).toISOString()
-  }, [])
-  const hasTodayGroup = groups.length > 0 && groups[0].key === todayKey
-
   return (
     <div>
       <div className="mb-4">
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <h3 className="text-base font-semibold tracking-tight">{title}</h3>
-            {canLog && !isLogging && (
-              <Tooltip>
-                <TooltipTrigger asChild>
+            {canLog && (
+              <ActivityLogDialog
+                subjectType={subjectType}
+                subjectId={subjectId}
+                trigger={
                   <Button
                     size="sm"
                     variant="outline"
                     className="h-7 gap-1 px-2 text-xs font-medium"
-                    onClick={() => setIsLogging(true)}
                   >
-                    <PenLine className="size-3" />
-                    Log
+                    <Plus className="size-3" />
+                    Log Activity
                   </Button>
-                </TooltipTrigger>
-                <TooltipContent>Log Activity</TooltipContent>
-              </Tooltip>
+                }
+              />
             )}
           </div>
           <div className="bg-muted inline-flex shrink-0 rounded-lg border p-0.5">
@@ -153,55 +140,29 @@ export function ActivityLog({
         )}
       </div>
 
-      {groups.length === 0 && !isLogging ? (
+      {groups.length === 0 ? (
         <p className="text-muted-foreground py-8 text-center text-sm">
           No activities yet.
         </p>
       ) : (
         <div className="space-y-6">
-          {/* Prepend standalone Today group when logging but no today activities exist */}
-          {isLogging && !hasTodayGroup && subjectType && subjectId != null && (
-            <div>
-              <div className="mb-2">
-                <span className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
-                  Today
-                </span>
-              </div>
-              <div>
-                <ActivityNewItem
-                  subjectType={subjectType}
-                  subjectId={subjectId}
-                  onCancel={() => setIsLogging(false)}
-                  isLast={true}
-                />
-              </div>
-            </div>
-          )}
-
           {groups.map((group) => (
             <div key={group.key}>
               <div className="mb-2 flex items-baseline justify-between">
-                <span className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
-                  {group.label}
-                </span>
+                <div className="flex items-baseline gap-1.5">
+                  <span className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
+                    {group.label}
+                  </span>
+                  <span className="text-muted-foreground/60 text-xs">
+                    {shortDate(group.key)}
+                  </span>
+                </div>
                 <span className="text-muted-foreground text-xs">
                   {group.items.length}{" "}
                   {group.items.length === 1 ? "activity" : "activities"}
                 </span>
               </div>
               <div>
-                {/* Inject new item at top of existing Today group */}
-                {isLogging &&
-                  group.key === todayKey &&
-                  subjectType &&
-                  subjectId != null && (
-                    <ActivityNewItem
-                      subjectType={subjectType}
-                      subjectId={subjectId}
-                      onCancel={() => setIsLogging(false)}
-                      isLast={false}
-                    />
-                  )}
                 {group.items.map((activity, i) => (
                   <ActivityItem
                     key={activity.id}

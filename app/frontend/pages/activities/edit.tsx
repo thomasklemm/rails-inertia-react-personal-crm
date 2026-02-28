@@ -1,8 +1,10 @@
 import { Head, useForm } from "@inertiajs/react"
 import { Modal } from "@inertiaui/modal-react"
 
+import { ActivityDatePicker } from "@/components/crm/activity-date-picker"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
+import { toDateString, todayDateString } from "@/lib/dates"
 import {
   Select,
   SelectContent,
@@ -24,6 +26,9 @@ export default function ActivitiesEdit({ activity }: Props) {
     body: activity.body,
     subject_type: activity.subject.type,
     subject_id: activity.subject.id,
+    occurred_at: activity.occurred_at
+      ? toDateString(new Date(activity.occurred_at))
+      : todayDateString(),
   })
   const { data, setData, patch, processing, errors } = form
 
@@ -65,6 +70,14 @@ export default function ActivitiesEdit({ activity }: Props) {
                 <SelectItem value="email">Email</SelectItem>
               </SelectContent>
             </Select>
+          </div>
+
+          <div className="space-y-1.5">
+            <Label>Date</Label>
+            <ActivityDatePicker
+              value={data.occurred_at}
+              onChange={(d) => setData("occurred_at", d)}
+            />
           </div>
 
           <div className="space-y-1.5">

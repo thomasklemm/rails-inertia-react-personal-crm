@@ -10,15 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_25_000001) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_25_000003) do
   create_table "activities", force: :cascade do |t|
     t.text "body", null: false
     t.datetime "created_at", null: false
     t.string "kind", null: false
+    t.datetime "occurred_at"
     t.integer "subject_id", null: false
     t.string "subject_type", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
+    t.index ["occurred_at"], name: "index_activities_on_occurred_at"
     t.index ["subject_type", "subject_id"], name: "index_activities_on_subject_type_and_subject_id"
     t.index ["user_id"], name: "index_activities_on_user_id"
   end

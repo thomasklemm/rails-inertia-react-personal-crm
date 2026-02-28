@@ -71,7 +71,8 @@ RSpec.describe "Deals", type: :system do
     let!(:deal) { create(:deal, title: "Activity Deal", stage: "lead", user: user) }
 
     it "logs a note from the deal page" do
-      visit new_activity_path(subject_type: "Deal", subject_id: deal.id)
+      visit deal_path(deal)
+      click_button "Log Activity"
       fill_in "Add a note…", with: "Discussed deal terms with the team."
       click_button "Log Note"
       expect(page).to have_current_path(deal_path(deal))
