@@ -85,6 +85,7 @@ function SubjectPicker({ subjects, selected, onSelect }: SubjectPickerProps) {
   const [query, setQuery] = useState("")
   const [commandValue, setCommandValue] = useState("")
   const containerRef = useRef<HTMLDivElement>(null)
+  const listRef = useRef<HTMLDivElement>(null)
 
   const contacts = subjects.filter((s) => s.type === "Contact")
   const companies = subjects.filter((s) => s.type === "Company")
@@ -106,6 +107,13 @@ function SubjectPicker({ subjects, selected, onSelect }: SubjectPickerProps) {
     filteredCompanies[0] ? `company-${filteredCompanies[0].id}` :
     filteredDeals[0] ? `deal-${filteredDeals[0].id}` : ""
 
+  // Ordered flat list for manual keyboard navigation
+  const allFilteredItems = [
+    ...filteredContacts.map((s) => ({ value: `contact-${s.id}`, subject: s })),
+    ...filteredCompanies.map((s) => ({ value: `company-${s.id}`, subject: s })),
+    ...filteredDeals.map((s) => ({ value: `deal-${s.id}`, subject: s })),
+  ]
+
   // Reset search + highlight first item every time the dropdown opens
   function openDropdown() {
     const first =
@@ -120,6 +128,13 @@ function SubjectPicker({ subjects, selected, onSelect }: SubjectPickerProps) {
   // Re-highlight first item whenever the query changes
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { if (open) setCommandValue(firstValue) }, [query])
+
+  // Scroll highlighted item into view when navigating with arrow keys
+  useEffect(() => {
+    if (!listRef.current) return
+    const selected = listRef.current.querySelector('[aria-selected="true"]')
+    selected?.scrollIntoView({ block: "nearest" })
+  }, [commandValue])
 
   useEffect(() => {
     function handleMouseDown(e: MouseEvent) {
@@ -189,11 +204,26 @@ function SubjectPicker({ subjects, selected, onSelect }: SubjectPickerProps) {
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Search contacts, companies, deals…"
-                className="placeholder:text-muted-foreground flex-1 bg-transparent py-2 text-sm outline-none"
+                className="placeholder:text-muted-foreground flex-1 bg-transparent py-2 text-sm outline-none focus:outline-none focus:ring-0"
+                style={{ outline: "none" }}
                 onKeyDown={(e) => {
-                  // Let arrow/enter bubble to Command; just prevent cursor movement
-                  if (e.key === "ArrowUp" || e.key === "ArrowDown") e.preventDefault()
-                  if (e.key === "Escape") setOpen(false)
+                  if (e.key === "ArrowDown") {
+                    e.preventDefault()
+                    const idx = allFilteredItems.findIndex((item) => item.value === commandValue)
+                    const next = allFilteredItems[idx + 1] ?? allFilteredItems[0]
+                    if (next) setCommandValue(next.value)
+                  } else if (e.key === "ArrowUp") {
+                    e.preventDefault()
+                    const idx = allFilteredItems.findIndex((item) => item.value === commandValue)
+                    const prev = allFilteredItems[idx - 1] ?? allFilteredItems[allFilteredItems.length - 1]
+                    if (prev) setCommandValue(prev.value)
+                  } else if (e.key === "Enter") {
+                    e.preventDefault()
+                    const item = allFilteredItems.find((item) => item.value === commandValue)
+                    if (item) { onSelect(item.subject); setOpen(false) }
+                  } else if (e.key === "Escape") {
+                    setOpen(false)
+                  }
                 }}
               />
               {query && (
@@ -207,7 +237,7 @@ function SubjectPicker({ subjects, selected, onSelect }: SubjectPickerProps) {
                 </button>
               )}
             </div>
-            <CommandList className="max-h-[220px] overflow-y-auto">
+            <CommandList ref={listRef} className="max-h-[220px] overflow-y-auto">
               {hasNoResults ? (
                 <CommandEmpty>No results found.</CommandEmpty>
               ) : (
