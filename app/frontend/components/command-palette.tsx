@@ -20,6 +20,7 @@ import {
 import { useCallback, useEffect, useRef, useState } from "react"
 
 import { useAppearance } from "@/hooks/use-appearance"
+import { openActivityLogDialog } from "@/components/crm/activity-log-dialog"
 import { CompanyTagBadge, TagBadge } from "@/components/crm/tag-badge"
 import {
   CommandDialog,
@@ -236,6 +237,20 @@ export function CommandPalette() {
               </CommandItem>
             )
           })}
+          <CommandItem
+            value="Log Activity"
+            onSelect={() => {
+              setOpen(false)
+              setQuery("")
+              openActivityLogDialog()
+            }}
+            className="flex items-center gap-3"
+          >
+            <div className="bg-muted flex size-7 shrink-0 items-center justify-center rounded-md">
+              <ActivitySquare className="size-3.5" />
+            </div>
+            <span className="text-sm font-medium">Log Activity</span>
+          </CommandItem>
         </CommandGroup>
 
         <CommandSeparator />

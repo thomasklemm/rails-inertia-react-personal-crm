@@ -27,7 +27,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :activities
+  resources :activities do
+    collection do
+      get :subjects
+    end
+  end
 
   resources :deals do
     member do

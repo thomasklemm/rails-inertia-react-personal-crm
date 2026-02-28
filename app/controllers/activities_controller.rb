@@ -45,6 +45,10 @@ class ActivitiesController < InertiaController
     }
   end
 
+  def subjects
+    render json: subject_options
+  end
+
   def show
     render inertia: "activities/show", props: {
       activity: @activity.as_activity_json
