@@ -57,6 +57,28 @@ function SubjectIcon({ type }: { type: string }) {
   return <TrendingUp className="text-muted-foreground size-3.5" />
 }
 
+function Highlight({ text, query }: { text: string; query: string }) {
+  if (!query.trim()) return <>{text}</>
+  const escaped = query.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+  const parts = text.split(new RegExp(`(${escaped})`, "gi"))
+  return (
+    <>
+      {parts.map((part, i) =>
+        i % 2 === 1 ? (
+          <mark
+            key={i}
+            className="bg-amber-100 text-amber-800 dark:bg-amber-800/40 dark:text-amber-200 rounded-[2px] font-medium not-italic"
+          >
+            {part}
+          </mark>
+        ) : (
+          part
+        ),
+      )}
+    </>
+  )
+}
+
 interface SubjectPickerProps {
   subjects: ActivitySubject[]
   selected: ActivitySubject | null
@@ -65,6 +87,7 @@ interface SubjectPickerProps {
 
 function SubjectPicker({ subjects, selected, onSelect }: SubjectPickerProps) {
   const [open, setOpen] = useState(false)
+  const [query, setQuery] = useState("")
 
   const contacts = subjects.filter((s) => s.type === "Contact")
   const companies = subjects.filter((s) => s.type === "Company")
@@ -99,8 +122,8 @@ function SubjectPicker({ subjects, selected, onSelect }: SubjectPickerProps) {
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-80 p-0" align="start">
-        <Command>
-          <CommandInput placeholder="Search…" />
+        <Command className="h-auto">
+          <CommandInput placeholder="Search…" onValueChange={setQuery} />
           <CommandList>
             <CommandEmpty>No results found.</CommandEmpty>
             {contacts.length > 0 && (
@@ -116,10 +139,10 @@ function SubjectPicker({ subjects, selected, onSelect }: SubjectPickerProps) {
                   >
                     <User className="size-3.5 shrink-0" />
                     <div className="min-w-0 flex-1">
-                      <div className="truncate">{s.name}</div>
+                      <div className="truncate"><Highlight text={s.name} query={query} /></div>
                       {s.subtitle && (
                         <div className="text-muted-foreground truncate text-xs">
-                          {s.subtitle}
+                          <Highlight text={s.subtitle} query={query} />
                         </div>
                       )}
                     </div>
@@ -142,7 +165,7 @@ function SubjectPicker({ subjects, selected, onSelect }: SubjectPickerProps) {
                     }}
                   >
                     <Building2 className="size-3.5 shrink-0" />
-                    <div className="truncate">{s.name}</div>
+                    <div className="truncate"><Highlight text={s.name} query={query} /></div>
                   </CommandItem>
                 ))}
               </CommandGroup>
@@ -161,10 +184,10 @@ function SubjectPicker({ subjects, selected, onSelect }: SubjectPickerProps) {
                   >
                     <TrendingUp className="size-3.5 shrink-0" />
                     <div className="min-w-0 flex-1">
-                      <div className="truncate">{s.name}</div>
+                      <div className="truncate"><Highlight text={s.name} query={query} /></div>
                       {s.subtitle && (
                         <div className="text-muted-foreground truncate text-xs">
-                          {s.subtitle}
+                          <Highlight text={s.subtitle} query={query} />
                         </div>
                       )}
                     </div>
