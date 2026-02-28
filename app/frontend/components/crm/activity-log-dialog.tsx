@@ -12,7 +12,7 @@ import {
   Users,
   X,
 } from "lucide-react"
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 import { ActivityDatePicker } from "@/components/crm/activity-date-picker"
 import { todayDateString } from "@/lib/dates"
@@ -33,11 +33,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
 import { Textarea } from "@/components/ui/textarea"
 import { activitiesPath } from "@/routes"
 import type { ActivityKind, ActivitySubject } from "@/types"
@@ -88,117 +83,129 @@ interface SubjectPickerProps {
 function SubjectPicker({ subjects, selected, onSelect }: SubjectPickerProps) {
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState("")
+  const containerRef = useRef<HTMLDivElement>(null)
 
   const contacts = subjects.filter((s) => s.type === "Contact")
   const companies = subjects.filter((s) => s.type === "Company")
   const deals = subjects.filter((s) => s.type === "Deal")
 
+  useEffect(() => {
+    function handleMouseDown(e: MouseEvent) {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setOpen(false)
+      }
+    }
+    document.addEventListener("mousedown", handleMouseDown)
+    return () => document.removeEventListener("mousedown", handleMouseDown)
+  }, [])
+
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          type="button"
-          variant="outline"
-          role="combobox"
-          aria-expanded={open}
-          className="h-8 w-full justify-between px-3 text-xs font-normal"
-        >
-          {selected ? (
-            <span className="flex items-center gap-1.5 min-w-0">
-              <SubjectIcon type={selected.type} />
-              <span className="truncate">{selected.name}</span>
-              {selected.subtitle && (
-                <span className="text-muted-foreground truncate text-xs">
-                  {selected.subtitle}
-                </span>
+    <div className="relative" ref={containerRef}>
+      <Button
+        type="button"
+        variant="outline"
+        role="combobox"
+        aria-expanded={open}
+        className="h-8 w-full justify-between px-3 text-xs font-normal"
+        onClick={() => setOpen((v) => !v)}
+      >
+        {selected ? (
+          <span className="flex items-center gap-1.5 min-w-0">
+            <SubjectIcon type={selected.type} />
+            <span className="truncate">{selected.name}</span>
+            {selected.subtitle && (
+              <span className="text-muted-foreground truncate text-xs">
+                {selected.subtitle}
+              </span>
+            )}
+          </span>
+        ) : (
+          <span className="text-muted-foreground">
+            Select contact, company, or deal…
+          </span>
+        )}
+        <ChevronsUpDown className="text-muted-foreground size-3.5 shrink-0" />
+      </Button>
+      {open && (
+        <div className="border-border bg-popover absolute z-10 mt-1 w-full overflow-hidden rounded-md border shadow-md">
+          <Command className="h-auto">
+            <CommandInput placeholder="Search contacts, companies, deals…" onValueChange={setQuery} />
+            <CommandList className="max-h-[220px] overflow-y-auto">
+              <CommandEmpty>No results found.</CommandEmpty>
+              {contacts.length > 0 && (
+                <CommandGroup heading="Contacts">
+                  {contacts.map((s) => (
+                    <CommandItem
+                      key={`Contact-${s.id}`}
+                      value={`contact-${s.name} ${s.subtitle ?? ""}`}
+                      onSelect={() => {
+                        onSelect(s)
+                        setOpen(false)
+                      }}
+                    >
+                      <User className="size-3.5 shrink-0" />
+                      <div className="min-w-0 flex-1">
+                        <div className="truncate"><Highlight text={s.name} query={query} /></div>
+                        {s.subtitle && (
+                          <div className="text-muted-foreground truncate text-xs">
+                            <Highlight text={s.subtitle} query={query} />
+                          </div>
+                        )}
+                      </div>
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
               )}
-            </span>
-          ) : (
-            <span className="text-muted-foreground">
-              Select contact, company, or deal…
-            </span>
-          )}
-          <ChevronsUpDown className="text-muted-foreground size-3.5 shrink-0" />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-80 p-0" align="start">
-        <Command className="h-auto">
-          <CommandInput placeholder="Search…" onValueChange={setQuery} />
-          <CommandList>
-            <CommandEmpty>No results found.</CommandEmpty>
-            {contacts.length > 0 && (
-              <CommandGroup heading="Contacts">
-                {contacts.map((s) => (
-                  <CommandItem
-                    key={`Contact-${s.id}`}
-                    value={`contact-${s.name} ${s.subtitle ?? ""}`}
-                    onSelect={() => {
-                      onSelect(s)
-                      setOpen(false)
-                    }}
-                  >
-                    <User className="size-3.5 shrink-0" />
-                    <div className="min-w-0 flex-1">
+              {contacts.length > 0 && companies.length > 0 && (
+                <CommandSeparator />
+              )}
+              {companies.length > 0 && (
+                <CommandGroup heading="Companies">
+                  {companies.map((s) => (
+                    <CommandItem
+                      key={`Company-${s.id}`}
+                      value={`company-${s.name}`}
+                      onSelect={() => {
+                        onSelect(s)
+                        setOpen(false)
+                      }}
+                    >
+                      <Building2 className="size-3.5 shrink-0" />
                       <div className="truncate"><Highlight text={s.name} query={query} /></div>
-                      {s.subtitle && (
-                        <div className="text-muted-foreground truncate text-xs">
-                          <Highlight text={s.subtitle} query={query} />
-                        </div>
-                      )}
-                    </div>
-                  </CommandItem>
-                ))}
-              </CommandGroup>
-            )}
-            {contacts.length > 0 && companies.length > 0 && (
-              <CommandSeparator />
-            )}
-            {companies.length > 0 && (
-              <CommandGroup heading="Companies">
-                {companies.map((s) => (
-                  <CommandItem
-                    key={`Company-${s.id}`}
-                    value={`company-${s.name}`}
-                    onSelect={() => {
-                      onSelect(s)
-                      setOpen(false)
-                    }}
-                  >
-                    <Building2 className="size-3.5 shrink-0" />
-                    <div className="truncate"><Highlight text={s.name} query={query} /></div>
-                  </CommandItem>
-                ))}
-              </CommandGroup>
-            )}
-            {companies.length > 0 && deals.length > 0 && <CommandSeparator />}
-            {deals.length > 0 && (
-              <CommandGroup heading="Deals">
-                {deals.map((s) => (
-                  <CommandItem
-                    key={`Deal-${s.id}`}
-                    value={`deal-${s.name} ${s.subtitle ?? ""}`}
-                    onSelect={() => {
-                      onSelect(s)
-                      setOpen(false)
-                    }}
-                  >
-                    <TrendingUp className="size-3.5 shrink-0" />
-                    <div className="min-w-0 flex-1">
-                      <div className="truncate"><Highlight text={s.name} query={query} /></div>
-                      {s.subtitle && (
-                        <div className="text-muted-foreground truncate text-xs">
-                          <Highlight text={s.subtitle} query={query} />
-                        </div>
-                      )}
-                    </div>
-                  </CommandItem>
-                ))}
-              </CommandGroup>
-            )}
-          </CommandList>
-        </Command>
-      </PopoverContent>
-    </Popover>
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              )}
+              {companies.length > 0 && deals.length > 0 && <CommandSeparator />}
+              {deals.length > 0 && (
+                <CommandGroup heading="Deals">
+                  {deals.map((s) => (
+                    <CommandItem
+                      key={`Deal-${s.id}`}
+                      value={`deal-${s.name} ${s.subtitle ?? ""}`}
+                      onSelect={() => {
+                        onSelect(s)
+                        setOpen(false)
+                      }}
+                    >
+                      <TrendingUp className="size-3.5 shrink-0" />
+                      <div className="min-w-0 flex-1">
+                        <div className="truncate"><Highlight text={s.name} query={query} /></div>
+                        {s.subtitle && (
+                          <div className="text-muted-foreground truncate text-xs">
+                            <Highlight text={s.subtitle} query={query} />
+                          </div>
+                        )}
+                      </div>
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              )}
+            </CommandList>
+          </Command>
+        </div>
+      )}
+    </div>
   )
 }
 
