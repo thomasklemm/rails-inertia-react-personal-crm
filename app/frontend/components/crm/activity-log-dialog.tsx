@@ -81,9 +81,14 @@ function SubjectPicker({ subjects, selected, onSelect }: SubjectPickerProps) {
           className="h-8 w-full justify-between px-3 text-xs font-normal"
         >
           {selected ? (
-            <span className="flex items-center gap-1.5">
+            <span className="flex items-center gap-1.5 min-w-0">
               <SubjectIcon type={selected.type} />
-              {selected.name}
+              <span className="truncate">{selected.name}</span>
+              {selected.subtitle && (
+                <span className="text-muted-foreground truncate text-xs">
+                  {selected.subtitle}
+                </span>
+              )}
             </span>
           ) : (
             <span className="text-muted-foreground">
@@ -103,14 +108,21 @@ function SubjectPicker({ subjects, selected, onSelect }: SubjectPickerProps) {
                 {contacts.map((s) => (
                   <CommandItem
                     key={`Contact-${s.id}`}
-                    value={`contact-${s.name}`}
+                    value={`contact-${s.name} ${s.subtitle ?? ""}`}
                     onSelect={() => {
                       onSelect(s)
                       setOpen(false)
                     }}
                   >
-                    <User className="size-3.5" />
-                    {s.name}
+                    <User className="size-3.5 shrink-0" />
+                    <div className="min-w-0 flex-1">
+                      <div className="truncate">{s.name}</div>
+                      {s.subtitle && (
+                        <div className="text-muted-foreground truncate text-xs">
+                          {s.subtitle}
+                        </div>
+                      )}
+                    </div>
                   </CommandItem>
                 ))}
               </CommandGroup>
@@ -129,8 +141,8 @@ function SubjectPicker({ subjects, selected, onSelect }: SubjectPickerProps) {
                       setOpen(false)
                     }}
                   >
-                    <Building2 className="size-3.5" />
-                    {s.name}
+                    <Building2 className="size-3.5 shrink-0" />
+                    <div className="truncate">{s.name}</div>
                   </CommandItem>
                 ))}
               </CommandGroup>
@@ -141,14 +153,21 @@ function SubjectPicker({ subjects, selected, onSelect }: SubjectPickerProps) {
                 {deals.map((s) => (
                   <CommandItem
                     key={`Deal-${s.id}`}
-                    value={`deal-${s.name}`}
+                    value={`deal-${s.name} ${s.subtitle ?? ""}`}
                     onSelect={() => {
                       onSelect(s)
                       setOpen(false)
                     }}
                   >
-                    <TrendingUp className="size-3.5" />
-                    {s.name}
+                    <TrendingUp className="size-3.5 shrink-0" />
+                    <div className="min-w-0 flex-1">
+                      <div className="truncate">{s.name}</div>
+                      {s.subtitle && (
+                        <div className="text-muted-foreground truncate text-xs">
+                          {s.subtitle}
+                        </div>
+                      )}
+                    </div>
                   </CommandItem>
                 ))}
               </CommandGroup>
@@ -283,7 +302,6 @@ function ActivityLogForm({
           ref={textareaRef}
           value={body}
           onChange={(e) => setBody(e.target.value)}
-          autoFocus
           placeholder={placeholder}
           rows={3}
           className="resize-none text-sm"
@@ -297,25 +315,23 @@ function ActivityLogForm({
       </div>
 
       {/* Actions */}
-      <div className="flex gap-1.5">
+      <div className="flex gap-2">
         <Button
           type="submit"
-          size="sm"
-          className="h-7 gap-1 px-2.5 text-xs"
+          className="gap-1.5"
           disabled={!canSubmit}
         >
-          <Check className="size-3" />
+          <Check className="size-4" />
           Log {KINDS.find((k) => k.value === kind)?.label}
         </Button>
         <Button
           type="button"
-          size="sm"
           variant="ghost"
-          className="h-7 gap-1 px-2.5 text-xs"
+          className="gap-1.5"
           onClick={onDone}
           disabled={processing}
         >
-          <X className="size-3" />
+          <X className="size-4" />
           Cancel
         </Button>
       </div>

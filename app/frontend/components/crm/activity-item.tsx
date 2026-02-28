@@ -237,28 +237,25 @@ export function ActivityItem({
               onChange={(e) => setEditBody(e.target.value)}
               rows={4}
               className="resize-none text-sm"
-              autoFocus
             />
 
             {/* Actions */}
-            <div className="flex gap-1.5">
+            <div className="flex gap-2">
               <Button
-                size="sm"
-                className="h-7 gap-1 px-2.5 text-xs"
+                className="gap-1.5"
                 onClick={saveEdit}
                 disabled={saving || !editBody.trim()}
               >
-                <Check className="size-3" />
+                <Check className="size-4" />
                 Save Changes
               </Button>
               <Button
-                size="sm"
                 variant="ghost"
-                className="h-7 gap-1 px-2.5 text-xs"
+                className="gap-1.5"
                 onClick={() => setEditDialogOpen(false)}
                 disabled={saving}
               >
-                <X className="size-3" />
+                <X className="size-4" />
                 Cancel
               </Button>
             </div>

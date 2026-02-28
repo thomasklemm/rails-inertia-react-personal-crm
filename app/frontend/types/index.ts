@@ -107,6 +107,7 @@ export interface ActivitySubject {
   id: number
   type: "Contact" | "Company" | "Deal"
   name: string
+  subtitle?: string
 }
 
 export interface Activity {
