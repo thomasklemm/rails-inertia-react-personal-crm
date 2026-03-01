@@ -121,6 +121,51 @@ RSpec.describe "Activities", type: :request do
     end
   end
 
+  describe "GET /activities/subjects" do
+    let!(:other_contact) { create(:contact, first_name: "Other", last_name: "User", user: create(:user)) }
+    let!(:other_company) { create(:company, name: "Other Corp", user: create(:user)) }
+
+    before { contact; company } # force lazy lets to be created
+
+    it "requires authentication" do
+      sign_out
+      get subjects_activities_path
+      expect(response).to redirect_to(sign_in_path)
+    end
+
+    it "returns JSON with contacts, companies, and deals for the current user" do
+      get subjects_activities_path
+      expect(response).to have_http_status(:ok)
+      data = JSON.parse(response.body)
+      expect(data).to be_an(Array)
+    end
+
+    it "includes the current user's contact" do
+      get subjects_activities_path
+      names = JSON.parse(response.body).map { |s| s["name"] }
+      expect(names).to include("Zara Ahmed")
+    end
+
+    it "includes the current user's company" do
+      get subjects_activities_path
+      names = JSON.parse(response.body).map { |s| s["name"] }
+      expect(names).to include("Acme Corp")
+    end
+
+    it "does not include other users' contacts or companies" do
+      get subjects_activities_path
+      names = JSON.parse(response.body).map { |s| s["name"] }
+      expect(names).not_to include("Other User", "Other Corp")
+    end
+
+    it "returns subjects with the expected shape" do
+      get subjects_activities_path
+      subject = JSON.parse(response.body).find { |s| s["name"] == "Zara Ahmed" }
+      expect(subject).to include("id", "type", "name")
+      expect(subject["type"]).to eq("Contact")
+    end
+  end
+
   describe "POST /activities" do
     it "creates an activity for a contact and redirects to the contact page" do
       expect {

@@ -559,11 +559,11 @@ export function ActivityLogDialog({
 // Trigger-less dialog mounted globally in the app layout, opened via openActivityLogDialog().
 export function GlobalActivityLogDialog() {
   const [open, setOpen] = useState(false)
-  const [subjects, setSubjects] = useState<ActivitySubject[]>([])
+  const [subjects, setSubjects] = useState<ActivitySubject[] | null>(null)
 
   useEffect(() => {
     async function handleOpen() {
-      if (subjects.length === 0) {
+      if (subjects === null) {
         try {
           const res = await fetch(subjectsActivitiesPath(), {
             headers: { Accept: "application/json" },
@@ -572,6 +572,7 @@ export function GlobalActivityLogDialog() {
           setSubjects(data)
         } catch {
           // Open the dialog even if the fetch fails — subject picker will be empty
+          setSubjects([])
         }
       }
       setOpen(true)
@@ -579,7 +580,7 @@ export function GlobalActivityLogDialog() {
     document.addEventListener("activity-log-dialog:open", handleOpen)
     return () =>
       document.removeEventListener("activity-log-dialog:open", handleOpen)
-  }, [subjects.length])
+  }, [subjects])
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -587,7 +588,7 @@ export function GlobalActivityLogDialog() {
         <DialogHeader>
           <DialogTitle>Log Activity</DialogTitle>
         </DialogHeader>
-        <ActivityLogForm subjects={subjects} onDone={() => setOpen(false)} />
+        <ActivityLogForm subjects={subjects ?? []} onDone={() => setOpen(false)} />
       </DialogContent>
     </Dialog>
   )
