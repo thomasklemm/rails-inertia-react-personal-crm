@@ -5,6 +5,7 @@ import { AppShell } from "@/components/app-shell"
 import { AppSidebar } from "@/components/app-sidebar"
 import { AppSidebarHeader } from "@/components/app-sidebar-header"
 import { CommandPalette } from "@/components/command-palette"
+import { GlobalActivityLogDialog } from "@/components/crm/activity-log-dialog"
 import { Toaster } from "@/components/ui/sonner"
 import { useFlash } from "@/hooks/use-flash"
 import type { BreadcrumbItem } from "@/types"
@@ -26,6 +27,7 @@ export default function AppSidebarLayout({
       </AppContent>
       <Toaster richColors />
       <CommandPalette />
+      <GlobalActivityLogDialog />
     </AppShell>
   )
 }

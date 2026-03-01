@@ -34,8 +34,13 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Textarea } from "@/components/ui/textarea"
-import { activitiesPath } from "@/routes"
+import { activitiesPath, subjectsActivitiesPath } from "@/routes"
 import type { ActivityKind, ActivitySubject } from "@/types"
+
+// Module-level trigger so the command palette can open the dialog without props drilling.
+export function openActivityLogDialog() {
+  document.dispatchEvent(new CustomEvent("activity-log-dialog:open"))
+}
 
 const KINDS: { value: ActivityKind; label: string; icon: React.ElementType }[] =
   [
@@ -546,6 +551,44 @@ export function ActivityLogDialog({
           subjectId={subjectId}
           onDone={() => setOpen(false)}
         />
+      </DialogContent>
+    </Dialog>
+  )
+}
+
+// Trigger-less dialog mounted globally in the app layout, opened via openActivityLogDialog().
+export function GlobalActivityLogDialog() {
+  const [open, setOpen] = useState(false)
+  const [subjects, setSubjects] = useState<ActivitySubject[] | null>(null)
+
+  useEffect(() => {
+    async function handleOpen() {
+      if (subjects === null) {
+        try {
+          const res = await fetch(subjectsActivitiesPath(), {
+            headers: { Accept: "application/json" },
+          })
+          const data = (await res.json()) as ActivitySubject[]
+          setSubjects(data)
+        } catch {
+          // Open the dialog even if the fetch fails — subject picker will be empty
+          setSubjects([])
+        }
+      }
+      setOpen(true)
+    }
+    document.addEventListener("activity-log-dialog:open", handleOpen)
+    return () =>
+      document.removeEventListener("activity-log-dialog:open", handleOpen)
+  }, [subjects])
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogContent className="sm:max-w-xl">
+        <DialogHeader>
+          <DialogTitle>Log Activity</DialogTitle>
+        </DialogHeader>
+        <ActivityLogForm subjects={subjects ?? []} onDone={() => setOpen(false)} />
       </DialogContent>
     </Dialog>
   )
