@@ -4,7 +4,7 @@
   "type": "module",
   "devDependencies": {
     "babel-plugin-react-compiler": "^1.0.0",
-    "eslint": "^9.39.3",
+    "eslint": "^10.0.3",
     "eslint-config-prettier": "^10.1.2",
     "eslint-plugin-react": "^7.37.4",
     "eslint-plugin-react-hooks": "^7.0.1",
