@@ -85,4 +85,4 @@ group :test do
   gem "selenium-webdriver"
 end
 
-gem "inertia_rails-contrib", "~> 0.5.2"
+gem "inertia_rails-contrib", "~> 0.6.0"
